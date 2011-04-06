@@ -11,10 +11,15 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 public class HoughTransform {
-	private static final double THRESHOLD = 0.5;
+	public static class Config {
+		public double houghMaximaThreshold = 0.3;
+		public int rejectDistanceLessThen= 5;
+		public int houghGroupingDistance = 5;
+	}
+	private static final double THRESHOLD = 0.3;
 	private static final short MAX_SPACE_VALUE = Short.MAX_VALUE;
-	private static final int DIST_MIN = 5;
-	private static final int MIN_DISTANCE = 10;
+	private static final int REJECT_DIST_LESS_THEN = 5;
+	private static final int HOUGH_DISTANCE_GROUP = 5;
 
 	public BufferedImage tranform2(BufferedImage src) {
 		long start = System.currentTimeMillis();
@@ -82,7 +87,7 @@ public class HoughTransform {
 				groupPoint(points_90, angle, dist, space_90, max);
 			}
 		}
-//		convertToParameters(angle_0, points_0);
+		convertToParameters(angle_0, points_0);
 		convertToParameters(angle_90, points_90);
 		return null;		
 	}
@@ -103,7 +108,7 @@ public class HoughTransform {
 		Iterator<int[]> iterator = points_0.iterator();
 		while (iterator.hasNext()) {
 			int[] p = iterator.next();
-			if(Math.abs(p[0]-angle) < MIN_DISTANCE && Math.abs(p[1]-dist) < MIN_DISTANCE) {
+			if(Math.abs(p[0]-angle) < HOUGH_DISTANCE_GROUP && Math.abs(p[1]-dist) < HOUGH_DISTANCE_GROUP) {
 				// current point inside local maxima area
 				if(value > space[p[0]][p[1]]) {
 					//move maxima main point 
@@ -144,12 +149,12 @@ public class HoughTransform {
 		}
 	}
 	private void incrementSpace(int distMax, int i, int dist, short[][] space) {
-		if (DIST_MIN <= dist && dist <= distMax) {
+		if (REJECT_DIST_LESS_THEN <= dist && dist <= distMax) {
 			if(space[i][dist] != MAX_SPACE_VALUE)
 				space[i][dist]++;
 		}
 	}
-	private boolean isPoint(BufferedImage src, int x, int y) {
+	public static boolean isPoint(BufferedImage src, int x, int y) {
 		int rgb = src.getRGB(x, y);
 		int r = (rgb >> 16) & 0xFF;
 		int g = (rgb >>  8) & 0xFF;
@@ -161,6 +166,10 @@ public class HoughTransform {
 	
 	public static int pixelValue(BufferedImage src, int x, int y) {		
 		int rgb = src.getRGB(x, y);
+		return pixelValue(rgb);
+	}
+
+	public static int pixelValue(int rgb) {
 		int r = (rgb >> 16) & 0xFF;
 		int g = (rgb >>  8) & 0xFF;
 		int b = (rgb >>  0) & 0xFF;		
