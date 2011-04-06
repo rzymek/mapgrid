@@ -61,7 +61,7 @@ public class JMapGridMain extends JFrame {
 
 	public static void main(String[] args) throws IOException {
 		JMapGridMain main = new JMapGridMain();
-		main.open("1/topo25.png");
+		main.open("redriver3/rr3-10.png");
 //		main.open("/home/rzymek/Pictures/maps/ramsar2010/topo25.png");
 		main.setVisible(true); 
 	}

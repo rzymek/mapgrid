@@ -125,22 +125,24 @@ public class HoughTransform {
 
 	private void writeHoughImage(String file, int angleSpace, int distMax, short[][] space,
 			short max) {
-		BufferedImage dest = new BufferedImage(angleSpace+1, distMax+1, BufferedImage.TYPE_INT_BGR);
+		BufferedImage dest = new BufferedImage(angleSpace+1, distMax+1, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = dest.getGraphics();
+		g.setColor(Color.BLACK);
+		g.fillRect(0,0,dest.getWidth(),dest.getHeight());
 		for (int a = 0; a <= angleSpace; ++a)
 			for (int d = 0; d <= distMax; ++d) {
 				int value = 0xff * space[a][d] / max;
-				value = (value << 16) | (value << 8) | value;
+				value = (0xff << 24) | (value << 16) | (value << 8) | value;
 				dest.setRGB(a, d, value);
 			}
-		Graphics g = dest.getGraphics();
-		g.setColor(Color.RED);
-		int R = 5;
-		for (int a = 0; a <= angleSpace; ++a) {
-			for (int d = 0; d <= distMax; ++d) {
-				if (space[a][d] >= max * THRESHOLD)
-					g.drawOval(a - R, d - R, 2 * R, 2 * R);
-			}
-		}
+//		g.setColor(new Color(0x01ff0000));
+//		int R = 5;
+//		for (int a = 0; a <= angleSpace; ++a) {
+//			for (int d = 0; d <= distMax; ++d) {
+//				if (space[a][d] >= max * THRESHOLD)
+//					g.drawOval(a - R, d - R, 2 * R, 2 * R);
+//			}
+//		}
 		try {
 			System.out.println("saving "+file);
 			ImageIO.write(dest, "png", new File(file));
