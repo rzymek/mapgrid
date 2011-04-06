@@ -20,16 +20,18 @@ public class JImageView extends JComponent implements Observer {
 		if (image == null)
 			return;
 		g.drawImage(image, 0, 0, null);
-		g.setColor(Color.RED);
-		if(lines != null) { 
-			for (double[] c : lines) {
-				g.drawLine(0,lineY(0,c[0],c[1]),getWidth(),lineY(getWidth(),c[0],c[1]));
-			}
-		}
+		g.setColor(new Color(0x80ff0000, true));
+//		if(lines != null) { 
+//			for (double[] c : lines) {
+//				g.drawLine(-1,lineY(0,c[0],c[1])-1,getWidth()-1,lineY(getWidth(),c[0],c[1])+1);
+//				g.drawLine(0,lineY(0,c[0],c[1]),getWidth(),lineY(getWidth(),c[0],c[1]));
+//				g.drawLine(+1,lineY(0,c[0],c[1])+1,getWidth()+1,lineY(getWidth(),c[0],c[1])+1);
+//			}
+//		}
 	}
 
-	private int lineY(double x, double t, double r) {
-		return (int) (-1*Math.cos(t)/Math.sin(t)*x+r/Math.sin(t));
+	private int lineY(double x, double a, double d) {		
+		return (int) (-1*Math.cos(a)/Math.sin(a)*x+d/Math.sin(a));
 	}
 
 	public void setImage(BufferedImage image) {
@@ -47,7 +49,34 @@ public class JImageView extends JComponent implements Observer {
 	}
 
 	public void setLines(List<double[]> coord) {
-		this.lines = coord;		
+		this.lines = coord;	
+		System.out.println("JImageView.setLines()");
+		for (double[] ds : coord) {
+			double a=ds[0];
+			double d=ds[1];
+			for(int x=0;x<image.getWidth();++x) {
+				int y = lineY(x,a,d);
+				if(0<=y && y<image.getHeight()) {
+					int pdy = 0;
+					for(int dy=-3;dy<3;++dy) {
+						int pixel = HoughTransform.pixelValue(image, x, y+dy);
+						if(pixel < 0x80) {
+							int rgb=image.getRGB(x, y-5);
+								//0xff0000;
+							for(int dy1 = dy; ; dy1 -= Math.signum(dy)) {
+								if (0 <= x + dy1 && x + dy1 < image.getWidth())
+									image.setRGB(x,y+dy1, rgb);
+								else 
+									break;
+								if(Math.abs(dy1) == 0)
+									break;
+							}
+						}
+						pdy = dy;
+					}
+				}
+			}
+		}
 	}
 
 }

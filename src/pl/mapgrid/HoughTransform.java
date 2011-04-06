@@ -5,14 +5,16 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
 public class HoughTransform {
-	private static final double THRESHOLD = 0.3;
+	private static final double THRESHOLD = 0.5;
 	private static final short MAX_SPACE_VALUE = Short.MAX_VALUE;
 	private static final int DIST_MIN = 5;
+	private static final int MIN_DISTANCE = 10;
 
 	public BufferedImage tranform2(BufferedImage src) {
 		long start = System.currentTimeMillis();
@@ -43,7 +45,7 @@ public class HoughTransform {
 		}
 		int w = src.getWidth();
 		int h = src.getHeight();
-		int distMax=Math.max(w,h);
+		int distMax=(int) Math.sqrt(w*w+h*h);
 		short[][] space_0 = new short[angleSpace+1][distMax+1];
 		short[][] space_90 = new short[angleSpace+1][distMax+1];
 		for(int x=0;x<w;++x) {
@@ -70,16 +72,50 @@ public class HoughTransform {
 				if (max < space_90[angle][dist])
 					max = space_90[angle][dist];
 			}
-		writeHoughImage("space0.png", angleSpace, distMax, space_0, max);
-		writeHoughImage("space90.png", angleSpace, distMax, space_90, max);
-		for (int angle = 0; angle <= angleSpace; ++angle)
+//		writeHoughImage("space0.png", angleSpace, distMax, space_0, max);
+//		writeHoughImage("space90.png", angleSpace, distMax, space_90, max);
+		List<int[]> points_0 = new ArrayList<int[]>();
+		List<int[]> points_90 = new ArrayList<int[]>();
+		for (int angle = 0; angle <= angleSpace; ++angle) {
 			for (int dist = 0; dist <= distMax; ++dist) {
-				if (space_0[angle][dist] >= max * 0.3)
-					coord.add(new double[] { angle_0[angle], dist });
-				if (space_90[angle][dist] >= max * THRESHOLD)
-					coord.add(new double[] { angle_90[angle], dist });
+				groupPoint(points_0, angle, dist, space_0, max);
+				groupPoint(points_90, angle, dist, space_90, max);
 			}
+		}
+//		convertToParameters(angle_0, points_0);
+		convertToParameters(angle_90, points_90);
 		return null;		
+	}
+
+	private void convertToParameters(double[] angle, List<int[]> points) {
+		for (int[] p : points) {
+			int a = p[0];
+			int dist = p[1];
+			coord.add(new double[] { angle[a], dist });			
+		}
+	}
+
+	private void groupPoint(List<int[]> points_0, int angle, int dist,
+			short[][] space, short max) {
+		short value = space[angle][dist];
+		if (value < max * THRESHOLD)
+			return;
+		Iterator<int[]> iterator = points_0.iterator();
+		while (iterator.hasNext()) {
+			int[] p = iterator.next();
+			if(Math.abs(p[0]-angle) < MIN_DISTANCE && Math.abs(p[1]-dist) < MIN_DISTANCE) {
+				// current point inside local maxima area
+				if(value > space[p[0]][p[1]]) {
+					//move maxima main point 
+					p[0] = angle;
+					p[1] = dist;
+				}else{
+					//ignore current value
+				}
+				return;
+			}
+		}
+		points_0.add(new int[]{angle,dist});
 	}
 
 	private void writeHoughImage(String file, int angleSpace, int distMax, short[][] space,
@@ -123,7 +159,7 @@ public class HoughTransform {
 	
 	public List<double[]> coord = new ArrayList<double[]>(); 
 	
-	public static int pixelValue(BufferedImage src, int x, int y) {
+	public static int pixelValue(BufferedImage src, int x, int y) {		
 		int rgb = src.getRGB(x, y);
 		int r = (rgb >> 16) & 0xFF;
 		int g = (rgb >>  8) & 0xFF;
