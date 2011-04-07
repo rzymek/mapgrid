@@ -53,37 +53,33 @@ public class HoughTransform {
 	}
 
 	public List<double[]> findGrid(BufferedImage src) {
-		try {
-			int w = src.getWidth();
-			int h = src.getHeight();
-			int distMax_v=w;
-			int distMax_h=h;
-			space_v = new short[angle_v.length][distMax_v+1];
-			space_h = new short[angle_h.length][distMax_h+1];
-			for(int x=0;x<w;++x) {
-				progres(100*x/w);
-				for (int y = 0; y < h; ++y) {
-					if (isPoint(src, x, y)) {
-						for (int i = 0; i < angle_v.length; ++i) {
-							//sin_h[i] = cos[i]
-							//cos_h[i] = -sin[i]
-							int dist_v =  (int) (y * sin[i] + x * cos[i]);
-							int dist_h = (int) (y * cos[i] - x * sin[i]);
-							incrementSpace(distMax_v, i, dist_v, space_v);
-							incrementSpace(distMax_h, i, dist_h, space_h);
-						}
+		int w = src.getWidth();
+		int h = src.getHeight();
+		int distMax_v=w;
+		int distMax_h=h;
+		space_v = new short[angle_v.length][distMax_v+1];
+		space_h = new short[angle_h.length][distMax_h+1];
+		for(int x=0;x<w;++x) {
+			progres(100*x/w);
+			for (int y = 0; y < h; ++y) {
+				if (isPoint(src, x, y)) {
+					for (int i = 0; i < angle_v.length; ++i) {
+						//sin_h[i] = cos[i]
+						//cos_h[i] = -sin[i]
+						int dist_v =  (int) (y * sin[i] + x * cos[i]);
+						int dist_h = (int) (y * cos[i] - x * sin[i]);
+						incrementSpace(distMax_v, i, dist_v, space_v);
+						incrementSpace(distMax_h, i, dist_h, space_h);
 					}
 				}
 			}
-			return getLineParameters(angle_v, angle_h, space_v, space_h);
-		}finally{
-			progres(0);
 		}
+		return getLineParameters(angle_v, angle_h, space_v, space_h);
 	}
 
 	private void progres(int percent) {
 		if(observer != null)
-			observer.update(percent);
+			observer.updateProgress(percent);
 	}
 
 	private List<double[]> getLineParameters(double[] angle_v, double[] angle_h,

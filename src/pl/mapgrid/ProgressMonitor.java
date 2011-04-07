@@ -1,5 +1,6 @@
 package pl.mapgrid;
 
 public interface ProgressMonitor {
-	public void update(int percent);
+	public void updateProgress(int percent);
+	public void setProgressMessage(String string);
 }

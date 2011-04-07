@@ -1,19 +1,17 @@
 package pl.mapgrid.actions;
 
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 
 import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.JMapGridMain;
 
-public class OpenAction extends AbstractAction {
+public class SaveAction extends AbstractAction {
+
 	private final JMapGridMain main;
 
-	public OpenAction(JMapGridMain main) {
+	public SaveAction(JMapGridMain main) {
 		this.main = main;
 	}
 
@@ -21,10 +19,9 @@ public class OpenAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		try {	
 			JFileChooser chooser = FileChooserSingleton.instance();
-			int result = chooser.showOpenDialog(main);
+			int result = chooser.showSaveDialog(main);
 			if(result == JFileChooser.APPROVE_OPTION) {
-				BufferedImage img = ImageIO.read(chooser.getSelectedFile());
-				main.view.setImage(img);
+//				ImageIO.write(main.view.getImage(), chooser.getSelectedFile());
 			}
 		}catch (Exception ex) {
 			throw new RuntimeException(ex);
@@ -32,7 +29,6 @@ public class OpenAction extends AbstractAction {
 	}
 	@Override
 	public String toString() {
-		return "Otwórz";
+		return "Zapisz";
 	}
-
 }

@@ -11,7 +11,7 @@ public class DetectGridAction extends BackgroundAction {
 	private final JMapGridMain main;
 
 	public DetectGridAction(JMapGridMain main) {
-		super(main.actions);
+		super(main.actions, main);
 		this.main = main;
 	}
 
@@ -21,6 +21,7 @@ public class DetectGridAction extends BackgroundAction {
 		HoughTransform transform = new HoughTransform();
 		transform.setObserver(main);
 		List<double[]> lines = transform.findGrid(image);
+		main.view.setShowGrid(true);
 		main.view.setLines(lines);
 	}
 	

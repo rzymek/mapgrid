@@ -18,6 +18,7 @@ import pl.mapgrid.actions.DetectGridAction;
 import pl.mapgrid.actions.ExitAction;
 import pl.mapgrid.actions.OpenAction;
 import pl.mapgrid.actions.RemoveGridAction;
+import pl.mapgrid.actions.SaveAction;
 import pl.mapgrid.actions.ToggleGridAction;
 
 public class JMapGridMain extends JFrame implements ProgressMonitor {
@@ -35,6 +36,7 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 	private void setupActions() {
 		actions = new Actions();
 		actions.set(Actions.Name.OPEN, new OpenAction(this));
+		actions.set(Actions.Name.SAVE, new SaveAction(this));
 		actions.set(Actions.Name.EXIT, new ExitAction());
 		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(this));
 		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(this));
@@ -52,6 +54,8 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		toolbar.add(createToolButton(Actions.Name.EXIT));
 
 		status = new JProgressBar(0,100);
+		status.setString("");
+		status.setStringPainted(true);
 		layoutComponents(toolbar, new JScrollPane(view), status);
 	}
 
@@ -77,8 +81,13 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 	}
 
 	@Override
-	public void update(int percent) {
+	public void updateProgress(int percent) {
 		status.setValue(percent);
+	}
+
+	@Override
+	public void setProgressMessage(String string) {
+		status.setString(string);
 	}
 
 }

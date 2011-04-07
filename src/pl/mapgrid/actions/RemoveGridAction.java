@@ -9,7 +9,7 @@ public class RemoveGridAction extends BackgroundAction {
 	private final JMapGridMain main;
 
 	public RemoveGridAction(JMapGridMain main) {
-		super(main.actions);
+		super(main.actions, main);
 		this.main = main;
 	}
 
@@ -19,7 +19,7 @@ public class RemoveGridAction extends BackgroundAction {
 		MaskGrid maskGrid = new MaskGrid();
 		maskGrid.setObserver(main);
 		image = maskGrid.filter(image, main.view.getLines());
-		main.view.setLines(null);
+		main.view.setShowGrid(false);
 		main.view.setImage(image);
 	}
 

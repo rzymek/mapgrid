@@ -75,4 +75,9 @@ public class JImageView extends JComponent implements Observer {
 		repaint();
 	}
 
+	public void setShowGrid(boolean b) {
+		showGrid = b;
+		repaint();
+	}
+
 }

@@ -13,7 +13,7 @@ public class Actions {
 	private Map<Name, Action> actions = new HashMap<Name, Action>();
 	private Map<Action, List<JComponent>> using = new HashMap<Action, List<JComponent>>();
 	public static enum Name {
-		OPEN, EXIT, REMOVE_GRID, DETECT_GRID, TOGGLE_GRID
+		OPEN, EXIT, REMOVE_GRID, DETECT_GRID, TOGGLE_GRID, SAVE
 	};	
 	
 	public void set(Name name, Action action) {
@@ -46,5 +46,9 @@ public class Actions {
 
 	public String getDescription(Name name) {
 		return get(name).toString();
+	}
+
+	public void run(Name name) {
+		get(name).actionPerformed(null);
 	};
 }
