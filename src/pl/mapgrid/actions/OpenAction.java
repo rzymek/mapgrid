@@ -64,5 +64,10 @@ public class OpenAction extends AbstractAction {
 			throw new RuntimeException(ex);
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "Otwórz";
+	}
 
 }

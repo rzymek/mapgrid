@@ -23,4 +23,8 @@ public class RemoveGridAction extends BackgroundAction {
 		main.view.setImage(image);
 	}
 
+	@Override
+	public String toString() {
+		return "Maskuj";
+	}
 }

@@ -9,4 +9,9 @@ public class ExitAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		System.exit(0);
 	}
+	
+	@Override
+	public String toString() {
+		return "Koniec";
+	}
 }

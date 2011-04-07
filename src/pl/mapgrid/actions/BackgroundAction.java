@@ -26,5 +26,4 @@ public abstract class BackgroundAction extends AbstractAction implements Runnabl
 		};
 		worker.execute();
 	}
-
 }

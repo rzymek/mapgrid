@@ -15,7 +15,6 @@ public class DetectGridAction extends BackgroundAction {
 		this.main = main;
 	}
 
-
 	@Override
 	public void run() {
 		BufferedImage image = main.view.getImage();
@@ -23,5 +22,10 @@ public class DetectGridAction extends BackgroundAction {
 		transform.setObserver(main);
 		List<double[]> lines = transform.findGrid(image);
 		main.view.setLines(lines);
+	}
+	
+	@Override
+	public String toString() {
+		return "Wykryj";
 	}
 }

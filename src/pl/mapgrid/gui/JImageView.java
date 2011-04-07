@@ -15,6 +15,7 @@ import pl.mapgrid.MaskGrid;
 public class JImageView extends JComponent implements Observer {
 	private BufferedImage image = null;
 	private List<double[]> lines;
+	private boolean showGrid =true;
 
 	@Override
 	public void paint(Graphics g) {
@@ -26,6 +27,8 @@ public class JImageView extends JComponent implements Observer {
 	}
 
 	private void drawLines(Graphics g) {
+		if(showGrid == false)
+			return;
 		g.setColor(new Color(0x80ff0000, true));
 		if(lines != null) { 
 			for (double[] c : lines) {
@@ -65,6 +68,11 @@ public class JImageView extends JComponent implements Observer {
 
 	public List<double[]> getLines() {
 		return lines;
+	}
+
+	public void toogleShowGrid() {
+		showGrid = !showGrid;
+		repaint();
 	}
 
 }

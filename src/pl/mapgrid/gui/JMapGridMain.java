@@ -18,6 +18,7 @@ import pl.mapgrid.actions.DetectGridAction;
 import pl.mapgrid.actions.ExitAction;
 import pl.mapgrid.actions.OpenAction;
 import pl.mapgrid.actions.RemoveGridAction;
+import pl.mapgrid.actions.ToggleGridAction;
 
 public class JMapGridMain extends JFrame implements ProgressMonitor {
 	public JImageView view;
@@ -37,16 +38,18 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		actions.set(Actions.Name.EXIT, new ExitAction());
 		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(this));
 		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(this));
+		actions.set(Actions.Name.TOGGLE_GRID, new ToggleGridAction(this));
 	}
 
 	private void setupComponents() {
 		view = new JImageView();
 		
 		JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
-		toolbar.add(createToolButton("Open", Actions.Name.OPEN));
-		toolbar.add(createToolButton("Wykryj siatkę", Actions.Name.DETECT_GRID));
-		toolbar.add(createToolButton("Maskuj siatkę", Actions.Name.REMOVE_GRID));
-		toolbar.add(createToolButton("Exit", Actions.Name.EXIT));
+		toolbar.add(createToolButton(Actions.Name.OPEN));
+		toolbar.add(createToolButton(Actions.Name.DETECT_GRID));
+		toolbar.add(createToolButton(Actions.Name.REMOVE_GRID));
+		toolbar.add(createToolButton(Actions.Name.TOGGLE_GRID));
+		toolbar.add(createToolButton(Actions.Name.EXIT));
 
 		status = new JProgressBar(0,100);
 		layoutComponents(toolbar, new JScrollPane(view), status);
@@ -61,10 +64,10 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		pack();
 	}
 
-	private JButton createToolButton(String string, Name name) {
+	private JButton createToolButton(Name name) {
 		JButton button = new JButton();
 		actions.assign(button, name);
-		button.setText(string);
+		button.setText(actions.getDescription(name));
 		return button;
 	}
 
