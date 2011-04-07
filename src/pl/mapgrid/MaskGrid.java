@@ -9,9 +9,12 @@ public class MaskGrid {
 	private ProgressMonitor observer;
 
 	public static class Config {
+		@Doc("Przetwarzaj pixele oddalone od lini o maksymalnie:")
 		public int processNeighbourPixels = 3;
+		@Doc("Maskuj pixele różniące się od sąsiadujących o co najmniej tyle procent:")
+		public double maskPixelDiffersMoreThan = 0.2;
+		@Doc("Jakim kolorem maskować pixele. Nie ustawiony = użyj siąsiadujących pixeli")
 		public Color maskingColor = null;
-		public int maskPixelDiffersMoreThan = 0x30;
 	}
 	public MaskGrid(Config config) {
 		this.config = config;
@@ -62,10 +65,11 @@ public class MaskGrid {
 		int dy = doY ? 1 : 0;
 		int process = config.processNeighbourPixels;
 		int maskWith = getPixel(image, x - dx*process, y - dy*process);
+		final int maskPixelDiffersMoreThan = (int) (config.maskPixelDiffersMoreThan * 255);
 		for (int i = -process; i < process; ++i) {
 			int current = getPixel(image, x + dx*i, y + dy*i);
 			int diff = HoughTransform.pixelValue(maskWith) - HoughTransform.pixelValue(current);
-			if (diff > config.maskPixelDiffersMoreThan) 
+			if (diff > maskPixelDiffersMoreThan) 
 				setPixel(image, x + dx * i, y + dy * i, maskWith);
 			else 
 				maskWith = getPixel(image, x + dx * i, y + dy * i);

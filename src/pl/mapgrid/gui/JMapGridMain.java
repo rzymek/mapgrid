@@ -13,6 +13,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import pl.mapgrid.HoughTransform;
 import pl.mapgrid.ProgressMonitor;
 import pl.mapgrid.actions.Actions;
 import pl.mapgrid.actions.Actions.Name;
@@ -59,6 +60,9 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		status = new JProgressBar(0,100);
 		status.setString("");
 		status.setStringPainted(true);
+		
+//		JForm houghSetup = new JForm();
+		
 		layoutComponents(toolbar, new JScrollPane(view), status);
 	}
 

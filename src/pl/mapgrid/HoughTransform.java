@@ -10,13 +10,19 @@ import java.util.List;
 
 public class HoughTransform {
 	public static class Config {
+		@Doc("Dopuszczalne odchylenie lini w stopniach")
+		public double aberration = 10;
+		@Doc("Próbkowanie odchylenia lini w stopniach (mniej = dokładnie i wolniej)")
+		public double angleStep=0.05;
+		@Doc("Współczynnik badania ekstremum w przestrzeni Hough. \n" +
+				"Jaki procent wartości maksymalnej uznać za ekstremum lokalne. (mniej = więcej wykrytych linii)")
 		public double houghMaximaThreshold = 0.5;
-		public int rejectDistanceLessThen= 5;
+		@Doc("Grupuj linie bliższe niż")
 		public int houghGroupingDistance = 5;
+		@Doc("Maksymalna liczba linii")
 		public int maxLines = 100;
-		
-		public double aberration = Math.toRadians(10); 
-		public double angleStep=Math.toRadians(0.05);
+		@Doc("Odrzuć linie oddalone od góry mapy o mniej niż podano. (Dla 0 pojawiają się błędy numeryczne)")
+		public int rejectDistanceLessThen= 5;
 	}
 	private final Config config;
 	private short[][] space_v;
@@ -30,19 +36,21 @@ public class HoughTransform {
 	public HoughTransform(Config config) {
 		this.config = config;		
 		
-		int angleSpace = (int) (2*config.aberration/config.angleStep);
+		double aberration = Math.toRadians(config.aberration);
+		double angleStep = Math.toRadians(config.angleStep);
+		int angleSpace = (int) (2*aberration/angleStep);
 		angle_v = new double[angleSpace];
 		angle_h = new double[angleSpace];
 		sin = new double[angleSpace];
 		cos = new double[angleSpace];
 
-		double angleMin_v = -config.aberration; 
+		double angleMin_v = -aberration; 
 		//double tmax_v = +aberration;
-		double angleMin_h = Math.PI/2-config.aberration; 
+		double angleMin_h = Math.PI/2-aberration; 
 		//double tmax_h = Math.PI/2+aberration;
 		for (int i = 0; i < angle_v.length; i++) {
-			angle_v[i] = angleMin_v+config.angleStep*i;
-			angle_h[i] = angleMin_h+config.angleStep*i;
+			angle_v[i] = angleMin_v+angleStep*i;
+			angle_h[i] = angleMin_h+angleStep*i;
 			sin[i] = Math.sin(angle_v[i]);
 			cos[i] = Math.cos(angle_v[i]);
 		}
