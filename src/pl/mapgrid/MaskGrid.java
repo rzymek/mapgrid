@@ -1,13 +1,12 @@
-package pl.mapgrid.actions;
+package pl.mapgrid;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-import pl.mapgrid.HoughTransform;
-
 public class MaskGrid {
 	private final Config config;
+	private ProgressMonitor observer;
 
 	public static class Config {
 		public int processNeighbourPixels = 3;
@@ -20,34 +19,45 @@ public class MaskGrid {
 	public MaskGrid() {
 		this(new Config());
 	}
-	private int lineY(double x, double a, double d) {		
+	public static int lineY(double x, double a, double d) {		
 		return (int) (d/Math.sin(a)-Math.cos(a)/Math.sin(a)*x);
 	}
-	private int lineX(int y, double a, double d) {
+	public static int lineX(int y, double a, double d) {
 		return (int) (d/Math.cos(a)-Math.sin(a)/Math.cos(a)*y);
 	}
 
 	public BufferedImage filter(BufferedImage image, List<double[]> coord) {
-		for (double[] ds : coord) {
-			double a = ds[0];
-			double d = ds[1];
-			if(Math.toRadians(80) <= a && a <= Math.toRadians(100)) {
-				for (int x = 0; x < image.getWidth(); ++x) {
-					int y = lineY(x, a, d);
-					if (0 <= y && y < image.getHeight()) {
-						maskPixel(image, x, y, false, true);
+		try {
+			for (int i=0;i<coord.size();++i) {
+				double[] ds = coord.get(i);
+				progress(100*i/coord.size());
+				double a = ds[0];
+				double d = ds[1];
+				if(Math.toRadians(80) <= a && a <= Math.toRadians(100)) {
+					for (int x = 0; x < image.getWidth(); ++x) {
+						int y = lineY(x, a, d);
+						if (0 <= y && y < image.getHeight()) {
+							maskPixel(image, x, y, false, true);
+						}
 					}
+				}else{
+					for (int y = 0; y < image.getHeight(); ++y) {
+						int x = lineX(y, a, d);
+						if (0 <= x && x < image.getWidth()) {
+							maskPixel(image, x, y, true, false);
+						}
+					}				
 				}
-			}else{
-				for (int y = 0; y < image.getHeight(); ++y) {
-					int x = lineX(y, a, d);
-					if (0 <= x && x < image.getWidth()) {
-						maskPixel(image, x, y, true, false);
-					}
-				}				
 			}
+			return image;
+		}finally{
+			progress(0);
 		}
-		return image;
+	}
+	private void progress(int p) {
+		if(observer!=null) {
+			observer.update(p);
+		}
 	}
 	private void maskPixel(BufferedImage image, int x, int y, boolean doX, boolean doY) {
 		if(doX && doY)
@@ -74,6 +84,7 @@ public class MaskGrid {
 				image.setRGB(x, y, config.maskingColor.getRGB());
 		}
 	}
+	
 	private int getPixel(BufferedImage image, int x, int y) {
 		if(x < 0)
 			x = 0;
@@ -84,5 +95,9 @@ public class MaskGrid {
 		if(y > image.getHeight())
 			y = image.getHeight()-1;
 		return image.getRGB(x, y);
+	}
+	
+	public void setObserver(ProgressMonitor observer) {
+		this.observer = observer;		
 	}
 }

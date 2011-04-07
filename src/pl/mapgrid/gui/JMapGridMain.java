@@ -1,4 +1,4 @@
-package pl.mapgrid;
+package pl.mapgrid.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -7,56 +7,51 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import pl.mapgrid.ProgressMonitor;
 import pl.mapgrid.actions.Actions;
+import pl.mapgrid.actions.Actions.Name;
 import pl.mapgrid.actions.DetectGridAction;
 import pl.mapgrid.actions.ExitAction;
 import pl.mapgrid.actions.OpenAction;
 import pl.mapgrid.actions.RemoveGridAction;
 
-public class JMapGridMain extends JFrame {
-	private JImageView view;
-	private JImageView hough;
-	private JLabel status;
-	private Actions actions;
+public class JMapGridMain extends JFrame implements ProgressMonitor {
+	public JImageView view;
+	public JProgressBar status;
+	public Actions actions;
 
 	public JMapGridMain() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Map Grid");
+		setupActions();
 		setupComponents();
-		actions = setupActions();
 	}
 	
-	private Actions setupActions() {
-		Actions actions = new Actions();
+	private void setupActions() {
+		actions = new Actions();
 		actions.set(Actions.Name.OPEN, new OpenAction(this));
 		actions.set(Actions.Name.EXIT, new ExitAction());
-		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(view));
-		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(view));
-		return actions;
+		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(this));
+		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(this));
 	}
 
 	private void setupComponents() {
 		view = new JImageView();
-		hough = new JImageView();
 		
 		JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
-		toolbar.add(createToolButton("Open", actions.get(Actions.Name.OPEN)));
-		toolbar.add(createToolButton("Wykryj siatkę", actions.get(Actions.Name.DETECT_GRID)));
-		toolbar.add(createToolButton("Maskuj siatkę", actions.get(Actions.Name.REMOVE_GRID)));
-		toolbar.add(createToolButton("Exit", actions.get(Actions.Name.EXIT)));
+		toolbar.add(createToolButton("Open", Actions.Name.OPEN));
+		toolbar.add(createToolButton("Wykryj siatkę", Actions.Name.DETECT_GRID));
+		toolbar.add(createToolButton("Maskuj siatkę", Actions.Name.REMOVE_GRID));
+		toolbar.add(createToolButton("Exit", Actions.Name.EXIT));
 
-		status = new JLabel("Ready.");
-//		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
-//				new JScrollPane(view), 
-//				new JScrollPane(hough));	
+		status = new JProgressBar(0,100);
 		layoutComponents(toolbar, new JScrollPane(view), status);
 	}
 
@@ -69,9 +64,9 @@ public class JMapGridMain extends JFrame {
 		pack();
 	}
 
-	private JButton createToolButton(String string, Action action) {
+	private JButton createToolButton(String string, Name name) {
 		JButton button = new JButton();
-		button.setAction(action);
+		actions.assign(button, name);
 		button.setText(string);
 		return button;
 	}
@@ -85,22 +80,14 @@ public class JMapGridMain extends JFrame {
 
 	private void open(String string) throws IOException {
 		BufferedImage img = ImageIO.read(new File(string));
-//		ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_GRAY);  
-//		ColorConvertOp op = new ColorConvertOp(cs, null);  
-//		img = op.filter(img, null);
-//		for(int x=0;x<img.getWidth();x++)
-//			for(int y=0;y<img.getHeight();y++) {
-//				int value = HoughTransform.pixelValue(img, x, y);
-//				img.setRGB(x, y, value < 255/2 ? 0 : 0xffffff);
-//			}
 		view.setImage(img);
-		
-		System.out.println("Hough...");
-		HoughTransform ht = new HoughTransform();
-		ht.tranform(view.getImage());
-		view.setLines(ht.coord);
-		System.out.println("done...");
-//		hough.setImage(dest);
+	}
+
+	@Override
+	public void update(int percent) {
+		System.out.println("JMapGridMain.update()" + percent);
+		status.setValue(percent);
+		status.repaint();
 	}
 
 }

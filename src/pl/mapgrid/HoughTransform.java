@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
 public class HoughTransform {
 	public static class Config {
 		public double houghMaximaThreshold = 0.5;
 		public int rejectDistanceLessThen= 5;
 		public int houghGroupingDistance = 5;
+		public int maxLines = 100;
 		
 		public double aberration = Math.toRadians(10); 
 		public double angleStep=Math.toRadians(0.05);
@@ -23,6 +25,7 @@ public class HoughTransform {
 	private double[] angle_h;
 	private double[] sin;
 	private double[] cos;
+	private ProgressMonitor observer;
 
 	public HoughTransform(Config config) {
 		this.config = config;		
@@ -49,42 +52,49 @@ public class HoughTransform {
 		this(new Config());
 	}
 
-	public List<int[]> tranform(BufferedImage src) {
-		coord.clear();		
-		
-		int w = src.getWidth();
-		int h = src.getHeight();
-		int distMax_v=w;
-		int distMax_h=h;
-		space_v = new short[angle_v.length][distMax_v+1];
-		space_h = new short[angle_h.length][distMax_h+1];
-		for(int x=0;x<w;++x) {
-			if(x % 100 ==0)
-				System.out.println( 100*x/w);
-			for (int y = 0; y < h; ++y) {
-				if (isPoint(src, x, y)) {
-					for (int i = 0; i < angle_v.length; ++i) {
-						//sin_h[i] = cos[i]
-						//cos_h[i] = -sin[i]
-						int dist_v =  (int) (y * sin[i] + x * cos[i]);
-						int dist_h = (int) (y * cos[i] - x * sin[i]);
-						incrementSpace(distMax_v, i, dist_v, space_v);
-						incrementSpace(distMax_h, i, dist_h, space_h);
+	public List<double[]> findGrid(BufferedImage src) {
+		try {
+			int w = src.getWidth();
+			int h = src.getHeight();
+			int distMax_v=w;
+			int distMax_h=h;
+			space_v = new short[angle_v.length][distMax_v+1];
+			space_h = new short[angle_h.length][distMax_h+1];
+			for(int x=0;x<w;++x) {
+				progres(100*x/w);
+				for (int y = 0; y < h; ++y) {
+					if (isPoint(src, x, y)) {
+						for (int i = 0; i < angle_v.length; ++i) {
+							//sin_h[i] = cos[i]
+							//cos_h[i] = -sin[i]
+							int dist_v =  (int) (y * sin[i] + x * cos[i]);
+							int dist_h = (int) (y * cos[i] - x * sin[i]);
+							incrementSpace(distMax_v, i, dist_v, space_v);
+							incrementSpace(distMax_h, i, dist_h, space_h);
+						}
 					}
 				}
 			}
+			return getLineParameters(angle_v, angle_h, space_v, space_h);
+		}finally{
+			progres(0);
 		}
-		return getLineParameters(angle_v, angle_h, space_v, space_h);
 	}
 
-	private List<int[]> getLineParameters(double[] angle_v, double[] angle_h,
+	private void progres(int percent) {
+		if(observer != null)
+			observer.update(percent);
+	}
+
+	private List<double[]> getLineParameters(double[] angle_v, double[] angle_h,
 			short[][] space_v, short[][] space_h) {
+		List<double[]> lines = new ArrayList<double[]>(); 		
 		List<int[]> points;
 		points = groupPoints(space_v, findMax(space_v));
-		convertToParameters(angle_v, points);
+		convertToParameters(angle_v, points, lines);
 		points = groupPoints(space_h, findMax(space_h));
-		convertToParameters(angle_h, points);
-		return points;
+		convertToParameters(angle_h, points, lines);
+		return lines;
 	}
 
 	private List<int[]> groupPoints(short[][] space, int max) {
@@ -107,11 +117,13 @@ public class HoughTransform {
 		return max;
 	}
 
-	private void convertToParameters(double[] angle, List<int[]> points) {
+	private void convertToParameters(double[] angle, List<int[]> points, List<double[]> lines) {		
 		for (int[] p : points) {
 			int a = p[0];
 			int dist = p[1];
-			coord.add(new double[] { angle[a], dist });			
+			lines.add(new double[] { angle[a], dist });
+			if(lines.size() > config.maxLines)
+				throw new RuntimeException("More than "+config.maxLines+" detected. ");
 		}
 	}
 
@@ -177,8 +189,6 @@ public class HoughTransform {
 		return (r+g+b < 0x80*3);
 	}
 	
-	public List<double[]> coord = new ArrayList<double[]>(); 
-	
 	public static int pixelValue(BufferedImage src, int x, int y) {		
 		int rgb = src.getRGB(x, y);
 		return pixelValue(rgb);
@@ -189,6 +199,10 @@ public class HoughTransform {
 		int g = (rgb >>  8) & 0xFF;
 		int b = (rgb >>  0) & 0xFF;		
 		return (r+g+b)/3;
+	}
+
+	public void setObserver(ProgressMonitor observer) {
+		this.observer = observer;
 	}
 
 }

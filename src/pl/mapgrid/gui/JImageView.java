@@ -1,4 +1,4 @@
-package pl.mapgrid;
+package pl.mapgrid.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,8 +10,7 @@ import java.util.Observer;
 
 import javax.swing.JComponent;
 
-import pl.mapgrid.actions.MaskGrid;
-import pl.mapgrid.actions.MaskGrid.Config;
+import pl.mapgrid.MaskGrid;
 
 public class JImageView extends JComponent implements Observer {
 	private BufferedImage image = null;
@@ -23,14 +22,26 @@ public class JImageView extends JComponent implements Observer {
 		if (image == null)
 			return;
 		g.drawImage(image, 0, 0, null);
+		drawLines(g);
+	}
+
+	private void drawLines(Graphics g) {
 		g.setColor(new Color(0x80ff0000, true));
-//		if(lines != null) { 
-//			for (double[] c : lines) {
-//				g.drawLine(-1,lineY(0,c[0],c[1])-1,getWidth()-1,lineY(getWidth(),c[0],c[1])+1);
-//				g.drawLine(0,lineY(0,c[0],c[1]),getWidth(),lineY(getWidth(),c[0],c[1]));
-//				g.drawLine(+1,lineY(0,c[0],c[1])+1,getWidth()+1,lineY(getWidth(),c[0],c[1])+1);
-//			}
-//		}
+		if(lines != null) { 
+			for (double[] c : lines) {
+				int x1 = 0;
+				int y1 = MaskGrid.lineY(x1,c[x1],c[1]);
+				int x2 = getWidth();
+				int y2 = MaskGrid.lineY(x2,c[x1],c[1]);
+				drawLine(g, x1, y1, x2, y2, 5);
+			}
+		}
+	}
+
+	private void drawLine(Graphics g, int x1, int y1, int x2, int y2, int w) {
+		int width = w/2;
+		for(int i=-width;i<=width;++i)
+			g.drawLine(x1+i,y1+i,x2+i,y2+i);
 	}
 
 	public void setImage(BufferedImage image) {
@@ -47,13 +58,13 @@ public class JImageView extends JComponent implements Observer {
 	public void update(Observable o, Object arg) {
 	}
 
-	public void setLines(List<double[]> coord) {
-		this.lines = coord;	
-		Config cfg = new Config();
-		cfg.maskingColor = Color.RED;
-		MaskGrid masker = new MaskGrid(cfg);
-		image = masker.filter(image, coord);
+	public void setLines(List<double[]> lines) {
+		this.lines = lines;	
 		repaint();
+	}
+
+	public List<double[]> getLines() {
+		return lines;
 	}
 
 }

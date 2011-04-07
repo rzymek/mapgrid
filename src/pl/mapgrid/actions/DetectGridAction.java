@@ -1,23 +1,27 @@
 package pl.mapgrid.actions;
 
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
-import javax.swing.AbstractAction;
+import pl.mapgrid.HoughTransform;
+import pl.mapgrid.gui.JMapGridMain;
 
-import pl.mapgrid.JImageView;
+public class DetectGridAction extends BackgroundAction {
 
-public class DetectGridAction extends AbstractAction {
+	private final JMapGridMain main;
 
-	private final JImageView view;
-
-	public DetectGridAction(JImageView view) {
-		this.view = view;
+	public DetectGridAction(JMapGridMain main) {
+		super(main.actions);
+		this.main = main;
 	}
+
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		BufferedImage image = view.getImage();		
+	public void run() {
+		BufferedImage image = main.view.getImage();
+		HoughTransform transform = new HoughTransform();
+		transform.setObserver(main);
+		List<double[]> lines = transform.findGrid(image);
+		main.view.setLines(lines);
 	}
-
 }
