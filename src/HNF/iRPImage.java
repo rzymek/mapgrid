@@ -8,10 +8,13 @@ package HNF;
  * @author bka
  * @version "0.1"
  */
+import java.awt.Canvas;
 import java.awt.Graphics;
-import java.awt.*;
-import java.awt.image.PixelGrabber;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
 import java.awt.image.MemoryImageSource;
+import java.awt.image.PixelGrabber;
 
 
 public class iRPImage extends Canvas{
@@ -215,7 +218,7 @@ public void drawLineWithConstantValue(int a1,int b1,int a2,int b2,int value){
   		for(a = a1; a != a2+delta; a+=delta)//for(a = a1; a < a2; a++)
     	{
 			b = (double)b1 + ((double)(b2-b1)* ((double)a-(double)a1)/((double)a2-(double)a1));
-			//Die Abfrage ist zufällig wegen ArrayindexofBoundexception!!
+			//Die Abfrage ist zufï¿½llig wegen ArrayindexofBoundexception!!
 			if(((int)b != sizeY) && ((int)a !=sizeX))
 			{  
 				SetPixel((int)a,(int)b, value);
@@ -260,7 +263,7 @@ public void drawLineWithConstantValue(int a1,int b1,int a2,int b2,int value){
   		for(a = a1; a != a2+delta; a+=delta)//for(a = a1; a < a2; a++)
     	{
 			b = (double)b1 + ((double)(b2-b1)* ((double)a-(double)a1)/((double)a2-(double)a1));
-			//Die Abfrage ist zufällig wegen ArrayindexofBoundexception!!
+			//Die Abfrage ist zufï¿½llig wegen ArrayindexofBoundexception!!
 			if(((int)b != sizeY) && ((int)a !=sizeX))
 			{
 				SetPixel((int)a,(int)b, this.GetPixel((int)a,(int)b)+1 );

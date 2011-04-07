@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.io.IOException;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -25,6 +27,7 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 	public JImageView view;
 	public JProgressBar status;
 	public Actions actions;
+	public List<double[]> lines;
 
 	public JMapGridMain() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

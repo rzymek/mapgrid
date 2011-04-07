@@ -1,9 +1,10 @@
 
 package HNF;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
-import javax.swing.*;
+import javax.swing.JPanel;
 
 /**
  * Klasse zum Zeichnen von Eingangs-und Ausgangsbild.
@@ -211,7 +212,7 @@ public class GeneralHoughViewer extends JPanel{
     /**
      * Dieser Methode wird das Array mit den Positionen der Maxima 
      * uebergeben. Hierbei ist maxArray[i][0] jeweils
-     * der Winkel im Bogenmaß und maxArray[i][1] 
+     * der Winkel im Bogenmaï¿½ und maxArray[i][1] 
      * der Abstand der potentiellen Geraden vom Ursprung.
      * (--> der Houghraum hat das Koordinatensystem (theta,r))
      * 

@@ -1,9 +1,12 @@
 
 package HNF;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  * Diese Klasse verwaltet ein Image in einem Applet.

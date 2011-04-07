@@ -2,6 +2,7 @@ package pl.mapgrid.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -21,6 +22,7 @@ public class OpenAction extends AbstractAction {
 	public void actionPerformed(ActionEvent e) {
 		try {	
 			JFileChooser chooser = FileChooserSingleton.instance();
+			chooser.setCurrentDirectory(new File("./input/"));
 			int result = chooser.showOpenDialog(main);
 			if(result == JFileChooser.APPROVE_OPTION) {
 				BufferedImage img = ImageIO.read(chooser.getSelectedFile());

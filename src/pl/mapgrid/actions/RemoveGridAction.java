@@ -1,6 +1,7 @@
 package pl.mapgrid.actions;
 
 import java.awt.image.BufferedImage;
+
 import pl.mapgrid.MaskGrid;
 import pl.mapgrid.gui.JMapGridMain;
 
@@ -18,7 +19,7 @@ public class RemoveGridAction extends BackgroundAction {
 		BufferedImage image = main.view.getImage();
 		MaskGrid maskGrid = new MaskGrid();
 		maskGrid.setObserver(main);
-		image = maskGrid.filter(image, main.view.getLines());
+		image = maskGrid.filter(image, main.lines);
 		main.view.setShowGrid(false);
 		main.view.setImage(image);
 	}

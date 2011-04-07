@@ -73,7 +73,8 @@ public class HoughTransform {
 					}
 				}
 			}
-		}
+		}		
+		progres(100);
 		return getLineParameters(angle_v, angle_h, space_v, space_h);
 	}
 
@@ -85,10 +86,14 @@ public class HoughTransform {
 	private List<double[]> getLineParameters(double[] angle_v, double[] angle_h,
 			short[][] space_v, short[][] space_h) {
 		List<double[]> lines = new ArrayList<double[]>(); 		
-		List<int[]> points;
-		points = groupPoints(space_v, findMax(space_v));
+		List<int[]> points;		
+
+		short max;
+		max = findMax(space_v);
+		points = groupPoints(space_v, max);
 		convertToParameters(angle_v, points, lines);
-		points = groupPoints(space_h, findMax(space_h));
+		max = findMax(space_h);
+		points = groupPoints(space_h, max);
 		convertToParameters(angle_h, points, lines);
 		return lines;
 	}

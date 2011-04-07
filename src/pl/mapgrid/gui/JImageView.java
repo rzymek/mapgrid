@@ -14,37 +14,22 @@ import pl.mapgrid.MaskGrid;
 
 public class JImageView extends JComponent implements Observer {
 	private BufferedImage image = null;
-	private List<double[]> lines;
 	private boolean showGrid =true;
+	private BufferedImage grid;
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
 		if (image == null)
 			return;
-		g.drawImage(image, 0, 0, null);
+		g.drawImage(image, 0, 0, this);
 		drawLines(g);
 	}
 
 	private void drawLines(Graphics g) {
-		if(showGrid == false)
+		if(showGrid == false || grid == null)
 			return;
-		g.setColor(new Color(0x80ff0000, true));
-		if(lines != null) { 
-			for (double[] c : lines) {
-				int x1 = 0;
-				int y1 = MaskGrid.lineY(x1,c[x1],c[1]);
-				int x2 = getWidth();
-				int y2 = MaskGrid.lineY(x2,c[x1],c[1]);
-				drawLine(g, x1, y1, x2, y2, 5);
-			}
-		}
-	}
-
-	private void drawLine(Graphics g, int x1, int y1, int x2, int y2, int w) {
-		int width = w/2;
-		for(int i=-width;i<=width;++i)
-			g.drawLine(x1+i,y1+i,x2+i,y2+i);
+		g.drawImage(grid, 0, 0, this);
 	}
 
 	public void setImage(BufferedImage image) {
@@ -62,13 +47,37 @@ public class JImageView extends JComponent implements Observer {
 	}
 
 	public void setLines(List<double[]> lines) {
-		this.lines = lines;	
+		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics g = grid.getGraphics();
+		g.setColor(new Color(255,0,0,128));
+		int x1,x2,y1,y2;
+		final double d45 = Math.PI/8;
+		for (double[] c : lines) {
+			if(-d45 < c[0] && c[0] < d45) {
+				//vertical
+				y1 = 0;
+				x1 = MaskGrid.lineX(y1,c[0],c[1]);
+				y2 = image.getWidth();
+				x2 = MaskGrid.lineX(y2,c[0],c[1]);
+				g.fillPolygon(
+						new int[]{x1-5,x1+5,x2+5,x2-5},
+						new int[]{y1,y1,y2,y2},
+						4);
+			}else{
+				//horizontal
+				x1 = 0;
+				y1 = MaskGrid.lineY(x1,c[0],c[1]);
+				x2 = image.getWidth();
+				y2 = MaskGrid.lineY(x2,c[0],c[1]);
+				g.fillPolygon(
+						new int[]{x1,x1,x2,x2},
+						new int[]{y1-5,y1+5,y2+5,y2-5},
+						4);
+			}
+		}
 		repaint();
 	}
 
-	public List<double[]> getLines() {
-		return lines;
-	}
 
 	public void toogleShowGrid() {
 		showGrid = !showGrid;

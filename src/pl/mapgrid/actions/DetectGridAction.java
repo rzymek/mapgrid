@@ -1,7 +1,6 @@
 package pl.mapgrid.actions;
 
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import pl.mapgrid.HoughTransform;
 import pl.mapgrid.gui.JMapGridMain;
@@ -20,9 +19,10 @@ public class DetectGridAction extends BackgroundAction {
 		BufferedImage image = main.view.getImage();
 		HoughTransform transform = new HoughTransform();
 		transform.setObserver(main);
-		List<double[]> lines = transform.findGrid(image);
+		main.lines = transform.findGrid(image);
 		main.view.setShowGrid(true);
-		main.view.setLines(lines);
+		main.view.setLines(main.lines);
+		main.view.repaint();
 	}
 	
 	@Override
