@@ -1,4 +1,4 @@
-package pl.mapgrid;
+package pl.mapgrid.actions;
 
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 
 import javax.swing.AbstractAction;
+
+import pl.mapgrid.JImageView;
 
 public class RemoveGridAction extends AbstractAction {
 

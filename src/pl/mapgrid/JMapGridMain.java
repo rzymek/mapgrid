@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -16,25 +15,43 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
+import pl.mapgrid.actions.Actions;
+import pl.mapgrid.actions.DetectGridAction;
+import pl.mapgrid.actions.ExitAction;
+import pl.mapgrid.actions.OpenAction;
+import pl.mapgrid.actions.RemoveGridAction;
+
 public class JMapGridMain extends JFrame {
 	private JImageView view;
 	private JImageView hough;
 	private JLabel status;
+	private Actions actions;
 
 	public JMapGridMain() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Map Grid");
 		setupComponents();
+		actions = setupActions();
 	}
 	
+	private Actions setupActions() {
+		Actions actions = new Actions();
+		actions.set(Actions.Name.OPEN, new OpenAction(this));
+		actions.set(Actions.Name.EXIT, new ExitAction());
+		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(view));
+		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(view));
+		return actions;
+	}
+
 	private void setupComponents() {
 		view = new JImageView();
 		hough = new JImageView();
 		
 		JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
-		toolbar.add(createToolButton("Open", Actions.OPEN));
-		toolbar.add(createToolButton("Usuń siatkę", new RemoveGridAction(view)));
-		toolbar.add(createToolButton("Exit", Actions.EXIT));
+		toolbar.add(createToolButton("Open", actions.get(Actions.Name.OPEN)));
+		toolbar.add(createToolButton("Wykryj siatkę", actions.get(Actions.Name.DETECT_GRID)));
+		toolbar.add(createToolButton("Maskuj siatkę", actions.get(Actions.Name.REMOVE_GRID)));
+		toolbar.add(createToolButton("Exit", actions.get(Actions.Name.EXIT)));
 
 		status = new JLabel("Ready.");
 //		JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
@@ -61,7 +78,7 @@ public class JMapGridMain extends JFrame {
 
 	public static void main(String[] args) throws IOException {
 		JMapGridMain main = new JMapGridMain();
-		main.open("redriver3/rr3-10.png");
+		main.open("input/rr3.png");
 //		main.open("/home/rzymek/Pictures/maps/ramsar2010/topo25.png");
 		main.setVisible(true); 
 	}
@@ -80,10 +97,11 @@ public class JMapGridMain extends JFrame {
 		
 		System.out.println("Hough...");
 		HoughTransform ht = new HoughTransform();
-		BufferedImage dest = ht.tranform2(view.getImage());
+		ht.tranform(view.getImage());
 		view.setLines(ht.coord);
 		System.out.println("done...");
 //		hough.setImage(dest);
 	}
 
 }
+
