@@ -2,7 +2,9 @@ package pl.mapgrid.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -14,21 +16,32 @@ import pl.mapgrid.gui.JMapGridMain;
 public class OpenAction extends AbstractAction {
 
 	private final JMapGridMain main;
+	private JFileChooser chooser;
 
 	public OpenAction(JMapGridMain main) {
 		this.main = main;
+		chooser = new JFileChooser();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		try {
-	
-			JFileChooser chooser = new JFileChooser();
+		try {	
 			FileFilter filter = new FileFilter() {
 				
 				@Override
 				public String getDescription() {
-					return Arrays.asList(ImageIO.getReaderFormatNames()).toString();
+					Set<String> uniq = new TreeSet<String>();					
+					for (String format : ImageIO.getReaderFormatNames()) {
+						uniq.add(format.toLowerCase());
+					}
+					StringBuilder desc = new StringBuilder("Pliki graficzne: ");
+					Iterator<String> iterator = uniq.iterator();
+					while (iterator.hasNext()) {
+						desc.append(iterator.next());
+						if(iterator.hasNext())
+							desc.append(", ");
+					}
+					return desc.toString();					
 				}
 				
 				@Override

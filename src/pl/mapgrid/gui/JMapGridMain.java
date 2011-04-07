@@ -3,10 +3,7 @@ package pl.mapgrid.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -73,21 +70,12 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 
 	public static void main(String[] args) throws IOException {
 		JMapGridMain main = new JMapGridMain();
-		main.open("input/rr3.png");
-//		main.open("/home/rzymek/Pictures/maps/ramsar2010/topo25.png");
 		main.setVisible(true); 
-	}
-
-	private void open(String string) throws IOException {
-		BufferedImage img = ImageIO.read(new File(string));
-		view.setImage(img);
 	}
 
 	@Override
 	public void update(int percent) {
-		System.out.println("JMapGridMain.update()" + percent);
 		status.setValue(percent);
-		status.repaint();
 	}
 
 }
