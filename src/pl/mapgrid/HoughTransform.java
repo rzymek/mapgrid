@@ -12,12 +12,12 @@ public class HoughTransform {
 	public static class Config {
 		@Doc("Dopuszczalne odchylenie lini w stopniach")
 		public double aberration = 10;
-		@Doc("Próbkowanie odchylenia lini w stopniach (mniej = dokładnie i wolniej)")
+		@Doc("Próbkowanie odchylenia lini w stopniach. Mniej = dokładniej i wolniej")
 		public double angleStep=0.05;
 		@Doc("Współczynnik badania ekstremum w przestrzeni Hough. \n" +
-				"Jaki procent wartości maksymalnej uznać za ekstremum lokalne. (mniej = więcej wykrytych linii)")
-		public double houghMaximaThreshold = 0.5;
-		@Doc("Grupuj linie bliższe niż")
+				"Jaki procent wartości maksymalnej uznać za ekstremum lokalne. Mniej = więcej wykrytych linii")
+		public double houghMaximaThreshold = 0.6;
+		@Doc("Grupuj podobne linie. Mniej = wiecej lini")
 		public int houghGroupingDistance = 5;
 		@Doc("Maksymalna liczba linii")
 		public int maxLines = 100;

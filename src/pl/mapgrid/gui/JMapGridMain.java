@@ -3,17 +3,20 @@ package pl.mapgrid.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.io.IOException;
+import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 
 import pl.mapgrid.HoughTransform;
+import pl.mapgrid.HoughTransform.Config;
+import pl.mapgrid.MaskGrid;
 import pl.mapgrid.ProgressMonitor;
 import pl.mapgrid.actions.Actions;
 import pl.mapgrid.actions.Actions.Name;
@@ -29,8 +32,10 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 	public JProgressBar status;
 	public Actions actions;
 	public List<double[]> lines;
+	public HoughTransform.Config houghConfig = new HoughTransform.Config();
+	public MaskGrid.Config maskConfig = new MaskGrid.Config();
 
-	public JMapGridMain() {
+	public JMapGridMain() throws Exception {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Map Grid");
 		setupActions();
@@ -42,16 +47,17 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		actions.set(Actions.Name.OPEN, new OpenAction(this));
 		actions.set(Actions.Name.SAVE, new SaveAction(this));
 		actions.set(Actions.Name.EXIT, new ExitAction());
-		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(this));
 		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(this));
+		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(this));
 		actions.set(Actions.Name.TOGGLE_GRID, new ToggleGridAction(this));
 	}
 
-	private void setupComponents() {
+	private void setupComponents() throws Exception {
 		view = new JImageView();
 		
 		JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
 		toolbar.add(createToolButton(Actions.Name.OPEN));
+		toolbar.add(createToolButton(Actions.Name.SAVE));
 		toolbar.add(createToolButton(Actions.Name.DETECT_GRID));
 		toolbar.add(createToolButton(Actions.Name.REMOVE_GRID));
 		toolbar.add(createToolButton(Actions.Name.TOGGLE_GRID));
@@ -61,17 +67,18 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		status.setString("");
 		status.setStringPainted(true);
 		
-//		JForm houghSetup = new JForm();
+		JForm setup = new JForm(houghConfig, maskConfig);
 		
-		layoutComponents(toolbar, new JScrollPane(view), status);
+		layoutComponents(toolbar, new JScrollPane(view), setup, status);
 	}
 
-	private void layoutComponents(JComponent top, JComponent center, JComponent bottom) {
+	private void layoutComponents(JComponent top, JComponent center, JComponent right, JComponent bottom) {
 		Container pane = getContentPane();
 		pane.add(top, BorderLayout.NORTH);
 		pane.add(center, BorderLayout.CENTER);
+		pane.add(right, BorderLayout.EAST);
 		pane.add(bottom, BorderLayout.SOUTH);
-		setPreferredSize(new Dimension(800,600));
+		setPreferredSize(new Dimension(800,700));
 		pack();
 	}
 
@@ -82,7 +89,7 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		return button;
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		JMapGridMain main = new JMapGridMain();
 		main.setVisible(true); 
 	}

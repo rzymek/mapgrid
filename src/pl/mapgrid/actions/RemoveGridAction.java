@@ -17,7 +17,7 @@ public class RemoveGridAction extends BackgroundAction {
 	@Override
 	public void run() {
 		BufferedImage image = main.view.getImage();
-		MaskGrid maskGrid = new MaskGrid();
+		MaskGrid maskGrid = new MaskGrid(main.maskConfig);
 		maskGrid.setObserver(main);
 		image = maskGrid.filter(image, main.lines);
 		main.view.setShowGrid(false);

@@ -21,7 +21,7 @@ public class ToggleGridAction extends AbstractAction {
 	
 	@Override
 	public String toString() {
-		return "Przełącz wyświerlanie siatki";
+		return "Pokaż/Ukryj wykrytą siatkę";
 	}
 
 }
