@@ -3,6 +3,7 @@ package pl.mapgrid.actions;
 import java.awt.image.BufferedImage;
 
 import pl.mapgrid.HoughTransform;
+import pl.mapgrid.actions.base.BackgroundAction;
 import pl.mapgrid.gui.JMapGridMain;
 
 public class DetectGridAction extends BackgroundAction {

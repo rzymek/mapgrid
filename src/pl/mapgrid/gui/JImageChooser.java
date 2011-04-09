@@ -1,4 +1,4 @@
-package pl.mapgrid.actions;
+package pl.mapgrid.gui;
 
 public class JImageChooser {
 

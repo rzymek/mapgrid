@@ -1,4 +1,4 @@
-package pl.mapgrid.actions;
+package pl.mapgrid.actions.base;
 
 import java.awt.event.ActionEvent;
 

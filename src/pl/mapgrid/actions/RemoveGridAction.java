@@ -3,6 +3,7 @@ package pl.mapgrid.actions;
 import java.awt.image.BufferedImage;
 
 import pl.mapgrid.MaskGrid;
+import pl.mapgrid.actions.base.BackgroundAction;
 import pl.mapgrid.gui.JMapGridMain;
 
 public class RemoveGridAction extends BackgroundAction {

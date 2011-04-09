@@ -3,37 +3,39 @@ package pl.mapgrid.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 
 import pl.mapgrid.HoughTransform;
-import pl.mapgrid.HoughTransform.Config;
 import pl.mapgrid.MaskGrid;
 import pl.mapgrid.ProgressMonitor;
-import pl.mapgrid.actions.Actions;
-import pl.mapgrid.actions.Actions.Name;
 import pl.mapgrid.actions.DetectGridAction;
 import pl.mapgrid.actions.ExitAction;
 import pl.mapgrid.actions.OpenAction;
 import pl.mapgrid.actions.RemoveGridAction;
 import pl.mapgrid.actions.SaveAction;
 import pl.mapgrid.actions.ToggleGridAction;
+import pl.mapgrid.actions.ToggleSetupAction;
+import pl.mapgrid.actions.base.Actions;
+import pl.mapgrid.actions.base.Actions.Name;
 
-public class JMapGridMain extends JFrame implements ProgressMonitor {
+public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExceptionHandler {
 	public JImageView view;
 	public JProgressBar status;
 	public Actions actions;
 	public List<double[]> lines;
 	public HoughTransform.Config houghConfig = new HoughTransform.Config();
 	public MaskGrid.Config maskConfig = new MaskGrid.Config();
+	public JForm setup;
 
 	public JMapGridMain() throws Exception {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -50,24 +52,23 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(this));
 		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(this));
 		actions.set(Actions.Name.TOGGLE_GRID, new ToggleGridAction(this));
+		actions.set(Actions.Name.TOGGLE_SETUP, new ToggleSetupAction(this));
 	}
 
 	private void setupComponents() throws Exception {
 		view = new JImageView();
 		
 		JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
-		toolbar.add(createToolButton(Actions.Name.OPEN));
-		toolbar.add(createToolButton(Actions.Name.SAVE));
-		toolbar.add(createToolButton(Actions.Name.DETECT_GRID));
-		toolbar.add(createToolButton(Actions.Name.REMOVE_GRID));
-		toolbar.add(createToolButton(Actions.Name.TOGGLE_GRID));
-		toolbar.add(createToolButton(Actions.Name.EXIT));
+		Name[] values = Actions.Name.values();
+		for (Name name : values) 
+			toolbar.add(createToolButton(name));
 
 		status = new JProgressBar(0,100);
 		status.setString("");
 		status.setStringPainted(true);
 		
-		JForm setup = new JForm(houghConfig, maskConfig);
+		setup = new JForm(houghConfig, maskConfig);
+		setup.setVisible(false);
 		
 		layoutComponents(toolbar, new JScrollPane(view), setup, status);
 	}
@@ -90,8 +91,18 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 	}
 
 	public static void main(String[] args) throws Exception {
-		JMapGridMain main = new JMapGridMain();
-		main.setVisible(true); 
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					JMapGridMain main = new JMapGridMain();
+					Thread.setDefaultUncaughtExceptionHandler(main);
+					main.setVisible(true);
+				}catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -102,6 +113,11 @@ public class JMapGridMain extends JFrame implements ProgressMonitor {
 	@Override
 	public void setProgressMessage(String string) {
 		status.setString(string);
+	}
+
+	@Override
+	public void uncaughtException(Thread thread, Throwable exception) {
+		JOptionPane.showMessageDialog(this, exception.toString());
 	}
 
 }

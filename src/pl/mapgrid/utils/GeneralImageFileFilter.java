@@ -1,4 +1,4 @@
-package pl.mapgrid.actions;
+package pl.mapgrid.utils;
 
 import java.io.File;
 import java.util.Iterator;
@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileFilter;
 
-public class ImageFileFilter extends FileFilter {
+public class GeneralImageFileFilter extends FileFilter {
 	@Override
 	public String getDescription() {
 		Set<String> uniq = new TreeSet<String>();					

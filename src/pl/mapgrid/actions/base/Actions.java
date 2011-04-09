@@ -1,4 +1,4 @@
-package pl.mapgrid.actions;
+package pl.mapgrid.actions.base;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class Actions {
 	private Map<Name, Action> actions = new HashMap<Name, Action>();
 	private Map<Action, List<JComponent>> using = new HashMap<Action, List<JComponent>>();
 	public static enum Name {
-		OPEN, EXIT, REMOVE_GRID, DETECT_GRID, TOGGLE_GRID, SAVE
+		OPEN, SAVE, DETECT_GRID, REMOVE_GRID, TOGGLE_GRID, TOGGLE_SETUP, EXIT
 	};	
 	
 	public void set(Name name, Action action) {

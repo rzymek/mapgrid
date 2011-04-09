@@ -13,11 +13,8 @@ import javax.swing.SpringLayout;
 
 import layout.SpringUtilities;
 import pl.mapgrid.Doc;
-import pl.mapgrid.MaskGrid.Config;
 
 public class JForm extends JPanel {
-	private final Object[] beans;
-
 	private static class TextFieldListener implements FocusListener {
 		private final Field field;
 		private final Object bean;
@@ -58,7 +55,6 @@ public class JForm extends JPanel {
 
 	public JForm(Object... beans) throws Exception {
 		super(new SpringLayout());
-		this.beans = beans;
 		int rows = 0;
 		for (Object bean : beans) {
 			Field[] fields = bean.getClass().getFields();
