@@ -31,6 +31,7 @@ import pl.mapgrid.actions.ToggleGridAction;
 import pl.mapgrid.actions.ToggleSetupAction;
 import pl.mapgrid.actions.base.Actions;
 import pl.mapgrid.actions.base.Actions.Name;
+import pl.mapgrid.utils.DragableViewportMouseListener;
 
 public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExceptionHandler {
 	public JImageView view;
@@ -75,7 +76,11 @@ public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExc
 		setup = new JForm(houghConfig, maskConfig);
 		setup.setVisible(false);
 		
-		layoutComponents(toolbar, new JScrollPane(view), setup, status);
+		JScrollPane scroll = new JScrollPane(view);
+		DragableViewportMouseListener drag = new DragableViewportMouseListener(scroll.getViewport());
+		view.addMouseListener(drag);
+		view.addMouseMotionListener(drag);
+		layoutComponents(toolbar, scroll, setup, status);
 	}
 
 	private void layoutComponents(JComponent top, JComponent center, JComponent right, JComponent bottom) {

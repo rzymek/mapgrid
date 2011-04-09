@@ -1,22 +1,38 @@
 package pl.mapgrid.gui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 
 import pl.mapgrid.MaskGrid;
 
-public class JImageView extends JComponent implements Observer {
+public class JImageView extends JComponent implements Observer, MouseMotionListener, MouseListener {
 	private BufferedImage image = null;
 	private boolean showGrid =true;
 	private BufferedImage grid;
+	private Point dragStart;
+	private Point mousePosition;
 
+	public JImageView() {
+		setAutoscrolls(true);
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
+	
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
@@ -36,6 +52,7 @@ public class JImageView extends JComponent implements Observer {
 		this.image = image;
 		setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
 		repaint();
+		revalidate();
 	}
 
 	public BufferedImage getImage() {
@@ -87,6 +104,45 @@ public class JImageView extends JComponent implements Observer {
 	public void setShowGrid(boolean b) {
 		showGrid = b;
 		repaint();
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		if(dragStart != null) {
+			JScrollPane pane = (JScrollPane) getParent();
+			JViewport viewport = pane.getViewport();
+			Point point = e.getPoint();
+//			point.x -= dragStart.x;
+//			point.y -= dragStart.y;
+			System.out.println("JImageView.mouseMoved()");
+			viewport.setViewPosition(point);
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		dragStart = e.getPoint();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent paramMouseEvent) {
+		dragStart = null;
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent paramMouseEvent) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent paramMouseEvent) {
 	}
 
 }
