@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileFilter;
 
-public class GeneralImageFileFilter extends FileFilter {
+public class ImageFileFilter extends FileFilter {
 	@Override
 	public String getDescription() {
 		Set<String> uniq = new TreeSet<String>();					

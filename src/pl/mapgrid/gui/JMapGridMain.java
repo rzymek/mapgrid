@@ -3,9 +3,12 @@ package pl.mapgrid.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -22,6 +25,7 @@ import pl.mapgrid.actions.DetectGridAction;
 import pl.mapgrid.actions.ExitAction;
 import pl.mapgrid.actions.OpenAction;
 import pl.mapgrid.actions.RemoveGridAction;
+import pl.mapgrid.actions.RevertAction;
 import pl.mapgrid.actions.SaveAction;
 import pl.mapgrid.actions.ToggleGridAction;
 import pl.mapgrid.actions.ToggleSetupAction;
@@ -47,6 +51,7 @@ public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExc
 	private void setupActions() {
 		actions = new Actions();
 		actions.set(Actions.Name.OPEN, new OpenAction(this));
+		actions.set(Actions.Name.REVERT, new RevertAction(this));
 		actions.set(Actions.Name.SAVE, new SaveAction(this));
 		actions.set(Actions.Name.EXIT, new ExitAction());
 		actions.set(Actions.Name.DETECT_GRID, new DetectGridAction(this));
@@ -117,7 +122,22 @@ public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExc
 
 	@Override
 	public void uncaughtException(Thread thread, Throwable exception) {
+		exception = getCause(exception);
 		JOptionPane.showMessageDialog(this, exception.toString());
+	}
+
+	private Throwable getCause(Throwable exception) {
+		Throwable cause = exception.getCause();
+		return cause == null ? exception : getCause(cause);
+	}
+
+	public void open(File selectedFile) {
+		try {
+			BufferedImage img = ImageIO.read(selectedFile);
+			view.setImage(img);
+		}catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

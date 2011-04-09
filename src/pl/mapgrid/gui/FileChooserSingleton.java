@@ -2,14 +2,14 @@ package pl.mapgrid.gui;
 
 import javax.swing.JFileChooser;
 
-import pl.mapgrid.utils.GeneralImageFileFilter;
+import pl.mapgrid.utils.ImageFileFilter;
 
 public class FileChooserSingleton {
 	private static FileChooserSingleton instance;
 	private JFileChooser chooser;
 	private FileChooserSingleton() {
 		chooser = new JFileChooser();
-		chooser.setFileFilter(new GeneralImageFileFilter());
+		chooser.setFileFilter(new ImageFileFilter());
 	}
 	public static JFileChooser instance() {
 		if(instance == null)

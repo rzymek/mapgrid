@@ -13,7 +13,7 @@ public class Actions {
 	private Map<Name, Action> actions = new HashMap<Name, Action>();
 	private Map<Action, List<JComponent>> using = new HashMap<Action, List<JComponent>>();
 	public static enum Name {
-		OPEN, SAVE, DETECT_GRID, REMOVE_GRID, TOGGLE_GRID, TOGGLE_SETUP, EXIT
+		OPEN, SAVE, DETECT_GRID, REMOVE_GRID, TOGGLE_GRID, REVERT, TOGGLE_SETUP, EXIT
 	};	
 	
 	public void set(Name name, Action action) {
