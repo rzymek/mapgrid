@@ -1,0 +1,19 @@
+<project name="mapgrid" default="build">
+	<property file="build.properties"/>
+	<target name="build">
+		<jar destfile="mapgrid.jar" basedir="bin"/>
+		<signjar jar="mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore"/>
+	</target>
+	
+	<target name="create.keystore">
+		<delete file="mapgrid.keystore"/>
+		<exec executable="keytool">
+			<arg line="-genkeypair"/>
+			<arg line="-alias mapgrid"/>
+			<arg line="-validity 36500"/>
+			<arg line='-dname "CN=Rzymek FIA, OU=FIA, O=FIA, L=Warszawa, S=Mazowieckie, C=US" '/>
+			<arg line="-keystore mapgrid.keystore"/>
+			<arg line='-storepass "${keystore.pass}"'/>
+		</exec>
+	</target>
+</project>

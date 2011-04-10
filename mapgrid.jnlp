@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- JNLP File for SpringForm -->
+<jnlp spec="1.0+" codebase="http://dl.dropbox.com/u/11015800/mapgrid/"
+	href="mapgrid.jnlp">
+	<information>
+		<title>Maskuj siatkę</title>
+		<vendor>Rzymek FIA</vendor>
+		<description>Usuwanie siatek z map rastrowych</description>
+		<offline-allowed />
+	</information>
+	<resources>
+		<j2se version="1.6+" />
+		<jar href="mapgrid.jar" />
+	</resources>
+	<application-desc main-class="pl.mapgrid.gui.JMapGridMain" />
+	<update check="background" />
+	<security>
+		<all-permissions />
+	</security>
+</jnlp> 
