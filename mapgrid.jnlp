@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- JNLP File for SpringForm -->
-<jnlp spec="1.0+" codebase="http://dl.dropbox.com/u/11015800/mapgrid/"
+<jnlp spec="1.0+" codebase="http://mapgrid.googlecode.com/files/"
 	href="mapgrid.jnlp">
 	<information>
 		<title>Maskuj siatkę</title>
