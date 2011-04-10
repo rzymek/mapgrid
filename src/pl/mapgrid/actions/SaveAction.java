@@ -10,10 +10,11 @@ import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import pl.mapgrid.actions.base.UIAction;
 import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.JMapGridMain;
 
-public class SaveAction extends AbstractAction {
+public class SaveAction extends AbstractAction implements UIAction {
 	private final List<String> imageSuffixes;
 	private final JMapGridMain main;
 
@@ -42,10 +43,16 @@ public class SaveAction extends AbstractAction {
 			}
 		}catch (Exception ex) {
 			throw new RuntimeException(ex);
+		}finally{
+			main.actions.reenable();
 		}
 	}
 	@Override
 	public String toString() {
 		return "Zapisz";
+	}
+	
+	public boolean enabled() {
+		return main.view.getImage() != null;
 	}
 }

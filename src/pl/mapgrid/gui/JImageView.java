@@ -89,4 +89,8 @@ public class JImageView extends JComponent implements Observer {
 		revalidate();
 		repaint();
 	}
+	
+	public BufferedImage getGrid() {
+		return grid;
+	}
 }

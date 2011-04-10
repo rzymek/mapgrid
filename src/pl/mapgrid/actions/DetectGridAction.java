@@ -4,9 +4,10 @@ import java.awt.image.BufferedImage;
 
 import pl.mapgrid.HoughTransform;
 import pl.mapgrid.actions.base.BackgroundAction;
+import pl.mapgrid.actions.base.UIAction;
 import pl.mapgrid.gui.JMapGridMain;
 
-public class DetectGridAction extends BackgroundAction {
+public class DetectGridAction extends BackgroundAction implements UIAction {
 
 	private final JMapGridMain main;
 
@@ -29,5 +30,10 @@ public class DetectGridAction extends BackgroundAction {
 	@Override
 	public String toString() {
 		return "Wykryj";
+	}
+
+	@Override
+	public boolean enabled() {
+		return main.view.getImage() != null;
 	}
 }

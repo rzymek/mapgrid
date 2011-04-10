@@ -44,9 +44,10 @@ public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExc
 
 	public JMapGridMain() throws Exception {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setTitle("Map Grid");
+		setTitle("Maskuj siatkę");
 		setupActions();
 		setupComponents();
+		actions.reenable();
 	}
 	
 	private void setupActions() {
@@ -95,7 +96,7 @@ public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExc
 
 	private JButton createToolButton(Name name) {
 		JButton button = new JButton();
-		actions.assign(button, name);
+		button.setAction(actions.get(name));
 		button.setText(actions.getDescription(name));
 		return button;
 	}

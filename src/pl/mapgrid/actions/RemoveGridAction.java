@@ -4,9 +4,10 @@ import java.awt.image.BufferedImage;
 
 import pl.mapgrid.MaskGrid;
 import pl.mapgrid.actions.base.BackgroundAction;
+import pl.mapgrid.actions.base.UIAction;
 import pl.mapgrid.gui.JMapGridMain;
 
-public class RemoveGridAction extends BackgroundAction {
+public class RemoveGridAction extends BackgroundAction implements UIAction {
 
 	private final JMapGridMain main;
 
@@ -28,5 +29,10 @@ public class RemoveGridAction extends BackgroundAction {
 	@Override
 	public String toString() {
 		return "Maskuj";
+	}
+
+	@Override
+	public boolean enabled() {
+		return main.view.getGrid() != null;
 	}
 }

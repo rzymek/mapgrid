@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-public class ExitAction extends AbstractAction {
+import pl.mapgrid.actions.base.UIAction;
+
+public class ExitAction extends AbstractAction implements UIAction {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -14,5 +16,10 @@ public class ExitAction extends AbstractAction {
 	@Override
 	public String toString() {
 		return "Koniec";
+	}
+
+	@Override
+	public boolean enabled() {
+		return true;
 	}
 }

@@ -7,10 +7,9 @@ import javax.swing.SwingWorker;
 
 import pl.mapgrid.ProgressMonitor;
 
-public abstract class BackgroundAction extends AbstractAction implements
-		Runnable {
-	private final Actions actions;
+public abstract class BackgroundAction extends AbstractAction implements Runnable {
 	private final ProgressMonitor monitor;
+	private final Actions actions;
 
 	public BackgroundAction(Actions actions, ProgressMonitor monitor) {
 		this.actions = actions;
@@ -19,7 +18,7 @@ public abstract class BackgroundAction extends AbstractAction implements
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		actions.setEnabled(this, false);
+		setEnabled(false);
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -27,9 +26,9 @@ public abstract class BackgroundAction extends AbstractAction implements
 				try {
 					BackgroundAction.this.run();
 				} finally {
-					actions.setEnabled(BackgroundAction.this, true);
 					monitor.updateProgress(0);
 					monitor.setProgressMessage("");
+					actions.reenable();
 				}
 				return null;
 			}
