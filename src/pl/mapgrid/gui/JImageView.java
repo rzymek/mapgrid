@@ -10,7 +10,7 @@ import java.util.Observer;
 
 import javax.swing.JComponent;
 
-import pl.mapgrid.MaskGrid;
+import pl.mapgrid.mask.MaskGrid;
 
 public class JImageView extends JComponent implements Observer {
 	private BufferedImage image = null;

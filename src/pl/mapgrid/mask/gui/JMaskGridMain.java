@@ -1,4 +1,4 @@
-package pl.mapgrid.gui;
+package pl.mapgrid.mask.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -18,22 +18,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
-import pl.mapgrid.HoughTransform;
-import pl.mapgrid.MaskGrid;
-import pl.mapgrid.ProgressMonitor;
-import pl.mapgrid.actions.DetectGridAction;
-import pl.mapgrid.actions.ExitAction;
-import pl.mapgrid.actions.OpenAction;
-import pl.mapgrid.actions.RemoveGridAction;
-import pl.mapgrid.actions.RevertAction;
-import pl.mapgrid.actions.SaveAction;
-import pl.mapgrid.actions.ToggleGridAction;
-import pl.mapgrid.actions.ToggleSetupAction;
-import pl.mapgrid.actions.base.Actions;
-import pl.mapgrid.actions.base.Actions.Name;
+import pl.mapgrid.gui.JForm;
+import pl.mapgrid.gui.JImageView;
+import pl.mapgrid.mask.HoughTransform;
+import pl.mapgrid.mask.MaskGrid;
+import pl.mapgrid.mask.gui.Actions.Name;
+import pl.mapgrid.mask.gui.actions.DetectGridAction;
+import pl.mapgrid.mask.gui.actions.ExitAction;
+import pl.mapgrid.mask.gui.actions.OpenAction;
+import pl.mapgrid.mask.gui.actions.RemoveGridAction;
+import pl.mapgrid.mask.gui.actions.RevertAction;
+import pl.mapgrid.mask.gui.actions.SaveAction;
+import pl.mapgrid.mask.gui.actions.ToggleGridAction;
+import pl.mapgrid.mask.gui.actions.ToggleSetupAction;
 import pl.mapgrid.utils.DragableViewportMouseListener;
+import pl.mapgrid.utils.ProgressMonitor;
 
-public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExceptionHandler {
+public class JMaskGridMain extends JFrame implements ProgressMonitor, UncaughtExceptionHandler {
 	public JImageView view;
 	public JProgressBar status;
 	public Actions actions;
@@ -42,7 +43,7 @@ public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExc
 	public MaskGrid.Config maskConfig = new MaskGrid.Config();
 	public JForm setup;
 
-	public JMapGridMain() throws Exception {
+	public JMaskGridMain() throws Exception {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("Maskuj siatkę");
 		setupActions();
@@ -106,7 +107,7 @@ public class JMapGridMain extends JFrame implements ProgressMonitor, UncaughtExc
 			@Override
 			public void run() {
 				try {
-					JMapGridMain main = new JMapGridMain();
+					JMaskGridMain main = new JMaskGridMain();
 					Thread.setDefaultUncaughtExceptionHandler(main);
 					main.setVisible(true);
 				}catch (Exception e) {

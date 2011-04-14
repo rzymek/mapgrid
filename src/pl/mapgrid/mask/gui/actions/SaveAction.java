@@ -1,4 +1,4 @@
-package pl.mapgrid.actions;
+package pl.mapgrid.mask.gui.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -10,15 +10,15 @@ import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import pl.mapgrid.actions.base.UIAction;
 import pl.mapgrid.gui.FileChooserSingleton;
-import pl.mapgrid.gui.JMapGridMain;
+import pl.mapgrid.gui.actions.UIAction;
+import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class SaveAction extends AbstractAction implements UIAction {
 	private final List<String> imageSuffixes;
-	private final JMapGridMain main;
+	private final JMaskGridMain main;
 
-	public SaveAction(JMapGridMain main) {
+	public SaveAction(JMaskGridMain main) {
 		this.main = main;
 		imageSuffixes = Arrays.asList(ImageIO.getWriterFileSuffixes());
 	}

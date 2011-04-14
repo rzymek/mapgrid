@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import layout.SpringUtilities;
-import pl.mapgrid.Doc;
+import pl.mapgrid.mask.Doc;
 
 public class JForm extends JPanel {
 	private static class TextFieldListener implements FocusListener {

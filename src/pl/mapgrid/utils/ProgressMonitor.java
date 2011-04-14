@@ -1,4 +1,4 @@
-package pl.mapgrid;
+package pl.mapgrid.utils;
 
 public interface ProgressMonitor {
 	public void updateProgress(int percent);

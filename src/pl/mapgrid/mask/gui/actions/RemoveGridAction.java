@@ -1,17 +1,17 @@
-package pl.mapgrid.actions;
+package pl.mapgrid.mask.gui.actions;
 
 import java.awt.image.BufferedImage;
 
-import pl.mapgrid.MaskGrid;
-import pl.mapgrid.actions.base.BackgroundAction;
-import pl.mapgrid.actions.base.UIAction;
-import pl.mapgrid.gui.JMapGridMain;
+import pl.mapgrid.gui.actions.BackgroundAction;
+import pl.mapgrid.gui.actions.UIAction;
+import pl.mapgrid.mask.MaskGrid;
+import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class RemoveGridAction extends BackgroundAction implements UIAction {
 
-	private final JMapGridMain main;
+	private final JMaskGridMain main;
 
-	public RemoveGridAction(JMapGridMain main) {
+	public RemoveGridAction(JMaskGridMain main) {
 		super(main.actions, main);
 		this.main = main;
 	}

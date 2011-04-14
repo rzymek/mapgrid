@@ -1,4 +1,4 @@
-package pl.mapgrid;
+package pl.mapgrid.mask;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

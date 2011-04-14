@@ -1,10 +1,12 @@
-package pl.mapgrid.actions.base;
+package pl.mapgrid.mask.gui;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.Action;
+
+import pl.mapgrid.gui.actions.UIAction;
 
 public class Actions {
 	private Map<Name, UIAction> actions = new HashMap<Name, UIAction>();

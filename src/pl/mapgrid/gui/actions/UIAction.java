@@ -1,4 +1,4 @@
-package pl.mapgrid.actions.base;
+package pl.mapgrid.gui.actions;
 
 import javax.swing.Action;
 

@@ -1,10 +1,10 @@
-package pl.mapgrid.actions;
+package pl.mapgrid.mask.gui.actions;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import pl.mapgrid.actions.base.UIAction;
+import pl.mapgrid.gui.actions.UIAction;
 
 public class ExitAction extends AbstractAction implements UIAction {
 

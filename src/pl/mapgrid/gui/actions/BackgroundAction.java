@@ -1,11 +1,12 @@
-package pl.mapgrid.actions.base;
+package pl.mapgrid.gui.actions;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.SwingWorker;
 
-import pl.mapgrid.ProgressMonitor;
+import pl.mapgrid.mask.gui.Actions;
+import pl.mapgrid.utils.ProgressMonitor;
 
 public abstract class BackgroundAction extends AbstractAction implements Runnable {
 	private final ProgressMonitor monitor;

@@ -1,8 +1,10 @@
-package pl.mapgrid;
+package pl.mapgrid.mask;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.List;
+
+import pl.mapgrid.utils.ProgressMonitor;
 
 public class MaskGrid {
 	private final Config config;

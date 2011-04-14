@@ -1,4 +1,4 @@
-package pl.mapgrid;
+package pl.mapgrid.mask;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import pl.mapgrid.utils.ProgressMonitor;
 
 
 public class HoughTransform {
