@@ -12,7 +12,7 @@
 		<j2se version="1.6+" />
 		<jar href="mapgrid.jar" />
 	</resources>
-	<application-desc main-class="pl.mapgrid.gui.JMapGridMain" />
+	<application-desc main-class="pl.mapgrid.mask.gui.JMaskGridMain" />
 	<update check="background" />
 	<security>
 		<all-permissions />
