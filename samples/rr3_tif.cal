@@ -1,0 +1,23 @@
+; Calibration file for QV map
+; MAPC2MAPC Conversion program by John Thorn
+name = 10 = rr3.tif
+fname = 10 = rr3.tif
+proj_mode = 10 = frei
+projparams = 10 = proj=LatLong
+datum1 = 10 = WGS 84# 6378137# 298.257223563# 0# 0# 0#
+c1_x = 7 = 0
+c1_y = 7 = 0
+c2_x = 7 = 1113
+c2_y = 7 = 0
+c3_x = 7 = 1113
+c3_y = 7 = 897
+c4_x = 7 = 0
+c4_y = 7 = 897
+c1_lat = 7 = 52.308917
+c1_lon = 7 = 23.088583
+c2_lat = 7 = 52.305896
+c2_lon = 7 = 23.174813
+c3_lat = 7 = 52.263299
+c3_lon = 7 = 23.170805
+c4_lat = 7 = 52.266316
+c4_lon = 7 = 23.084656
