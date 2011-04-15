@@ -15,6 +15,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
+import pl.mapgrid.calibration.Calibration;
+import pl.mapgrid.calibration.OZIMapReader;
+import pl.mapgrid.grid.UTMGrid;
 import pl.mapgrid.gui.JForm;
 import pl.mapgrid.gui.JImageView;
 import pl.mapgrid.gui.JMainFrame;
@@ -40,6 +43,7 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 	public HoughTransform.Config houghConfig = new HoughTransform.Config();
 	public MaskGrid.Config maskConfig = new MaskGrid.Config();
 	public JForm setup;
+	private Calibration calibration;
 
 	public JMaskGridMain() throws Exception {
 		super();
@@ -47,6 +51,7 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
+		open(new File("samples/rr3.map"));
 	}
 	
 	private void setupActions() {
@@ -110,14 +115,24 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 		status.setString(string);
 	}
 
-	public void open(File selectedFile) {
+	public void open(File file) {
 		try {
-			BufferedImage img = ImageIO.read(selectedFile);
-			view.setImage(img);
+			if(file.getName().toLowerCase().endsWith(".map")) {
+				OZIMapReader reader = new OZIMapReader(file);
+				calibration = reader.read();
+				System.out.println(calibration);
+				BufferedImage image = ImageIO.read(reader.getAssociated());
+				UTMGrid utm = new UTMGrid(image, calibration);
+				image = utm.draw();
+				view.setImage(image);
+			}else{
+				view.setImage(ImageIO.read(file));
+			}
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
+
 	public static void main(String[] args) throws Exception {		
 		SwingUtilities.invokeLater(new JMaskGridMain());
 	}
