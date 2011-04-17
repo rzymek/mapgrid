@@ -1,8 +1,10 @@
 package pl.mapgrid.gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Observable;
@@ -25,7 +27,7 @@ public class JImageView extends JComponent implements Observer {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if (image == null)
-			return;
+			return;	
 		g.drawImage(image, 0, 0, (int) (image.getWidth() * zoom), (int) (image.getHeight() * zoom), this);
 		if (showGrid != false && grid != null)
 			g.drawImage(grid, 0, 0, (int) (image.getWidth() * zoom), (int) (image.getHeight() * zoom), this);
@@ -92,5 +94,15 @@ public class JImageView extends JComponent implements Observer {
 	
 	public BufferedImage getGrid() {
 		return grid;
+	}
+
+	public void setGrid(List<int[]> lines) {
+		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		Graphics2D g = (Graphics2D) grid.getGraphics();
+		g.setColor(new Color(0x80000000, true));
+		g.setStroke(new BasicStroke(3));
+		for (int[] line : lines) 
+			g.drawLine(line[0], line[1], line[2], line[3]);
+		setShowGrid(true);
 	}
 }

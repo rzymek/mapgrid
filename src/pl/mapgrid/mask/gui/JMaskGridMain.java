@@ -3,7 +3,6 @@ package pl.mapgrid.mask.gui;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
@@ -124,11 +123,9 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 				OZIMapReader reader = new OZIMapReader(file);
 				calibration = reader.read();
 				System.out.println(calibration);
-				BufferedImage image = ImageIO.read(reader.getAssociated());
-//				UTMGrid utm = new UTMGrid(image, calibration);
-//				image = utm.draw();
-				view.setImage(image);
+				view.setImage(ImageIO.read(reader.getAssociated()));
 			}else{
+				calibration = null;
 				view.setImage(ImageIO.read(file));
 			}
 			actions.reenable();
