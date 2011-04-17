@@ -1,5 +1,4 @@
-<project name="mapgrid" default="build">
-	<property file="build.properties" />
+<project name="mapgrid" default="build">		
 	<target name="build">
 		<jar destfile="mapgrid.jar" basedir="bin">
 			<manifest>
@@ -9,19 +8,6 @@
 		<signjar jar="mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
 	</target>
 	
-	<target name="release">
-		<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" 
-			classpath="tools/ant-googlecode-0.0.2.jar" name="gcupload"/>
-		<gcupload 
-		        username="${google.user}" 
-		        password="${google.pass}" 
-		        projectname="mapgrid" 
-		        filename="mapgrid.jar" 
-		        targetfilename="mapgrid-${version}.jar"
-		        summary="Wersja ${version}"
-		        labels="Featured, Type-Package, OpSys-All" />
-	</target>
-
 	<target name="create.keystore">
 		<delete file="mapgrid.keystore" />
 		<exec executable="keytool">

@@ -3,9 +3,9 @@
 <jnlp spec="1.0+" codebase="http://mapgrid.googlecode.com/files/"
 	href="mapgrid.jnlp">
 	<information>
-		<title>Maskuj siatkę</title>
-		<vendor>Rzymek FIA</vendor>
-		<description>Usuwanie siatek z map rastrowych</description>
+		<title>MapGrid</title>
+		<vendor>Rzymek FIA</vendor>		
+		<description>Operacje na siatkach na mapach rastrowych</description>
 		<offline-allowed />
 	</information>
 	<resources>
