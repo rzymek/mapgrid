@@ -3,7 +3,7 @@
 <jnlp spec="1.0+" codebase="http://mapgrid.googlecode.com/files/"
 	href="mapgrid.jnlp">
 	<information>
-		<title>MapGrid</title>
+		<title>mapgrid</title>
 		<vendor>Rzymek FIA</vendor>		
 		<description>Operacje na siatkach na mapach rastrowych</description>
 		<offline-allowed />
