@@ -13,20 +13,16 @@ public class UTMGrid {
 
 	public UTMGrid(BufferedImage image, Calibration calibration) {
 		this.image = image;
-		utm = new UTM[4];
-		for (int i = 0; i < calibration.coordinates.length; i++) { 
-			utm[i] = new UTM(calibration.coordinates[i]);
-			System.out.println(utm[i]);
-		}
+		utm = calibration.toUTM();
 	}
 
 	public BufferedImage draw() {
 		double pixelsPerMeterX = image.getWidth() / (utm[1].getEasting() - utm[0].getEasting());
-		double pixelsPerMeterY = image.getHeight() / (utm[3].getNorthing() - utm[0].getNorthing());
+		double pixelsPerMeterY = image.getHeight() / (utm[0].getNorthing() - utm[3].getNorthing());
 		Graphics g = image.getGraphics();
 		g.setColor(Color.BLUE);
 		{
-			double x1 = getStart(utm[0].getEasting())*pixelsPerMeterX;
+			double x1 = (1000-getStart(utm[0].getEasting()))*pixelsPerMeterX;
 			double x2 = getStart(utm[2].getEasting())*pixelsPerMeterX;
 			for(;;){
 				if(x1 > image.getWidth() && x2 > image.getWidth())
@@ -42,8 +38,8 @@ public class UTMGrid {
 			if(y1 > image.getWidth() && y2 > image.getWidth())
 				break;
 			g.drawLine(0, (int)y1, image.getWidth(), (int) y2);
-			y1 += 1000.0 * pixelsPerMeterX;
-			y2 += 1000.0 * pixelsPerMeterX;
+			y1 += 1000.0 * pixelsPerMeterY;
+			y2 += 1000.0 * pixelsPerMeterY;
 		}
 		return image;
 	}

@@ -19,6 +19,7 @@ public abstract class JMainFrame extends JFrame implements UncaughtExceptionHand
 	
 	@Override
 	public void uncaughtException(Thread thread, Throwable exception) {
+		exception.printStackTrace();
 		exception = getCause(exception);
 		JOptionPane.showMessageDialog(this, exception.toString());
 	}

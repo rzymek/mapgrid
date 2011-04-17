@@ -11,7 +11,7 @@ import pl.mapgrid.gui.actions.UIAction;
 public class Actions {
 	private Map<Name, UIAction> actions = new HashMap<Name, UIAction>();
 	public static enum Name {
-		OPEN, SAVE, DETECT_GRID, REMOVE_GRID, TOGGLE_GRID, REVERT, TOGGLE_SETUP, EXIT
+		OPEN, SAVE, DETECT_GRID, REMOVE_GRID, TOGGLE_GRID, REVERT, ROTATE_CALIBRATED, UTM_GRID, TOGGLE_SETUP, EXIT
 	};	
 	
 	public void set(Name name, UIAction action) {

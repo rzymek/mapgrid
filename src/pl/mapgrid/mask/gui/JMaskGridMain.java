@@ -17,7 +17,6 @@ import javax.swing.SwingUtilities;
 
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.OZIMapReader;
-import pl.mapgrid.grid.UTMGrid;
 import pl.mapgrid.gui.JForm;
 import pl.mapgrid.gui.JImageView;
 import pl.mapgrid.gui.JMainFrame;
@@ -29,9 +28,11 @@ import pl.mapgrid.mask.gui.actions.ExitAction;
 import pl.mapgrid.mask.gui.actions.OpenAction;
 import pl.mapgrid.mask.gui.actions.RemoveGridAction;
 import pl.mapgrid.mask.gui.actions.RevertAction;
+import pl.mapgrid.mask.gui.actions.RotateCalibratedAction;
 import pl.mapgrid.mask.gui.actions.SaveAction;
 import pl.mapgrid.mask.gui.actions.ToggleGridAction;
 import pl.mapgrid.mask.gui.actions.ToggleSetupAction;
+import pl.mapgrid.mask.gui.actions.UTMGridAction;
 import pl.mapgrid.utils.DragableViewportMouseListener;
 import pl.mapgrid.utils.ProgressMonitor;
 
@@ -43,7 +44,7 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 	public HoughTransform.Config houghConfig = new HoughTransform.Config();
 	public MaskGrid.Config maskConfig = new MaskGrid.Config();
 	public JForm setup;
-	private Calibration calibration;
+	public Calibration calibration;
 
 	public JMaskGridMain() throws Exception {
 		super();
@@ -64,6 +65,8 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 		actions.set(Actions.Name.REMOVE_GRID, new RemoveGridAction(this));
 		actions.set(Actions.Name.TOGGLE_GRID, new ToggleGridAction(this));
 		actions.set(Actions.Name.TOGGLE_SETUP, new ToggleSetupAction(this));
+		actions.set(Actions.Name.ROTATE_CALIBRATED, new RotateCalibratedAction(this));
+		actions.set(Actions.Name.UTM_GRID, new UTMGridAction(this));
 	}
 
 	private void setupComponents() throws Exception {
@@ -122,12 +125,13 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 				calibration = reader.read();
 				System.out.println(calibration);
 				BufferedImage image = ImageIO.read(reader.getAssociated());
-				UTMGrid utm = new UTMGrid(image, calibration);
-				image = utm.draw();
+//				UTMGrid utm = new UTMGrid(image, calibration);
+//				image = utm.draw();
 				view.setImage(image);
 			}else{
 				view.setImage(ImageIO.read(file));
 			}
+			actions.reenable();
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}
