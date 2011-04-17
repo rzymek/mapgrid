@@ -2,7 +2,7 @@
 	<target name="build">
 		<jar destfile="mapgrid.jar" basedir="bin">
 			<manifest>
-				<attribute name="Main-Class" value="pl.mapgrid.gui.JMapGridMain" />
+				<attribute name="Main-Class" value="pl.mapgrid.mask.gui.JMaskGridMain" />
 			</manifest>
 		</jar>
 		<signjar jar="mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
