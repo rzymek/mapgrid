@@ -51,7 +51,7 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
-		open(new File("samples/rr3.map"));
+//		open(new File("samples/rr3.map"));
 	}
 	
 	private void setupActions() {
