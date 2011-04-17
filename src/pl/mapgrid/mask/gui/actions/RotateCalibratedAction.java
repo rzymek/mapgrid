@@ -28,8 +28,18 @@ public class RotateCalibratedAction extends BackgroundAction implements UIAction
 		transform.rotate(rot);
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
 		BufferedImage image = op.filter(main.view.getImage(), null);
-		main.view.setImage(image);
-		main.calibration=null;
+		main.view.setImage(image);	
+		double a1 = Math.abs(c[1].getEasting() - c[0].getEasting());
+		double b1 = Math.abs(c[1].getNorthing() - c[0].getNorthing());
+		double w = Math.sqrt(a1*a1+b1*b1);
+		double h = Math.sqrt(a*a+b*b);
+		c[1].easting = c[0].easting+w; 
+		c[1].northing = c[0].northing;
+		c[2].easting = c[0].easting+w;
+		c[2].northing = c[0].northing-h;
+		c[3].easting = c[0].easting;
+		c[3].northing = c[0].northing-h;
+		main.calibration.coordinates=c;
 	}
 
 	@Override

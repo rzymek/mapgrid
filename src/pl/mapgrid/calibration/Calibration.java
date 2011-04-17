@@ -13,6 +13,8 @@ public class Calibration {
 		return Arrays.asList(coordinates).toString();
 	}
 	public UTM[] toUTM() {
+		if(coordinates instanceof UTM[])
+			return (UTM[]) coordinates;
 		UTM[] utm = new UTM[4];
 		for (int i = 0; i < coordinates.length; i++)  
 			utm[i] = new UTM(coordinates[i]);
