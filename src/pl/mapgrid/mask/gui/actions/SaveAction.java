@@ -1,6 +1,7 @@
 package pl.mapgrid.mask.gui.actions;
 
 import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,8 @@ public class SaveAction extends AbstractAction implements UIAction {
 				}
 				String filename = selectedFile.getName();
 				String ext = filename.substring(filename.lastIndexOf('.')+1);
-				boolean r = ImageIO.write(main.view.getImage(), ext, selectedFile);
+				BufferedImage image = main.view.getImageWithGrid();
+				boolean r = ImageIO.write(image, ext, selectedFile);
 				if(r == false)
 					throw new RuntimeException("Nie obsługiwany format pliku: "+ext+".\nObsługiwane: "+imageSuffixes);
 			}

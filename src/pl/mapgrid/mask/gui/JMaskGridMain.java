@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -16,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.OZIMapReader;
+import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.JForm;
 import pl.mapgrid.gui.JImageView;
 import pl.mapgrid.gui.JMainFrame;
@@ -51,7 +53,13 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
-//		open(new File("samples/rr3.map"));
+		try {
+			File f = new File("samples/rr3.map");
+			FileChooserSingleton.instance().setSelectedFile(f);
+			open(f);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void setupActions() {
@@ -123,16 +131,20 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 				OZIMapReader reader = new OZIMapReader(file);
 				calibration = reader.read();
 				System.out.println(calibration);
-				view.setImage(ImageIO.read(reader.getAssociated()));
+				openImage(reader.getAssociated());
 			}else{
 				calibration = null;
-				view.setImage(ImageIO.read(file));
+				openImage(file);
 			}
 			actions.reenable();
 		}catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
+
+	private void openImage(File f) throws IOException {		
+		view.setImage(ImageIO.read(f));
+	}	
 
 	public static void main(String[] args) throws Exception {		
 		SwingUtilities.invokeLater(new JMaskGridMain());

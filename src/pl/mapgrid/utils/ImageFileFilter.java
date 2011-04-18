@@ -29,9 +29,12 @@ public class ImageFileFilter extends FileFilter {
 	public boolean accept(File f) {
 		if(f.isDirectory())
 			return true;
+		String ext = f.getName().toLowerCase();
+		if(ext.endsWith(".map"))
+			return true;
 		String[] suffixes = ImageIO.getReaderFileSuffixes();
 		for (String string : suffixes) {
-			if(f.getName().toLowerCase().endsWith("."+string.toLowerCase()))
+			if(ext.endsWith("."+string.toLowerCase()))
 				return true;
 		}
 		return false;

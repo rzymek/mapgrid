@@ -1,0 +1,5 @@
+* ramka na dole i z prawej
+* obsługa .tif
+* obsługa .twf (puwg-92)
+* crop do A4
+* zapis .map

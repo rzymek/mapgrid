@@ -23,7 +23,7 @@ public class ToggleGridAction extends AbstractAction implements UIAction {
 	
 	@Override
 	public String toString() {
-		return "Pokaż/Ukryj wykrytą siatkę";
+		return "Siatka";
 	}
 
 	@Override

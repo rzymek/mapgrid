@@ -11,6 +11,7 @@
 	<resources>
 		<j2se version="1.6+" />
 		<jar href="mapgrid.jar" />
+		<jar href="jcoord-1.0.jar"
 	</resources>
 	<application-desc main-class="pl.mapgrid.mask.gui.JMaskGridMain" />
 	<update check="background" />
