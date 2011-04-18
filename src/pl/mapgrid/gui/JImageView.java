@@ -155,11 +155,14 @@ public class JImageView extends JComponent implements Observer {
 			}
 			int dx = x2-x1;
 			int dy = y2-y1;
-			int nx1;
-			if(i+1 >= lines.size())
+			int nx1,nx2;
+			if(i+1 >= lines.size()) {
 				nx1 = image.getWidth(); //last incomplete
-			else
+				nx2 = image.getWidth(); //last incomplete
+			}else{
 				nx1 = lines.get(i+1)[0];
+				nx2 = lines.get(i+1)[1];
+			}
 			int bx = border * dx / dy;				
 			/*<pre>
 			 *   0 ------ 1
@@ -169,26 +172,27 @@ public class JImageView extends JComponent implements Observer {
 			arrayCopy(x, x1, nx1, nx1+bx,		x1+bx);
 			arrayCopy(y, y1, y1,  y1+border,	y1+border);
 			g.setColor(borderColor[borderColorIndex]);
-			g.fillPolygon(x, y, x.length);
+			g.fillPolygon(x, y, x.length);			
 			borderColorIndex = (borderColorIndex+1)%borderColor.length;
 			g.setColor(borderColor[0]);
 			g.drawPolygon(x, y, x.length);
 			if(i >= 0 && (i+1 < lines.size())) {
 				g.setColor(borderColor[borderColorIndex]);
-				drawTextVertical(g, String.valueOf(firstEasting+1000*(i+1)), x ,y);
+				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
+			}
+			arrayCopy(x, x2, nx2, nx2+bx,		x2+bx);
+			arrayCopy(y, y2, y2,  y2+border,	y2+border);			
+			borderColorIndex = (borderColorIndex+1)%borderColor.length;
+			g.setColor(borderColor[0]);
+			g.drawPolygon(x, y, x.length);
+			if(i >= 0 && (i+1 < lines.size())) {
+				g.setColor(borderColor[borderColorIndex]);
+				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
 			}
 		}
 	}
-	private void drawTextVertical(Graphics2D g, String s, int[] x, int[] y) {
-		FontMetrics fm = g.getFontMetrics();
-		int h = fm.getAscent();
-		int w = fm.stringWidth(s);
-		int xx = x[0] + (x[1]-x[0]-w)/2;
-		int yy = y[0] + (y[3]-y[0]+h)/2-1;
-		g.drawString(s, xx, yy);
-	}
 
-	private void drawTextHorizontal(Graphics2D g, String s, int[] x, int[] y) {
+	private void drawText(Graphics2D g, String s, int[] x, int[] y, int rotate) {
 		FontMetrics fm = g.getFontMetrics();
 		int h = fm.getAscent();
 		int w = fm.stringWidth(s);
@@ -197,7 +201,7 @@ public class JImageView extends JComponent implements Observer {
 		AffineTransform save = g.getTransform();
 		AffineTransform tx = new AffineTransform();
 		tx.translate(xx, yy);		
-		tx.rotate(Math.toRadians(270));
+		tx.rotate(Math.toRadians(rotate));
 		g.setTransform(tx);
 		g.drawString(s, -w/2, h/2);
 		g.setTransform(save);
@@ -242,7 +246,7 @@ public class JImageView extends JComponent implements Observer {
 			g.drawPolygon(x, y, x.length);
 			if(i >= 0 && (i+1 < lines.size())) {
 				g.setColor(borderColor[borderColorIndex]);
-				drawTextHorizontal(g, String.valueOf(firstNorthing-(i+1)*1000), x ,y);
+				drawText(g, String.valueOf(firstNorthing-(i+1)*1000), x ,y, 270);
 			}
 		}
 	}
