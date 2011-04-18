@@ -180,6 +180,7 @@ public class JImageView extends JComponent implements Observer {
 				g.setColor(borderColor[borderColorIndex]);
 				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
 			}
+			/*
 			arrayCopy(x, x2, nx2, nx2+bx,		x2+bx);
 			arrayCopy(y, y2, y2,  y2+border,	y2+border);			
 			borderColorIndex = (borderColorIndex+1)%borderColor.length;
@@ -189,6 +190,7 @@ public class JImageView extends JComponent implements Observer {
 				g.setColor(borderColor[borderColorIndex]);
 				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
 			}
+			*/
 		}
 	}
 
