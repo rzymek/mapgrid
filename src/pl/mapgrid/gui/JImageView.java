@@ -162,7 +162,7 @@ public class JImageView extends JComponent implements Observer {
 				nx2 = image.getWidth(); //last incomplete
 			}else{
 				nx1 = lines.get(i+1)[0];
-				nx2 = lines.get(i+1)[1];
+				nx2 = lines.get(i+1)[2];
 			}
 			int bx = border * dx / dy;				
 			/*<pre>
@@ -181,9 +181,11 @@ public class JImageView extends JComponent implements Observer {
 				g.setColor(borderColor[borderColorIndex]);
 				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
 			}
-			/*
-			arrayCopy(x, x2, nx2, nx2+bx,		x2+bx);
-			arrayCopy(y, y2, y2,  y2+border,	y2+border);			
+			borderColorIndex = (borderColorIndex+1)%borderColor.length;
+			arrayCopy(x, x2 - bx,     nx2 - bx,    nx2, x2);
+			arrayCopy(y, y2 - border, y2 - border, y2,  y2);
+			g.setColor(borderColor[borderColorIndex]);
+			g.fillPolygon(x, y, x.length);			
 			borderColorIndex = (borderColorIndex+1)%borderColor.length;
 			g.setColor(borderColor[0]);
 			g.drawPolygon(x, y, x.length);
@@ -191,7 +193,6 @@ public class JImageView extends JComponent implements Observer {
 				g.setColor(borderColor[borderColorIndex]);
 				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
 			}
-			*/
 		}
 	}
 
@@ -229,11 +230,14 @@ public class JImageView extends JComponent implements Observer {
 			}
 			int dx = x2-x1;
 			int dy = y2-y1;
-			int n;
-			if(i+1 >= lines.size())
-				n = image.getHeight(); //!
-			else
-				n = lines.get(i+1)[1]; //!
+			int n1,n2;
+			if(i+1 >= lines.size()) {
+				n1 = image.getHeight(); //!
+				n2 = image.getHeight(); //!
+			}else{
+				n1 = lines.get(i+1)[1]; //!
+				n2 = lines.get(i+1)[3]; //!
+			}
 			int b = border * dy / dx; //!				
 			/*<pre>
 			 *   0 ------ 1
@@ -241,7 +245,19 @@ public class JImageView extends JComponent implements Observer {
 			 *   3--------2
 			 *</pre>*/
 			arrayCopy(x, x1, x1+border, x1+border, 	x1);//!
-			arrayCopy(y, y1, y1+b, 		n+b,		n);//!
+			arrayCopy(y, y1, y1+b, 		n1+b,		n1);//!
+			g.setColor(borderColor[borderColorIndex]);
+			g.fillPolygon(x, y, x.length);
+			borderColorIndex = (borderColorIndex+1)%borderColor.length;
+			g.setColor(borderColor[0]);
+			g.drawPolygon(x, y, x.length);
+			if(i >= 0 && (i+1 < lines.size())) {
+				g.setColor(borderColor[borderColorIndex]);
+				drawText(g, String.valueOf(firstNorthing-(i+1)*1000), x ,y, 270);
+			}
+			borderColorIndex = (borderColorIndex+1)%borderColor.length;
+			arrayCopy(x, x2 - border, x2, x2, x2 - border);// !
+			arrayCopy(y, y2 - b, y2, n2 - b, n2);// !
 			g.setColor(borderColor[borderColorIndex]);
 			g.fillPolygon(x, y, x.length);
 			borderColorIndex = (borderColorIndex+1)%borderColor.length;
