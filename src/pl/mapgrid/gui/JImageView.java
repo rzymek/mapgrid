@@ -27,7 +27,8 @@ public class JImageView extends JComponent implements Observer {
 
 	@Override
 	public void paint(Graphics g) {
-		super.paint(g);
+		g.setColor(Color.WHITE);
+		g.fillRect(0,0,getWidth(), getHeight());
 		if (image == null)
 			return;	
 		g.drawImage(image, 0, 0, (int) (image.getWidth() * zoom), (int) (image.getHeight() * zoom), this);
