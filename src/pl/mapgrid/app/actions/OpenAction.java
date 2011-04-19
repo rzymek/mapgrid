@@ -8,17 +8,19 @@ import javax.swing.JFileChooser;
 
 import pl.mapgrid.app.Main;
 import pl.mapgrid.gui.FileChooserSingleton;
+import pl.mapgrid.gui.actions.BackgroundAction;
 import pl.mapgrid.gui.actions.UIAction;
 
-public class OpenAction extends AbstractAction implements UIAction {
+public class OpenAction extends BackgroundAction implements UIAction {
 	private final Main main;
 
 	public OpenAction(Main main) {
+		super(main.actions, main);
 		this.main = main;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void run() {
 		try {	
 			JFileChooser chooser = FileChooserSingleton.instance();
 			chooser.setCurrentDirectory(new File("./input/"));

@@ -1,31 +1,31 @@
 package pl.mapgrid.app.actions;
 
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import pl.mapgrid.app.Main;
 import pl.mapgrid.gui.FileChooserSingleton;
+import pl.mapgrid.gui.actions.BackgroundAction;
 import pl.mapgrid.gui.actions.UIAction;
 
-public class SaveAction extends AbstractAction implements UIAction {
+public class SaveAction extends BackgroundAction implements UIAction {
 	private final List<String> imageSuffixes;
 	private final Main main;
 
 	public SaveAction(Main main) {
+		super(main.actions, main);
 		this.main = main;
 		imageSuffixes = Arrays.asList(ImageIO.getWriterFileSuffixes());
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void run() {
 		try {	
 			JFileChooser chooser = FileChooserSingleton.instance();
 			int result = chooser.showSaveDialog(main);
