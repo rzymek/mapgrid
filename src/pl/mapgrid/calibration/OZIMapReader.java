@@ -1,55 +1,34 @@
 package pl.mapgrid.calibration;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.text.DecimalFormat;
 
 import pl.mapgrid.Messages;
-import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.calibration.exceptions.InvalidFormatException;
 
-public class OZIMapReader {
+public class OZIMapReader extends TextFileReader {
 	private static final String MMPLL = "MMPLL";
 	private static final String HEADER = "OziExplorer Map Data File Version";
 	private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#.#");
-	private int lineNo;
-	private Calibration calibration;
-	private String line;
-	private BufferedReader in;
 	private File associated;
-	private final File file;
 
 	public OZIMapReader(File file) throws Exception {
-		this.file = file;
-		FileReader reader = new FileReader(file);
-		in = new BufferedReader(reader);
-		calibration = new Calibration();
+		super(file);
 	}
 	
-	public Calibration read() throws Exception {
-		for (lineNo = 1;;++lineNo) {
-			line = in.readLine();
-			if (line == null)
-				break;
-			if(lineNo == 1)
-				verifyFileType();
-			else if(lineNo==3) 
-				findAssociatedFile();
-			try{
-				if(line.startsWith(MMPLL)) {
-					readCoords();
-				}
-			}catch (Exception e) {
-				throw new InvalidFormatException(e,line);
-			}
+	@Override
+	protected void processLine(String line, int lineNo) throws Exception {
+		if(lineNo == 1)
+			verifyFileType(line, lineNo);
+		else if(lineNo==3) 
+			findAssociatedFile(line, lineNo);
+		if(line.startsWith(MMPLL)) {
+			readCoords(line, lineNo);
 		}
-		verify(calibration);
-		return calibration;
 	}
 
-	private void findAssociatedFile() {
+	private void findAssociatedFile(String line, int lineNo) {
 		associated = new File(file.getParentFile(), line);
 		if(associated.canRead())
 			return;
@@ -62,15 +41,7 @@ public class OZIMapReader {
 			throw new InvalidFormatException(Messages.CANT_READ_ASSOCIATED+line, lineNo);
 	}
 
-	private void verify(Calibration calibration) {		
-		for (int i = 0; i < calibration.coordinates.length; i++) {
-			Coordinates coordinates = calibration.coordinates[i];
-			if(coordinates == null) 
-				throw new InvalidFormatException(Messages.COORDS_MISSING+(i+1));
-		}
-	}
-
-	private void readCoords() throws Exception {		
+	private void readCoords(String line, int lineNo) throws Exception {		
 		String[] split = line.split(",");
 		String mmpll = split[0];
 		if(MMPLL.equals(mmpll) == false)
@@ -83,16 +54,12 @@ public class OZIMapReader {
 		calibration.coordinates[nr] = new LatLon(lat, lon);
 	}
 
-	protected void verifyFileType() {
+	protected void verifyFileType(String line, int lineNo) {
 		if (line.startsWith(HEADER) == false)
 			throw new InvalidFormatException(HEADER, line, lineNo);
 	}
 	
-	public static void main(String[] args) throws Exception {
-		OZIMapReader reader = new OZIMapReader(new File("samples/rr3.map"));
-		Calibration c = reader.read();
-		System.out.println(c);
-	}
+	
 	public File getAssociated() {
 		return associated;
 	}

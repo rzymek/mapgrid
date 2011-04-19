@@ -8,12 +8,15 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.management.RuntimeErrorException;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+
+import org.openstreetmap.josm.data.projection.Puwg;
 
 import pl.mapgrid.app.Actions.Name;
 import pl.mapgrid.app.actions.DetectGridAction;
@@ -28,6 +31,7 @@ import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.OZIMapReader;
+import pl.mapgrid.calibration.WorldFileReader;
 import pl.mapgrid.grid.UTMGraphics;
 import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.JForm;
@@ -56,7 +60,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		setupComponents();
 		actions.reenable();
 		try {
-			File f = new File("samples/rr3.map");
+			File f = new File("samples/rr3.tfw");
 			FileChooserSingleton.instance().setSelectedFile(f);
 			open(f);
 		}catch (Exception e) {
@@ -129,8 +133,14 @@ public class Main extends JMainFrame implements ProgressMonitor {
 
 	public void open(File file) {
 		try {
-			if(file.getName().toLowerCase().endsWith(".map")) {
+			String filename = file.getName().toLowerCase();
+			if(filename.endsWith(".map")) {
 				OZIMapReader reader = new OZIMapReader(file);
+				calibration = reader.read();
+				System.out.println(calibration);
+				openImage(reader.getAssociated());
+			}else if(filename.endsWith(".tfw")) {
+				WorldFileReader reader = new WorldFileReader(file);
 				calibration = reader.read();
 				System.out.println(calibration);
 				openImage(reader.getAssociated());

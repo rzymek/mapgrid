@@ -32,7 +32,7 @@ public class ImageFileFilter extends FileFilter {
 		if(f.isDirectory())
 			return true;
 		String ext = f.getName().toLowerCase();
-		if(ext.endsWith(".map"))
+		if(ext.endsWith(".map") || ext.endsWith(".tfw"))
 			return true;
 		String[] suffixes = ImageIO.getReaderFileSuffixes();
 		for (String string : suffixes) {

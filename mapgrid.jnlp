@@ -5,7 +5,7 @@
  -->
 <jnlp spec="1.0+"
 	codebase="http://mapgrid.googlecode.com/files/" 	
-	href="mapgrid.jnlp">
+ 	href="mapgrid.jnlp">
 	<information>
 		<title>mapgrid</title>
 		<vendor>Rzymek FIA</vendor>		
