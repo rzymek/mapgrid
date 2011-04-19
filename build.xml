@@ -1,5 +1,8 @@
 <project name="mapgrid" default="build">		
 	<target name="build">
+		<exec executable="svnversion" outputproperty="version">
+			<arg line="src"/>
+		</exec>
 		<jar destfile="mapgrid.jar" basedir="bin">
 			<manifest>
 				<attribute name="Main-Class" value="pl.mapgrid.mask.gui.JMaskGridMain" />
@@ -18,5 +21,9 @@
 			<arg line="-keystore mapgrid.keystore" />
 			<arg line='-storepass "${keystore.pass}"' />
 		</exec>
+	</target>
+	
+	<target name="sign.lib">
+		<signjar jar="lib/jcoord-1.0.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
 	</target>
 </project>
