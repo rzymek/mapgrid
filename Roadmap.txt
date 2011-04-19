@@ -1,6 +1,7 @@
 * obsługa .tif
 * obsługa .twf (puwg-92)
 * crop do A4
+* zoom
 * zapis .map
 
 known bugs:

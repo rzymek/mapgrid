@@ -3,17 +3,17 @@ package pl.mapgrid.gui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
 import javax.swing.JComponent;
 
+import pl.mapgrid.app.Main;
+import pl.mapgrid.grid.UTMGraphics;
 import pl.mapgrid.mask.MaskGrid;
 
 public class JImageView extends JComponent implements Observer {
@@ -21,8 +21,10 @@ public class JImageView extends JComponent implements Observer {
 	private BufferedImage grid;
 	private boolean showGrid = true;
 	private float zoom = 1;
+	private final Main main;
 
-	public JImageView() {
+	public JImageView(Main main) {
+		this.main = main;
 	}
 
 	@Override
@@ -114,164 +116,11 @@ public class JImageView extends JComponent implements Observer {
 
 	public void setGrid(List<int[]> vertical, List<int[]> horizontal,
 			int firstEasting, int firstNorthing) {
-		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);		
 		Graphics2D g = (Graphics2D) grid.getGraphics();
-		Color lineColor = new Color(0,0,0,128);
-		Color[] borderColor = {
-			new Color(0,0,0),
-			new Color(255,255,255),
-		};		
-		//drawBorder
-		int border=20;		
-		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, border));
-		drawVertical(vertical, g, borderColor, border, firstEasting);
-		drawHorizontal(horizontal, g, borderColor, border, firstNorthing);
-
-		//draw grid
-		g.setColor(lineColor);
-		g.setStroke(new BasicStroke(3));
-		for (int[] line : vertical) 
-			g.drawLine(line[0], line[1], line[2], line[3]);
-		for (int[] line : horizontal) 
-			g.drawLine(line[0], line[1], line[2], line[3]);
+		UTMGraphics.Config cfg = main.utmConfig;
+		UTMGraphics utmg = new UTMGraphics(g, cfg, grid.getWidth(), grid.getHeight());
+		utmg.drawGrid(vertical, horizontal, firstEasting, firstNorthing);
 		setShowGrid(true);
-	}
-
-	private void drawVertical(List<int[]> lines, Graphics2D g, Color[] borderColor, int border, int firstEasting) {
-		int[] x = new int[4];
-		int[] y = new int[4];
-		int borderColorIndex = 0;
-		for(int i=-1;i<lines.size();++i) {
-			int x1,y1,x2,y2;
-			if(i==-1) {
-				x1 = 0;
-				y1 = 0;
-				x2 = 0;
-				y2 = image.getHeight();
-			}else{
-				x1 = lines.get(i)[0];
-				y1 = lines.get(i)[1];
-				x2 = lines.get(i)[2];
-				y2 = lines.get(i)[3];
-			}
-			int dx = x2-x1;
-			int dy = y2-y1;
-			int nx1,nx2;
-			if(i+1 >= lines.size()) {
-				nx1 = image.getWidth(); //last incomplete
-				nx2 = image.getWidth(); //last incomplete
-			}else{
-				nx1 = lines.get(i+1)[0];
-				nx2 = lines.get(i+1)[2];
-			}
-			int bx = border * dx / dy;				
-			/*<pre>
-			 *   0 ------ 1
-			 *   |        |
-			 *   3--------2
-			 *</pre>*/
-			arrayCopy(x, x1, nx1, nx1+bx,		x1+bx);
-			arrayCopy(y, y1, y1,  y1+border,	y1+border);
-			g.setColor(borderColor[borderColorIndex]);
-			g.fillPolygon(x, y, x.length);			
-			borderColorIndex = (borderColorIndex+1)%borderColor.length;
-			g.setColor(borderColor[0]);
-			g.drawPolygon(x, y, x.length);
-			if(i >= 0 && (i+1 < lines.size())) {
-				g.setColor(borderColor[borderColorIndex]);
-				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
-			}
-			borderColorIndex = (borderColorIndex+1)%borderColor.length;
-			arrayCopy(x, x2 - bx,     nx2 - bx,    nx2, x2);
-			arrayCopy(y, y2 - border, y2 - border, y2,  y2);
-			g.setColor(borderColor[borderColorIndex]);
-			g.fillPolygon(x, y, x.length);			
-			borderColorIndex = (borderColorIndex+1)%borderColor.length;
-			g.setColor(borderColor[0]);
-			g.drawPolygon(x, y, x.length);
-			if(i >= 0 && (i+1 < lines.size())) {
-				g.setColor(borderColor[borderColorIndex]);
-				drawText(g, String.valueOf(firstEasting+1000*(i+1)), x ,y, 0);
-			}
-		}
-	}
-
-	private void drawText(Graphics2D g, String s, int[] x, int[] y, int rotate) {
-		FontMetrics fm = g.getFontMetrics();
-		int h = fm.getAscent();
-		int w = fm.stringWidth(s);
-		int xx = x[0] + (x[1]-x[0])/2;
-		int yy = y[0] + (y[3]-y[0])/2-1;
-		AffineTransform save = g.getTransform();
-		AffineTransform tx = new AffineTransform();
-		tx.translate(xx, yy);		
-		tx.rotate(Math.toRadians(rotate));
-		g.setTransform(tx);
-		g.drawString(s, -w/2, h/2);
-		g.setTransform(save);
-	}
-
-	private void drawHorizontal(List<int[]> lines, Graphics2D g, Color[] borderColor, int border, int firstNorthing) {
-		int[] x = new int[4];
-		int[] y = new int[4];
-		int borderColorIndex = 0;
-		for(int i=-1;i<lines.size();++i) {
-			int x1,y1,x2,y2;
-			if(i==-1) {
-				x1 = 0;
-				y1 = 0;
-				x2 = image.getWidth();//!
-				y2 = 0;//!
-			}else{
-				x1 = lines.get(i)[0];
-				y1 = lines.get(i)[1];
-				x2 = lines.get(i)[2];
-				y2 = lines.get(i)[3];
-			}
-			int dx = x2-x1;
-			int dy = y2-y1;
-			int n1,n2;
-			if(i+1 >= lines.size()) {
-				n1 = image.getHeight(); //!
-				n2 = image.getHeight(); //!
-			}else{
-				n1 = lines.get(i+1)[1]; //!
-				n2 = lines.get(i+1)[3]; //!
-			}
-			int b = border * dy / dx; //!				
-			/*<pre>
-			 *   0 ------ 1
-			 *   |        |
-			 *   3--------2
-			 *</pre>*/
-			arrayCopy(x, x1, x1+border, x1+border, 	x1);//!
-			arrayCopy(y, y1, y1+b, 		n1+b,		n1);//!
-			g.setColor(borderColor[borderColorIndex]);
-			g.fillPolygon(x, y, x.length);
-			borderColorIndex = (borderColorIndex+1)%borderColor.length;
-			g.setColor(borderColor[0]);
-			g.drawPolygon(x, y, x.length);
-			if(i >= 0 && (i+1 < lines.size())) {
-				g.setColor(borderColor[borderColorIndex]);
-				drawText(g, String.valueOf(firstNorthing-(i+1)*1000), x ,y, 270);
-			}
-			borderColorIndex = (borderColorIndex+1)%borderColor.length;
-			arrayCopy(x, x2 - border, x2, x2, x2 - border);// !
-			arrayCopy(y, y2 - b, y2, n2 - b, n2);// !
-			g.setColor(borderColor[borderColorIndex]);
-			g.fillPolygon(x, y, x.length);
-			borderColorIndex = (borderColorIndex+1)%borderColor.length;
-			g.setColor(borderColor[0]);
-			g.drawPolygon(x, y, x.length);
-			if(i >= 0 && (i+1 < lines.size())) {
-				g.setColor(borderColor[borderColorIndex]);
-				drawText(g, String.valueOf(firstNorthing-(i+1)*1000), x ,y, 270);
-			}
-		}
-	}
-
-	private void arrayCopy(int[] dst, int... src) {
-		for (int i = 0; i < src.length; i++) 
-			dst[i] = src[i];
 	}
 }

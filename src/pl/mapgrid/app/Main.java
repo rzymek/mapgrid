@@ -28,6 +28,7 @@ import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.OZIMapReader;
+import pl.mapgrid.grid.UTMGraphics;
 import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.JForm;
 import pl.mapgrid.gui.JImageView;
@@ -44,6 +45,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	public List<double[]> lines;
 	public HoughTransform.Config houghConfig = new HoughTransform.Config();
 	public MaskGrid.Config maskConfig = new MaskGrid.Config();
+	public UTMGraphics.Config utmConfig = new UTMGraphics.Config(); 
 	public JForm setup;
 	public Calibration calibration;
 
@@ -77,7 +79,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	}
 
 	private void setupComponents() throws Exception {
-		view = new JImageView();
+		view = new JImageView(this);
 		
 		JToolBar toolbar = new JToolBar(JToolBar.HORIZONTAL);
 		Name[] values = Actions.Name.values();
@@ -88,7 +90,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		status.setString("");
 		status.setStringPainted(true);
 		
-		setup = new JForm(houghConfig, maskConfig);
+		setup = new JForm(houghConfig, maskConfig, utmConfig);
 		setup.setVisible(false);
 		
 		JScrollPane scroll = new JScrollPane(view);

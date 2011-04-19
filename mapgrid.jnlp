@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- JNLP File for SpringForm -->
-<jnlp spec="1.0+" codebase="http://mapgrid.googlecode.com/files/"
+<jnlp spec="1.0+" 
 	href="mapgrid.jnlp">
 	<information>
 		<title>mapgrid</title>
@@ -11,9 +11,10 @@
 	<resources>
 		<j2se version="1.6+" />
 		<jar href="mapgrid.jar" />
-		<jar href="jcoord-1.0.jar"
+		<jar href="jcoord-1.0.jar"/>
+		<extension href="http://download.java.net/media/jai/webstart/release/jai-1.1.3-latest.jnlp"/>
 	</resources>
-	<application-desc main-class="pl.mapgrid.mask.gui.JMaskGridMain" />
+	<application-desc main-class="pl.mapgrid.app.Main" />
 	<update check="background" />
 	<security>
 		<all-permissions />
