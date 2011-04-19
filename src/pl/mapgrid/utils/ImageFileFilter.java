@@ -12,7 +12,9 @@ public class ImageFileFilter extends FileFilter {
 	@Override
 	public String getDescription() {
 		Set<String> uniq = new TreeSet<String>();					
-		for (String format : ImageIO.getReaderFormatNames()) {
+		for (String format : ImageIO.getReaderFileSuffixes()) {
+			if(format.trim().isEmpty())
+				continue;
 			uniq.add(format.toLowerCase());
 		}
 		StringBuilder desc = new StringBuilder("Pliki graficzne: ");
