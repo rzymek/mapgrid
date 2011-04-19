@@ -19,7 +19,6 @@
 		<extension href="http://download.java.net/media/jai-imageio/webstart/release/jai-imageio-1.1-latest.jnlp"/>
 	</resources>
 	<application-desc main-class="pl.mapgrid.app.Main" />
-	<update check="background" />
 	<security>
 		<all-permissions />
 	</security>
