@@ -16,6 +16,7 @@
 		<j2se version="1.6+" />
 		<jar href="mapgrid.jar" />
 		<jar href="jcoord-1.0.jar"/>
+		<jar href="josm-tested.jar"/>
 		<extension href="http://download.java.net/media/jai-imageio/webstart/release/jai-imageio-1.1-latest.jnlp"/>
 	</resources>
 	<application-desc main-class="pl.mapgrid.app.Main" />
