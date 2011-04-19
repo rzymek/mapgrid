@@ -1,17 +1,17 @@
-package pl.mapgrid.mask.gui.actions;
+package pl.mapgrid.app.actions;
 
 import java.awt.image.BufferedImage;
 
+import pl.mapgrid.app.Main;
 import pl.mapgrid.gui.actions.BackgroundAction;
 import pl.mapgrid.gui.actions.UIAction;
 import pl.mapgrid.mask.HoughTransform;
-import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class DetectGridAction extends BackgroundAction implements UIAction {
 
-	private final JMaskGridMain main;
+	private final Main main;
 
-	public DetectGridAction(JMaskGridMain main) {
+	public DetectGridAction(Main main) {
 		super(main.actions, main);
 		this.main = main;
 	}

@@ -1,4 +1,4 @@
-package pl.mapgrid.mask.gui.actions;
+package pl.mapgrid.app.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -7,15 +7,15 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 
+import pl.mapgrid.app.Main;
 import pl.mapgrid.calibration.coordinates.UTM;
 import pl.mapgrid.gui.actions.UIAction;
-import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class UTMGridAction extends AbstractAction implements UIAction {
 
-	private final JMaskGridMain main;
+	private final Main main;
 
-	public UTMGridAction(JMaskGridMain main) {
+	public UTMGridAction(Main main) {
 		this.main = main;
 	}
 

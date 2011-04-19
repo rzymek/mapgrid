@@ -1,4 +1,4 @@
-package pl.mapgrid.mask.gui;
+package pl.mapgrid.app;
 
 import java.util.HashMap;
 import java.util.Map;

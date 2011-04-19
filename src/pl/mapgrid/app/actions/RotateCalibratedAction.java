@@ -1,19 +1,19 @@
-package pl.mapgrid.mask.gui.actions;
+package pl.mapgrid.app.actions;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
+import pl.mapgrid.app.Main;
 import pl.mapgrid.calibration.coordinates.UTM;
 import pl.mapgrid.gui.actions.BackgroundAction;
 import pl.mapgrid.gui.actions.UIAction;
-import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class RotateCalibratedAction extends BackgroundAction implements UIAction {
 
-	private final JMaskGridMain main;
+	private final Main main;
 
-	public RotateCalibratedAction(JMaskGridMain main) {
+	public RotateCalibratedAction(Main main) {
 		super(main.actions, main);
 		this.main = main;
 	}

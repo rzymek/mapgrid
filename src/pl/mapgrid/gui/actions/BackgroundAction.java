@@ -6,7 +6,7 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import javax.swing.AbstractAction;
 import javax.swing.SwingWorker;
 
-import pl.mapgrid.mask.gui.Actions;
+import pl.mapgrid.app.Actions;
 import pl.mapgrid.utils.ProgressMonitor;
 
 public abstract class BackgroundAction extends AbstractAction implements Runnable {

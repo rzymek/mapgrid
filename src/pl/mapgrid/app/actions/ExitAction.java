@@ -1,4 +1,4 @@
-package pl.mapgrid.mask.gui.actions;
+package pl.mapgrid.app.actions;
 
 import java.awt.event.ActionEvent;
 

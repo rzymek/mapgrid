@@ -1,4 +1,4 @@
-package pl.mapgrid.mask.gui.actions;
+package pl.mapgrid.app.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -6,14 +6,14 @@ import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 
+import pl.mapgrid.app.Main;
 import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.actions.UIAction;
-import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class OpenAction extends AbstractAction implements UIAction {
-	private final JMaskGridMain main;
+	private final Main main;
 
-	public OpenAction(JMaskGridMain main) {
+	public OpenAction(Main main) {
 		this.main = main;
 	}
 

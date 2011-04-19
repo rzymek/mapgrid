@@ -1,19 +1,19 @@
-package pl.mapgrid.mask.gui.actions;
+package pl.mapgrid.app.actions;
 
 import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.AbstractAction;
 
+import pl.mapgrid.app.Main;
 import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.actions.UIAction;
-import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class RevertAction extends AbstractAction implements UIAction{
 
-	private final JMaskGridMain main;
+	private final Main main;
 
-	public RevertAction(JMaskGridMain main) {
+	public RevertAction(Main main) {
 		this.main = main;
 	}
 

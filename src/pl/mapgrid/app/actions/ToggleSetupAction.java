@@ -1,17 +1,17 @@
-package pl.mapgrid.mask.gui.actions;
+package pl.mapgrid.app.actions;
 
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import pl.mapgrid.app.Main;
 import pl.mapgrid.gui.actions.UIAction;
-import pl.mapgrid.mask.gui.JMaskGridMain;
 
 public class ToggleSetupAction extends AbstractAction implements UIAction {
 
-	private final JMaskGridMain main;
+	private final Main main;
 
-	public ToggleSetupAction(JMaskGridMain main) {
+	public ToggleSetupAction(Main main) {
 		this.main = main;
 	}
 

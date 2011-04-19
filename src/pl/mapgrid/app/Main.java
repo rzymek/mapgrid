@@ -1,4 +1,4 @@
-package pl.mapgrid.mask.gui;
+package pl.mapgrid.app;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -15,6 +15,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
+import pl.mapgrid.app.Actions.Name;
+import pl.mapgrid.app.actions.DetectGridAction;
+import pl.mapgrid.app.actions.ExitAction;
+import pl.mapgrid.app.actions.OpenAction;
+import pl.mapgrid.app.actions.RemoveGridAction;
+import pl.mapgrid.app.actions.RevertAction;
+import pl.mapgrid.app.actions.RotateCalibratedAction;
+import pl.mapgrid.app.actions.SaveAction;
+import pl.mapgrid.app.actions.ToggleGridAction;
+import pl.mapgrid.app.actions.ToggleSetupAction;
+import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.OZIMapReader;
 import pl.mapgrid.gui.FileChooserSingleton;
@@ -23,21 +34,10 @@ import pl.mapgrid.gui.JImageView;
 import pl.mapgrid.gui.JMainFrame;
 import pl.mapgrid.mask.HoughTransform;
 import pl.mapgrid.mask.MaskGrid;
-import pl.mapgrid.mask.gui.Actions.Name;
-import pl.mapgrid.mask.gui.actions.DetectGridAction;
-import pl.mapgrid.mask.gui.actions.ExitAction;
-import pl.mapgrid.mask.gui.actions.OpenAction;
-import pl.mapgrid.mask.gui.actions.RemoveGridAction;
-import pl.mapgrid.mask.gui.actions.RevertAction;
-import pl.mapgrid.mask.gui.actions.RotateCalibratedAction;
-import pl.mapgrid.mask.gui.actions.SaveAction;
-import pl.mapgrid.mask.gui.actions.ToggleGridAction;
-import pl.mapgrid.mask.gui.actions.ToggleSetupAction;
-import pl.mapgrid.mask.gui.actions.UTMGridAction;
 import pl.mapgrid.utils.DragableViewportMouseListener;
 import pl.mapgrid.utils.ProgressMonitor;
 
-public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
+public class Main extends JMainFrame implements ProgressMonitor {
 	public JImageView view;
 	public JProgressBar status;
 	public Actions actions;
@@ -47,7 +47,7 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 	public JForm setup;
 	public Calibration calibration;
 
-	public JMaskGridMain() throws Exception {
+	public Main() throws Exception {
 		super();
 		setTitle("Maskuj siatkę");
 		setupActions();
@@ -147,7 +147,7 @@ public class JMaskGridMain extends JMainFrame implements ProgressMonitor {
 	}	
 
 	public static void main(String[] args) throws Exception {		
-		SwingUtilities.invokeLater(new JMaskGridMain());
+		SwingUtilities.invokeLater(new Main());
 	}
 }
 
