@@ -1,4 +1,4 @@
-package pl.mapgrid.calibration;
+package pl.mapgrid.calibration.readers;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -13,10 +13,6 @@ public class OZIMapReader extends TextFileReader {
 	private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#.#");
 	private File associated;
 
-	public OZIMapReader(File file) throws Exception {
-		super(file);
-	}
-	
 	@Override
 	protected void processLine(String line, int lineNo) throws Exception {
 		if(lineNo == 1)
@@ -65,6 +61,6 @@ public class OZIMapReader extends TextFileReader {
 	}
 	
 	public String[] getFileSuffixes() {
-		return new String[]{".map"};
+		return new String[]{"map"};
 	}
 }

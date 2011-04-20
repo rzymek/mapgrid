@@ -1,26 +1,24 @@
-package pl.mapgrid.calibration;
+package pl.mapgrid.calibration.readers;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
 import pl.mapgrid.Messages;
+import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.exceptions.InvalidFormatException;
 
-public abstract class TextFileReader {
-	protected final File file;
-	protected final BufferedReader in;
-	protected final Calibration calibration;
+public abstract class TextFileReader implements CalibrationReader {
+	protected File file;
+	protected Calibration calibration;
 
-	public TextFileReader(File file) throws Exception {
+	public Calibration read(File file) throws Exception {
 		this.file = file;
 		FileReader reader = new FileReader(file);
-		in = new BufferedReader(reader);
+		BufferedReader in = new BufferedReader(reader);
 		calibration = new Calibration();
-	}
-	
-	public Calibration read() throws Exception {
+
 		for (int lineNo = 1;;++lineNo) {
 			String line = in.readLine();
 			if (line == null)
@@ -44,7 +42,5 @@ public abstract class TextFileReader {
 	}
 
 	protected abstract void processLine(String line, int lineNo) throws Exception;
-
-	public abstract String[] getFileSuffixes();
 
 }
