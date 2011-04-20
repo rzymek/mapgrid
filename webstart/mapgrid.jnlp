@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-		<extension href="http://download.java.net/media/jai/webstart/release/jai-1.1.3-latest.jnlp"/>
-	codebase="http://localhost/mapgrid"
- -->
 <jnlp spec="1.0+"
 	codebase="http://mapgrid.googlecode.com/files/" 	
  	href="mapgrid.jnlp">
@@ -14,7 +10,7 @@
 	</information>
 	<resources>
 		<j2se version="1.6+" />
-		<jar href="mapgrid-65.jar" />
+		<jar href="mapgrid-66.jar" />
 		<jar href="jcoord-1.0.jar"/>
 		<jar href="josm-tested.jar"/>
 		<!-- Wyłącznie dla obsługi większej ilości plików graficznych (m.in. tiff). 
