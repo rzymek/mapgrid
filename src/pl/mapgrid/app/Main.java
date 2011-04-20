@@ -29,11 +29,8 @@ import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.readers.CalibrationReader;
-import pl.mapgrid.calibration.readers.OZIMapReader;
 import pl.mapgrid.calibration.readers.Registry;
-import pl.mapgrid.calibration.readers.WorldFileReader;
 import pl.mapgrid.grid.UTMGraphics;
-import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.JForm;
 import pl.mapgrid.gui.JImageView;
 import pl.mapgrid.gui.JMainFrame;
@@ -59,13 +56,13 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
-		try {
-			File f = new File("samples/rr3.tfw");
-			FileChooserSingleton.instance().setSelectedFile(f);
-			open(f);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			File f = new File("samples/rr3.tfw");
+//			FileChooserSingleton.instance().setSelectedFile(f);
+//			open(f);
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	private void setupActions() {
