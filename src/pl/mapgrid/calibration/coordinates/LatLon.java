@@ -26,6 +26,14 @@ public class LatLon implements Coordinates {
 	}
 	
 	@Override
+	public double getX() {
+		return getLon();
+	}
+	@Override
+	public double getY() {
+		return getLat();
+	}
+	@Override
 	public String toString() {
 		return "LatLon("+lat+"; "+lon+")";
 	}

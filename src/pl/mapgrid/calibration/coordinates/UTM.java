@@ -34,10 +34,10 @@ public class UTM implements Coordinates {
 	}
 	
 	public double getEasting() {
-		return easting;
+		return getX();
 	}
 	public double getNorthing() {
-		return northing;
+		return getY();
 	}
 	@Override
 	public double getLat() {
@@ -52,6 +52,12 @@ public class UTM implements Coordinates {
 	@Override
 	public String toString() {
 		return ""+lngZone+latZone+" "+easting+" "+northing;
+	}
+	public double getX() {
+		return easting;
+	}
+	public double getY() {
+		return northing;
 	}
 }
 

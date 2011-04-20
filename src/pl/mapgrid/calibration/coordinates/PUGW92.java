@@ -7,8 +7,12 @@ import org.openstreetmap.josm.data.projection.Puwg;
 public class PUGW92 implements Coordinates {
 
 	private LatLon latLon;
+	private final double x;
+	private final double y;
 
 	public PUGW92(double x, double y) {
+		this.x = x;
+		this.y = y;
 		Puwg puwg = new Puwg();
 		latLon = puwg.eastNorth2latlon(new EastNorth(x,y));
 	}
@@ -21,6 +25,12 @@ public class PUGW92 implements Coordinates {
 	@Override
 	public double getLon() {
 		return latLon.lon();
+	}
+	public double getX() {
+		return x;
+	}
+	public double getY() {
+		return y;
 	}
 
 	@Override
