@@ -1,15 +1,46 @@
 <project name="mapgrid" default="build">		
-	<target name="build">
+	<property file="build.properties"/>
+	<property file="build.user.properties"/>
+
+	<target name="release" depends="version,build,upload,update.webstart"/>
+	
+	<target name="upload">
+		<exec executable="googlecode_upload.py">
+			<arg line="-p mapgrid build/mapgrid-${version}.jar"/>
+			<arg line="-l Featured,Type-Package,OpSys-All"/>
+			<arg line="-s 'Wersja ${version}'"/>
+			<arg line="-u ${google.code.user}"/>
+			<arg line="-p ${google.code.password}"/>
+		</exec>
+	</target>
+	
+	<target name="version">
 		<exec executable="svnversion" outputproperty="version">
 			<arg line="src"/>
 		</exec>
-		<jar destfile="mapgrid.jar" basedir="bin">
+	</target>
+	
+	<target name="build">
+		<delete dir="build"/>
+		<mkdir dir="build"/>
+		<jar destfile="build/mapgrid-${version}.jar" basedir="bin">
 			<manifest>
-				<attribute name="Main-Class" value="pl.mapgrid.mask.gui.JMaskGridMain" />
+				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 		</jar>
-		<signjar jar="mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
+		<signjar jar="build/mapgrid-${version}.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
 	</target>
+	
+	<target name="update.webstart">
+		<copy file="mapgrid.jnlp" todir="webstart" overwrite="true">
+			<filterset>
+				<filter token="MAIN" value="${main.class}"/>
+				<filter token="FILE" value="mapgrid-${version}.jar"/>
+				<filter token="CODEBASE" value="${webstart.codebase}"/>
+			</filterset>
+		</copy>
+	</target>
+
 	
 	<target name="create.keystore">
 		<delete file="mapgrid.keystore" />
