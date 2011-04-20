@@ -2,25 +2,31 @@
 	<property file="build.properties"/>
 	<property file="build.user.properties"/>
 
-	<target name="release" depends="version,build,upload,update.webstart"/>
+	<target name="release" depends="build,upload,update.webstart"/>
 	
 	<target name="upload">
 		<exec executable="googlecode_upload.py">
 			<arg line="-p mapgrid build/mapgrid-${version}.jar"/>
 			<arg line="-l Featured,Type-Package,OpSys-All"/>
-			<arg line="-s 'Wersja ${version}'"/>
+			<arg line="-s Wersja:${version}"/>
 			<arg line="-u ${google.code.user}"/>
-			<arg line="-p ${google.code.password}"/>
+			<arg line="-w ${google.code.password}"/>
 		</exec>
+		<echo>Uploaded mapgrid-${version}.jar</echo>
 	</target>
 	
-	<target name="version">
+	<target name="version" unless="version">
+		<exec executable="svn">
+			<arg line="up src"/>
+			<arg line="-username ${google.code.user}"/>
+			<arg line="-password ${google.code.password}"/>
+		</exec>
 		<exec executable="svnversion" outputproperty="version">
 			<arg line="src"/>
 		</exec>
 	</target>
 	
-	<target name="build">
+	<target name="build" depends="version">
 		<delete dir="build"/>
 		<mkdir dir="build"/>
 		<jar destfile="build/mapgrid-${version}.jar" basedir="bin">
@@ -31,14 +37,20 @@
 		<signjar jar="build/mapgrid-${version}.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
 	</target>
 	
-	<target name="update.webstart">
+	<target name="update.webstart" depends="version">
 		<copy file="mapgrid.jnlp" todir="webstart" overwrite="true">
 			<filterset>
 				<filter token="MAIN" value="${main.class}"/>
 				<filter token="FILE" value="mapgrid-${version}.jar"/>
+				<filter token="JNLP" value="${jnlp.href}"/>
 				<filter token="CODEBASE" value="${webstart.codebase}"/>
 			</filterset>
 		</copy>
+		<exec executable="svn">
+			<arg line="ci webstart -m 'version ${version}'"/>
+			<arg line="--username ${google.code.user}"/>
+			<arg line="--password ${google.code.password}"/>
+		</exec>
 	</target>
 
 	

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0+"
 	codebase="@CODEBASE@" 	
- 	href="mapgrid.jnlp">
+ 	href="@JNLP@">
 	<information>
 		<title>mapgrid</title>
 		<vendor>Rzymek FIA</vendor>		
