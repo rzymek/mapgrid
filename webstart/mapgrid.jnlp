@@ -10,7 +10,7 @@
 	</information>
 	<resources>
 		<j2se version="1.6+" />
-		<jar href="mapgrid-70.jar" />
+		<jar href="mapgrid-1.74.jar" />
 		<jar href="jcoord-1.0.jar"/>
 		<jar href="josm-tested.jar"/>
 		<!-- Wyłącznie dla obsługi większej ilości plików graficznych (m.in. tiff). 
