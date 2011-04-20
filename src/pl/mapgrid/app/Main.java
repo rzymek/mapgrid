@@ -8,15 +8,12 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.management.RuntimeErrorException;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-
-import org.openstreetmap.josm.data.projection.Puwg;
 
 import pl.mapgrid.app.Actions.Name;
 import pl.mapgrid.app.actions.DetectGridAction;

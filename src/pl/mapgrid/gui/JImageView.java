@@ -5,43 +5,75 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JComponent;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 import pl.mapgrid.app.Main;
 import pl.mapgrid.grid.UTMGraphics;
 import pl.mapgrid.mask.MaskGrid;
+import pl.mapgrid.utils.PopupListener;
 
 public class JImageView extends JComponent implements Observer {
 	private BufferedImage image = null;
 	private BufferedImage grid;
 	private boolean showGrid = true;
-	private float zoom = 1;
 	private final Main main;
+	private boolean zoomToFit;
 
 	public JImageView(Main main) {
 		this.main = main;
-	}
+		JPopupMenu menu = new JPopupMenu();
+		JMenuItem item = menu.add("Pokaż cały");
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				toggleZoomToFit();
+			}
+		});
+		addMouseListener(new PopupListener(menu));
+		add(menu);
+	}	
 
 	@Override
 	public void paint(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(0,0,getWidth(), getHeight());
 		if (image == null)
-			return;	
-		g.drawImage(image, 0, 0, (int) (image.getWidth() * zoom), (int) (image.getHeight() * zoom), this);
+			return;
+		int[] bounds = { image.getWidth(), image.getHeight() };
+		if(zoomToFit) {
+			int w = getParent().getWidth();
+			int h = getParent().getHeight();
+			float scaleW = (float)image.getWidth() / w;
+			float scaleH = (float)image.getHeight() / h;
+			float scale = Math.max(scaleW, scaleH);
+			bounds[0] /= scale;
+			bounds[1] /= scale;
+		}else{
+			bounds[0]= image.getWidth(); 
+			bounds[1] = image.getHeight();
+		}
+		g.drawImage(image, 0, 0, bounds[0], bounds[1], this);
 		if (showGrid != false && grid != null)
-			g.drawImage(grid, 0, 0, (int) (image.getWidth() * zoom), (int) (image.getHeight() * zoom), this);
+			g.drawImage(grid, 0, 0, bounds[0], bounds[1], this);
 	}
 
+	public boolean toggleZoomToFit() {
+		zoomToFit = !zoomToFit;
+		repaint();
+		return zoomToFit;
+	}
+	
 	public void setImage(BufferedImage image) {
 		this.image = image;
 		setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
-		zoom = 1;
 		repaint();
 		revalidate();
 	}
@@ -103,13 +135,6 @@ public class JImageView extends JComponent implements Observer {
 		repaint();
 	}
 
-	public void setZoom(float zoom) {
-		this.zoom = zoom;
-		setPreferredSize(new Dimension((int)(image.getWidth(this)*zoom), (int)(image.getHeight(this)*zoom)));
-		revalidate();
-		repaint();
-	}
-	
 	public BufferedImage getGrid() {
 		return grid;
 	}

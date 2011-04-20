@@ -1,6 +1,5 @@
-* obsługa .tfw (puwg-92)
-* crop do A4
 * zoom
+* crop do A4
 * zapis .map
 
 known bugs:
