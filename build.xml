@@ -18,8 +18,8 @@
 	<target name="version" unless="version">
 		<exec executable="svn">
 			<arg line="up src"/>
-			<arg line="-username ${google.code.user}"/>
-			<arg line="-password ${google.code.password}"/>
+			<arg line="--username ${google.code.user}"/>
+			<arg line="--password ${google.code.password}"/>
 		</exec>
 		<exec executable="svnversion" outputproperty="minor.version">
 			<arg line="src"/>
