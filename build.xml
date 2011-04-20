@@ -21,9 +21,11 @@
 			<arg line="-username ${google.code.user}"/>
 			<arg line="-password ${google.code.password}"/>
 		</exec>
-		<exec executable="svnversion" outputproperty="version">
+		<exec executable="svnversion" outputproperty="minor.version">
 			<arg line="src"/>
 		</exec>
+		<property name="version" value="${major.version}.${minor.version}"/>
+		<echo>Version: ${version}</echo>
 	</target>
 	
 	<target name="build" depends="version">
