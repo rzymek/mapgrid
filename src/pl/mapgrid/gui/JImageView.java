@@ -82,16 +82,20 @@ public class JImageView extends JComponent implements Observer {
 		return image;
 	}
 	public BufferedImage getImageWithGrid() {
-		BufferedImage image = new BufferedImage(
-				this.image.getWidth(), 
-				this.image.getHeight(), 
-				BufferedImage.TYPE_INT_RGB);
-		Graphics g = image.getGraphics();
-		g.setColor(Color.WHITE);
-		g.fillRect(0,0,image.getWidth(), image.getHeight());
-		g.drawImage(this.image, 0,0, this);
-		g.drawImage(this.grid, 0,0, this);
-		return image;
+		if(showGrid) {
+			BufferedImage image = new BufferedImage(
+					this.image.getWidth(), 
+					this.image.getHeight(), 
+					BufferedImage.TYPE_INT_RGB);
+			Graphics g = image.getGraphics();
+			g.setColor(Color.WHITE);
+			g.fillRect(0,0,image.getWidth(), image.getHeight());
+			g.drawImage(this.image, 0,0, this);
+			g.drawImage(this.grid, 0,0, this);
+			return image;
+		}else{
+			return image;
+		}
 	}
 
 	@Override
