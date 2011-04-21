@@ -28,6 +28,7 @@ import pl.mapgrid.app.actions.ToggleGridAction;
 import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
+import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.readers.CalibrationReader;
 import pl.mapgrid.calibration.readers.Registry;
 import pl.mapgrid.grid.UTMGraphics;
@@ -138,6 +139,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 				calibration = null;
 				openImage(file);
 			}
+			System.out.println(calibration);
 			actions.reenable();
 		}catch (Exception e) {
 			throw new RuntimeException(e);

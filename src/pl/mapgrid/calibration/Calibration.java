@@ -11,13 +11,13 @@ public class Calibration {
 	@Override
 	public String toString() {
 		StringBuilder buf = new StringBuilder();
-		buf.append("{");
+		buf.append("Calibration:\n");
 		for (Coordinates c : coordinates) {
-			buf.append('\t').append(c.getLat()+" "+c.getLon()).append('\n');
+			buf.append('\t').append(c).append('\n');
 		}
-		buf.append("}");
 		return buf.toString();
 	}
+	
 	public UTM[] toUTM() {
 		if(coordinates instanceof UTM[])
 			return (UTM[]) coordinates;

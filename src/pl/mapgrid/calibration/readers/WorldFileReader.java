@@ -7,7 +7,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 import pl.mapgrid.calibration.Calibration;
-import pl.mapgrid.calibration.coordinates.PUGW92;
+import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.exceptions.InvalidFormatException;
 
 public class WorldFileReader extends TextFileReader {
@@ -36,10 +36,10 @@ public class WorldFileReader extends TextFileReader {
 		double lty = data[5];
 		double rbx = ltx + data[0]*width;
 		double rby = lty + data[3]*height;
-		calibration.coordinates[0] = new PUGW92(ltx, lty);
-		calibration.coordinates[1] = new PUGW92(rbx, lty);
-		calibration.coordinates[2] = new PUGW92(rbx, rby);
-		calibration.coordinates[3] = new PUGW92(ltx, rby);
+		calibration.coordinates[0] = new PUWG92(ltx, lty);
+		calibration.coordinates[1] = new PUWG92(rbx, lty);
+		calibration.coordinates[2] = new PUWG92(rbx, rby);
+		calibration.coordinates[3] = new PUWG92(ltx, rby);
 	}
 
 
