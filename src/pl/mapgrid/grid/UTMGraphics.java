@@ -47,10 +47,10 @@ public class UTMGraphics {
 		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, config.border));
 		boolean HORIZONTAL = true;
 		boolean VERTICAL  = false;
-		drawBoxes(vertical, firstEasting, VERTICAL);
-		drawBoxes(horizontal, firstNorthing, HORIZONTAL);
 		drawGrid(vertical);
 		drawGrid(horizontal);
+		drawBoxes(vertical, firstEasting, VERTICAL);
+		drawBoxes(horizontal, firstNorthing, HORIZONTAL);
 	}
 
 	private void drawGrid(List<int[]> lines) {
