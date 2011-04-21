@@ -9,7 +9,7 @@
 		<offline-allowed />
 	</information>
 	<resources>
-		<j2se version="1.6+" />
+		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
 		<jar href="@FILE@" />
 		<jar href="jcoord-1.0.jar"/>
 		<jar href="josm-tested.jar"/>
