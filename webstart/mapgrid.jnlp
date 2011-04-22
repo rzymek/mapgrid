@@ -9,8 +9,8 @@
 		<offline-allowed />
 	</information>
 	<resources>
-		<j2se version="1.6+" />
-		<jar href="mapgrid-1.74.jar" />
+		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
+		<jar href="mapgrid-1.82.jar" />
 		<jar href="jcoord-1.0.jar"/>
 		<jar href="josm-tested.jar"/>
 		<!-- Wyłącznie dla obsługi większej ilości plików graficznych (m.in. tiff). 
