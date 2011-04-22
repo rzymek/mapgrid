@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
+import org.openstreetmap.josm.data.projection.Puwg;
+
 import pl.mapgrid.app.Actions.Name;
 import pl.mapgrid.app.actions.DetectGridAction;
 import pl.mapgrid.app.actions.ExitAction;
@@ -29,6 +31,7 @@ import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.Coordinates;
+import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.readers.CalibrationReader;
 import pl.mapgrid.calibration.readers.Registry;
 import pl.mapgrid.grid.UTMGraphics;
@@ -140,9 +143,20 @@ public class Main extends JMainFrame implements ProgressMonitor {
 				openImage(file);
 			}
 			System.out.println(calibration);
+			printForGDAL(calibration);
 			actions.reenable();
 		}catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	private void printForGDAL(Calibration calibration) {
+		Coordinates coordinates = calibration.coordinates[0];
+		if(coordinates instanceof PUWG92) {
+			PUWG92 tl = (PUWG92) calibration.coordinates[0];
+			PUWG92 br = (PUWG92) calibration.coordinates[2];
+			System.out.printf("gdal_translate -of PNG -projwin %.0f %.0f %.0f %.0f xml/geop_ars.xml \n",
+					tl.getX(), tl.getY(), br.getX(), br.getY());
 		}
 	}
 
