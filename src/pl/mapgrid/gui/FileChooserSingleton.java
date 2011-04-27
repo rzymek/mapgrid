@@ -17,8 +17,8 @@ public class FileChooserSingleton {
 				ImageIO.getReaderFileSuffixes());
 		RegistryFileFilter calibrated = new RegistryFileFilter("Pliki kalibracyjne: ", 
 				Registry.getReaderFileSuffixes());
-		chooser.addChoosableFileFilter(calibrated);
 		chooser.addChoosableFileFilter(images);
+		chooser.addChoosableFileFilter(calibrated);
 	}
 	public static JFileChooser instance() {
 		if(instance == null)

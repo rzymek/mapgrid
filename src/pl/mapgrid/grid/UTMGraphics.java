@@ -18,7 +18,10 @@ public class UTMGraphics {
 	
 	public static class Config {
 		@Doc("UTM: kolor lini")
-		public Color lineColor = new Color(0,0,0,128);
+		public Color[] lineColors = {
+			new Color(0,0,0,128),
+			new Color(255,255,255,128),
+		};
 		@Doc("UTM: grubość lini")
 		public int lineSize = 3;
 		@Doc("UTM: grubość ramki")
@@ -47,15 +50,48 @@ public class UTMGraphics {
 		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, config.border));
 		boolean HORIZONTAL = true;
 		boolean VERTICAL  = false;
-		drawGrid(vertical);
-		drawGrid(horizontal);
+//		drawGrid1(vertical);
+		drawGrid(vertical, horizontal, 1);
+		drawGrid(horizontal, vertical, 0);
+		g.setStroke(new BasicStroke());
 		drawBoxes(vertical, firstEasting, VERTICAL);
 		drawBoxes(horizontal, firstNorthing, HORIZONTAL);
 	}
 
-	private void drawGrid(List<int[]> lines) {
-		g.setColor(config.lineColor);
-		g.setStroke(new BasicStroke(config.lineSize));
+	private void drawGrid(List<int[]> lines, List<int[]> other, int idx) {
+		int start = other.get(0)[idx];
+		int w = other.get(2)[idx] - other.get(1)[idx];
+		drawDashed(lines, start, 0, w);
+		drawDashed(lines, start, 1, w);
+//		start = horizontal.get(0)[1];
+//		w = horizontal.get(2)[1] - horizontal.get(1)[1];
+//		drawDashed(vertical, start, 0, w);
+//		drawDashed(vertical, start, 1, w);
+	}
+
+	private void drawDashed(List<int[]> lines, int start, int colorIdx, int w) {
+		float step = Math.abs(w)/10.f;
+		float[] dashPattern = new float[] {
+				step,
+				step,
+		};
+		g.setColor(config.lineColors[colorIdx % config.lineColors.length]);
+		g.setStroke(new BasicStroke(
+				config.lineSize, 			// Width
+				 BasicStroke.CAP_BUTT,    // End cap
+                 BasicStroke.JOIN_BEVEL,    // Join style
+                 10.0f,                     // Miter limit
+                 dashPattern, // Dash pattern
+                 (colorIdx%2)*step+(w-start)
+		));
+		for (int[] line : lines) 
+			g.drawLine(line[0] , line[1], line[2], line[3]);
+	}
+	
+	private void drawGrid1(List<int[]> lines) {
+		g.setColor(config.lineColors[0]);
+		g.setStroke(new BasicStroke(
+				config.lineSize));
 		for (int[] line : lines) 
 			g.drawLine(line[0], line[1], line[2], line[3]);
 	}
