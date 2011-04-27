@@ -9,6 +9,7 @@ import javax.imageio.stream.ImageInputStream;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.exceptions.InvalidFormatException;
+import pl.mapgrid.utils.Utils;
 
 public class WorldFileReader extends TextFileReader {
 	private double[] data = new double[6];
@@ -23,10 +24,7 @@ public class WorldFileReader extends TextFileReader {
 	protected void verify(Calibration calibration) throws Exception {
 		if(data[1] != 0 || data[2] != 0)
 			throw new InvalidFormatException("Rotacja nie wspierana.");
-		String path = file.getPath();
-		String basename = path.substring(0,path.lastIndexOf('.'));
-		String filename = basename+".tif";
-		associated = new File(filename);
+		associated = Utils.basename(file, ".tif");
 		ImageInputStream input = ImageIO.createImageInputStream(associated);
 		ImageReader reader = ImageIO.getImageReaders(input).next();
 		reader.setInput(input);
@@ -41,7 +39,6 @@ public class WorldFileReader extends TextFileReader {
 		calibration.coordinates[2] = new PUWG92(rbx, rby);
 		calibration.coordinates[3] = new PUWG92(ltx, rby);
 	}
-
 
 	@Override
 	public String[] getFileSuffixes() {

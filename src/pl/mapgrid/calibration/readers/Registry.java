@@ -9,6 +9,7 @@ public class Registry {
 	static CalibrationReader[] readers = {
 			new OZIMapReader(),
 			new WorldFileReader(),
+			new AuxXmlReader(),
 	};
 	
 	public static List<String> getReaderFileSuffixes() {
