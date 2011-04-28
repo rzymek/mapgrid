@@ -2,9 +2,6 @@ package pl.mapgrid.calibration.readers;
 
 import java.io.File;
 import java.io.FileReader;
-import java.util.Arrays;
-
-import org.openstreetmap.josm.actions.ValidateAction;
 import org.xml.sax.InputSource;
 
 import pl.mapgrid.calibration.Calibration;
@@ -27,17 +24,17 @@ public class AuxXmlReader implements CalibrationReader{
 
 	@Override
 	public Calibration read(File file) throws Exception {
-		associated = Utils.basename(file, ".png");
-		FileReader reader = new FileReader(file);
-		String transform = Utils.xpath(new InputSource(reader), "/PAMDataset/GeoTransform");
+		associated = Utils.basename(Utils.basename(file, ""),"");
+		FileReader in = new FileReader(file);
+		String transform = Utils.xpath(new InputSource(in), "/PAMDataset/GeoTransform");
 		String[] strings = transform.split(", *");
 		double[] values = new double[strings.length];
 		for (int i = 0; i < strings.length; i++) {
 			values[i] = Double.parseDouble(strings[i].trim());
 		}
-		String tmp = Arrays.toString(values);
-		System.out.println(tmp);
-		throw new RuntimeException(tmp);
+		Calibration calibration = new Calibration();
+		WorldFileReader.setupCalibration(associated, calibration, values, 0, 3, 1, 5);
+		return calibration;
 	}
 
 }

@@ -1,6 +1,7 @@
 package pl.mapgrid.calibration.readers;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -22,18 +23,30 @@ public class WorldFileReader extends TextFileReader {
 	
 	@Override
 	protected void verify(Calibration calibration) throws Exception {
-		if(data[1] != 0 || data[2] != 0)
+		double[] values = data;
+		if(values[1] != 0 || values[2] != 0)
 			throw new InvalidFormatException("Rotacja nie wspierana.");
 		associated = Utils.basename(file, ".tif");
+		setupCalibration(associated, calibration, values, 4, 5, 0, 3);
+	}
+
+	public static void setupCalibration(File associated, Calibration calibration, double[] values,
+			int ilx, int ily, int ippmx, int ippmy) throws IOException {
 		ImageInputStream input = ImageIO.createImageInputStream(associated);
 		ImageReader reader = ImageIO.getImageReaders(input).next();
 		reader.setInput(input);
 		int width = reader.getWidth(reader.getMinIndex());
 		int height = reader.getHeight(reader.getMinIndex());
-		double ltx = data[4];
-		double lty = data[5];
-		double rbx = ltx + data[0]*width;
-		double rby = lty + data[3]*height;
+		double ltx = values[ilx];
+		double lty = values[ily];
+		double rbx = ltx + values[ippmx]*width;
+		double rby = lty + values[ippmy]*height;
+		System.out.println(values[ippmx]);
+		System.out.println("0.0");
+		System.out.println("0.0");
+		System.out.println(values[ippmy]);
+		System.out.println(values[ilx]);
+		System.out.println(values[ily]);
 		calibration.coordinates[0] = new PUWG92(ltx, lty);
 		calibration.coordinates[1] = new PUWG92(rbx, lty);
 		calibration.coordinates[2] = new PUWG92(rbx, rby);
