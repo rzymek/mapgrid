@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.shape.Shape;
 import pl.mapgrid.shape.Waypoint;
@@ -24,18 +25,18 @@ public class KMLReader implements ShapeReader {
 	private static final String[] SUFFIXES = { "kml" };
 
 	@Override
-	public List<Shape<LatLon>> read(File file) throws Exception {
+	public List<Shape<Coordinates>> read(File file) throws Exception {
 		return read(Kml.unmarshal(file));
 	}
 
-	protected List<Shape<LatLon>> read(Kml kml) {
-		List<Shape<LatLon>> result = new ArrayList<Shape<LatLon>>();
+	protected List<Shape<Coordinates>> read(Kml kml) {
+		List<Shape<Coordinates>> result = new ArrayList<Shape<Coordinates>>();
 		Document doc = (Document) kml.getFeature();
 		processFeatures(result, doc.getFeature());
 		return result;
 	}
 
-	private void processFeatures(List<Shape<LatLon>> result, List<Feature> features) {
+	private void processFeatures(List<Shape<Coordinates>> result, List<Feature> features) {
 		for (Feature feature : features) {
 			if (feature instanceof Placemark) {
 				Placemark placemark = (Placemark) feature;
@@ -59,41 +60,41 @@ public class KMLReader implements ShapeReader {
 		}
 	}
 
-	private Shape<LatLon> toShape(LinearRing g) {
-		LatLon[] points = toPoints(g.getCoordinates());
-		return new pl.mapgrid.shape.Path<LatLon>(points);
+	private Shape<Coordinates> toShape(LinearRing g) {
+		Coordinates[] points = toPoints(g.getCoordinates());
+		return new pl.mapgrid.shape.Path<Coordinates>(points);
 	}
 
-	private Shape<LatLon> toShape(LineString g) {
-		LatLon[] points = toPoints(g.getCoordinates());
-		return new pl.mapgrid.shape.Path<LatLon>(points);
+	private Shape<Coordinates> toShape(LineString g) {
+		Coordinates[] points = toPoints(g.getCoordinates());
+		return new pl.mapgrid.shape.Path<Coordinates>(points);
 	}
 
-	private Shape<LatLon> toShape(Polygon p) {
+	private Shape<Coordinates> toShape(Polygon p) {
 		Boundary boundary = p.getOuterBoundaryIs();
 		LinearRing ring = boundary.getLinearRing();
-		LatLon[] points = toPoints(ring.getCoordinates());
-		return new pl.mapgrid.shape.Polygon<LatLon>(points);
+		Coordinates[] points = toPoints(ring.getCoordinates());
+		return new pl.mapgrid.shape.Polygon<Coordinates>(points);
 	}
 
-	private LatLon[] toPoints(List<Coordinate> coordinates) {
-		LatLon[] points = new LatLon[coordinates.size()];
+	private Coordinates[] toPoints(List<Coordinate> coordinates) {
+		Coordinates[] points = new Coordinates[coordinates.size()];
 		for (int i = 0; i < coordinates.size(); i++)
 			points[i] = toLatLon(coordinates.get(i));
 		return points;
 	}
 
-	private Shape<LatLon> toShape(Point p) {
+	private Shape<Coordinates> toShape(Point p) {
 		return toShape(p.getCoordinates().get(0));
 	}
 
-	private Shape<LatLon> toShape(Coordinate c) {
-		LatLon latlon = toLatLon(c);
-		Shape<LatLon> shape = new Waypoint<LatLon>(latlon);
+	private Shape<Coordinates> toShape(Coordinate c) {
+		Coordinates latlon = toLatLon(c);
+		Shape<Coordinates> shape = new Waypoint<Coordinates>(latlon);
 		return shape;
 	}
 
-	private LatLon toLatLon(Coordinate c) {
+	private Coordinates toLatLon(Coordinate c) {
 		return new LatLon(c.getLatitude(), c.getLongitude());
 	}
 
@@ -104,8 +105,8 @@ public class KMLReader implements ShapeReader {
 
 	public static void main(String[] args) throws Exception {
 		KMLReader reader = new KMLReader();
-		List<Shape<LatLon>> read = reader.read(new File("samples/rr3-places.kml"));
-		for (Shape<LatLon> shape : read) {
+		List<Shape<Coordinates>> read = reader.read(new File("samples/rr3-places.kml"));
+		for (Shape<Coordinates> shape : read) {
 			System.out.println(shape);
 		}
 	}

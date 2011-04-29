@@ -30,15 +30,19 @@ import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.Coordinates;
+import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.readers.CalibrationReader;
+import pl.mapgrid.calibration.readers.KMLReader;
 import pl.mapgrid.calibration.readers.Registry;
 import pl.mapgrid.grid.UTMGraphics;
+import pl.mapgrid.gui.FileChooserSingleton;
 import pl.mapgrid.gui.JForm;
 import pl.mapgrid.gui.JImageView;
 import pl.mapgrid.gui.JMainFrame;
 import pl.mapgrid.mask.HoughTransform;
 import pl.mapgrid.mask.MaskGrid;
+import pl.mapgrid.shape.Shape;
 import pl.mapgrid.utils.DragableViewportMouseListener;
 import pl.mapgrid.utils.ProgressMonitor;
 
@@ -59,13 +63,13 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
-//		try {
-//			File f = new File("samples/rr3.tfw");
-//			FileChooserSingleton.instance().setSelectedFile(f);
-//			open(f);
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			File f = new File("samples/rr3.tfw");
+			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
+			open(f);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void setupActions() {

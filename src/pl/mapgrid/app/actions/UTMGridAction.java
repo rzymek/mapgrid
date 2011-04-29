@@ -2,14 +2,19 @@ package pl.mapgrid.app.actions;
 
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 
 import pl.mapgrid.app.Main;
+import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.UTM;
+import pl.mapgrid.calibration.readers.KMLReader;
+import pl.mapgrid.calibration.readers.Registry;
 import pl.mapgrid.gui.actions.UIAction;
+import pl.mapgrid.shape.Shape;
 
 public class UTMGridAction extends AbstractAction implements UIAction {
 
@@ -57,7 +62,15 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 		int firstEasting = (int) getKmLine(utm[0].getEasting()); 
 		int firstNorthing = (int) getKmLine(utm[0].getNorthing());
 		main.view.setGrid(vertical, horizontal, firstEasting, firstNorthing);
-		main.view.repaint();
+		try {
+			File shp = new File("samples/rr3-places.kml");
+			KMLReader reader = (KMLReader) Registry.getFeatureReader(shp.getName());
+			List<Shape<Coordinates>> shapes = reader.read(shp);
+			main.view.setShapes(shapes);
+			main.view.repaint();
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override

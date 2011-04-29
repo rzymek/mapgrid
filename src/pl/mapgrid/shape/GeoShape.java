@@ -8,7 +8,7 @@ import pl.mapgrid.utils.Utils;
 import pl.mapgrid.utils.Utils.CoordType;
 
 public class GeoShape {
-	public static Shape<Point> project(Shape<Coordinates> shape, Calibration calibration, int width, int height) {
+	public static Shape<Point> project(Shape<? extends Coordinates> shape, Calibration calibration, int width, int height) {
 		Point[] points = new Point[shape.count()];
 		Coordinates[] calib = calibration.coordinates;
 		for(int i=0;i<shape.count();++i) {
