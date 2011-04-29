@@ -1,5 +1,6 @@
 package pl.mapgrid.utils;
 
+import java.awt.image.RenderedImage;
 import java.io.File;
 
 import javax.xml.xpath.XPath;
@@ -7,6 +8,8 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
 import org.xml.sax.InputSource;
+
+import pl.mapgrid.calibration.coordinates.Coordinates;
 
 public class Utils {
 
@@ -27,4 +30,24 @@ public class Utils {
 			throw new RuntimeException(e);
 		}
 	}
+	public static enum CoordType {LAT,LON,X,Y};
+	public static double get(Coordinates c, CoordType type) {
+		switch (type) {
+		case LAT: return c.getLat();
+		case LON: return c.getLon();
+		case X:   return c.getX();
+		case Y:   return c.getY();
+		default:  throw new AssertionError("Consitency error:"+type);
+		}
+	}
+	
+	public static enum DimentionType {WIDTH, HEIGHT};
+	public static int getDimention(RenderedImage image, DimentionType type) {
+		switch (type) {
+		case HEIGHT: return image.getHeight();
+		case WIDTH:  return image.getWidth();
+		default:     throw new AssertionError("Consitency error:"+type);		
+		}
+	}
+
 }

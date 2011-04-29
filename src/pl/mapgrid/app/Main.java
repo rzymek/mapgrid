@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -15,8 +16,6 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-
-import org.openstreetmap.josm.data.projection.Puwg;
 
 import pl.mapgrid.app.Actions.Name;
 import pl.mapgrid.app.actions.DetectGridAction;
@@ -137,6 +136,8 @@ public class Main extends JMainFrame implements ProgressMonitor {
 			try {
 				CalibrationReader reader = Registry.getReader(file.getName());
 				calibration = reader.read(file);
+				System.out.println(calibration);
+				System.out.println(Arrays.toString(calibration.toLatLon()));
 				openImage(reader.getAssociated());
 			}catch(NoSuchElementException ex) {
 				calibration = null;
