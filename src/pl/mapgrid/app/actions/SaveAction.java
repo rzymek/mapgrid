@@ -27,7 +27,7 @@ public class SaveAction extends BackgroundAction implements UIAction {
 	@Override
 	public void run() {
 		try {	
-			JFileChooser chooser = FileChooserSingleton.instance();
+			JFileChooser chooser = FileChooserSingleton.instance().getMapChooser();
 			int result = chooser.showSaveDialog(main);
 			if(result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = chooser.getSelectedFile();

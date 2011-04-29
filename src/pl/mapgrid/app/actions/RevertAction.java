@@ -25,7 +25,7 @@ public class RevertAction extends AbstractAction implements UIAction{
 	}
 
 	private File getSelectedFile() {
-		return FileChooserSingleton.instance().getSelectedFile();
+		return FileChooserSingleton.instance().getMapChooser().getSelectedFile();
 	}
 	
 	@Override

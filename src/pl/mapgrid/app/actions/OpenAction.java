@@ -20,7 +20,7 @@ public class OpenAction extends BackgroundAction implements UIAction {
 	@Override
 	public void run() {
 		try {	
-			JFileChooser chooser = FileChooserSingleton.instance();
+			JFileChooser chooser = FileChooserSingleton.instance().getMapChooser();
 			chooser.setCurrentDirectory(new File("./input/"));
 			int result = chooser.showOpenDialog(main);
 			if(result == JFileChooser.APPROVE_OPTION) {
