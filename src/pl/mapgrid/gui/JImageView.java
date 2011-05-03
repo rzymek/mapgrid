@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Observable;
@@ -28,7 +30,8 @@ import pl.mapgrid.utils.PopupListener;
 
 public class JImageView extends JComponent implements Observer {
 	private BufferedImage image = null;
-	private BufferedImage grid;
+	private BufferedImage grid = null;
+	private BufferedImage shape = null;
 	private boolean showGrid = true;
 	private final Main main;
 	private boolean zoomToFit;
@@ -67,6 +70,8 @@ public class JImageView extends JComponent implements Observer {
 			bounds[1] = image.getHeight();
 		}
 		g.drawImage(image, 0, 0, bounds[0], bounds[1], this);
+		if(shape != null)
+			g.drawImage(shape, 0, 0, bounds[0], bounds[1], this);
 		if (showGrid != false && grid != null)
 			g.drawImage(grid, 0, 0, bounds[0], bounds[1], this);
 	}
@@ -80,6 +85,7 @@ public class JImageView extends JComponent implements Observer {
 	public void setImage(BufferedImage image) {
 		this.image = image;		
 		this.grid = null;
+		this.shape = null;
 		setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
 		repaint();
 		revalidate();
@@ -99,6 +105,7 @@ public class JImageView extends JComponent implements Observer {
 			g.fillRect(0,0,image.getWidth(), image.getHeight());
 			g.drawImage(this.image, 0,0, this);
 			g.drawImage(this.grid, 0,0, this);
+			g.drawImage(this.shape, 0,0, this);
 			return image;
 		}else{
 			return image;
@@ -160,12 +167,26 @@ public class JImageView extends JComponent implements Observer {
 		setShowGrid(true);
 	}
 	
-	public void setShapes(List<Shape<Coordinates>> shapes) {
-		Graphics2D g2 = (Graphics2D) image.getGraphics();
-		ShapeGraphics g = new ShapeGraphics(g2);
+	public void setShapes(List<Shape<Coordinates>> shapes, ShapeGraphics.Config config) {
+		shape = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);		
+		Graphics2D g2 = (Graphics2D) shape.getGraphics();
+		ShapeGraphics g = new ShapeGraphics(g2, config);
 		for (Shape<? extends Coordinates> shape : shapes) {
 			Shape<Point> p = GeoShape.project(shape, main.calibration, image.getWidth(), image.getHeight());
 			g.draw(p);
 		}
+		repaint();
+	}
+
+	public void rotate(double rot) {
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(rot);
+		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
+		image = op.filter(image, null);
+		if (shape != null)
+			shape = op.filter(shape, null);
+		if (grid != null)
+			grid = op.filter(grid, null);
+		repaint();
 	}
 }

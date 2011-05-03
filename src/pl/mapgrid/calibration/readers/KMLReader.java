@@ -77,6 +77,8 @@ public class KMLReader implements ShapeReader {
 		Style s = new Style();
 		s.color = KMLUtils.getColor(style);
 		s.width = KMLUtils.getWidth(style);
+		if(s.width == 0.0)
+			s.width = 1.0;
 		return s;
 	
 	}

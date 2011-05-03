@@ -22,6 +22,7 @@ import pl.mapgrid.app.actions.DetectGridAction;
 import pl.mapgrid.app.actions.ExitAction;
 import pl.mapgrid.app.actions.OpenAction;
 import pl.mapgrid.app.actions.OpenShapeAction;
+import pl.mapgrid.app.actions.RedrawShapesAction;
 import pl.mapgrid.app.actions.RemoveGridAction;
 import pl.mapgrid.app.actions.RevertAction;
 import pl.mapgrid.app.actions.RotateCalibratedAction;
@@ -43,6 +44,7 @@ import pl.mapgrid.gui.JMainFrame;
 import pl.mapgrid.mask.HoughTransform;
 import pl.mapgrid.mask.MaskGrid;
 import pl.mapgrid.shape.Shape;
+import pl.mapgrid.shape.ShapeGraphics;
 import pl.mapgrid.utils.DragableViewportMouseListener;
 import pl.mapgrid.utils.ProgressMonitor;
 
@@ -52,11 +54,15 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	public JProgressBar status;
 	public Actions actions;
 	public List<double[]> lines;
+	
 	public HoughTransform.Config houghConfig = new HoughTransform.Config();
 	public MaskGrid.Config maskConfig = new MaskGrid.Config();
 	public UTMGraphics.Config utmConfig = new UTMGraphics.Config(); 
+	public ShapeGraphics.Config shapeConfig = new ShapeGraphics.Config(); 
+	
 	public JForm setup;
 	public Calibration calibration;
+	public List<Shape<Coordinates>> shapes;
 
 	public Main() throws Exception {
 		super();
@@ -72,7 +78,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 			File file = new File("samples/s11/granica.kml");
 			KMLReader reader = (KMLReader) Registry.getFeatureReader(file.getName());
 			List<Shape<Coordinates>> shapes = reader.read(file);
-			view.setShapes(shapes);
+			view.setShapes(shapes, shapeConfig);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -91,6 +97,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		actions.set(Actions.Name.TOGGLE_SETUP, new ToggleSetupAction(this));
 		actions.set(Actions.Name.ROTATE_CALIBRATED, new RotateCalibratedAction(this));
 		actions.set(Actions.Name.UTM_GRID, new UTMGridAction(this));
+		actions.set(Actions.Name.REDRAW_SHAPES, new RedrawShapesAction(this));
 	}
 
 	private void setupComponents() throws Exception {
@@ -104,8 +111,8 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		status = new JProgressBar(0,100);
 		status.setString("");
 		status.setStringPainted(true);
-		
-		setup = new JForm(houghConfig, maskConfig, utmConfig);
+				
+		setup = new JForm(utmConfig, shapeConfig, houghConfig, maskConfig);
 		setup.setVisible(false);
 		
 		JScrollPane scroll = new JScrollPane(view);

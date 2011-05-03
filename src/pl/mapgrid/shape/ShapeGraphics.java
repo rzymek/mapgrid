@@ -9,15 +9,27 @@ import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+
+import pl.mapgrid.mask.Doc;
 
 public class ShapeGraphics {
-	private static final Color FONT_COLOR = Color.BLACK;
-	private static int BASE_FONT_SIZE=25;
-	private static int BASE_WAYPOINT_RADIUS=10;
+	public static class Config {
+		@Doc("Wielkość tekstu")
+		public int fontSize = 20;
+		@Doc("Kolor tekstu")
+		public Color fontColor = Color.BLACK;
+		@Doc("Kolor obramowania tekstu")
+		public Color fontBorder = Color.WHITE;
+		@Doc("Promień waypointów")
+		public int baseWaypointRadius = 5;
+	}
 	private final Graphics2D g;
+	private final Config config;
 
-	public ShapeGraphics(Graphics2D g) {
+	public ShapeGraphics(Graphics2D g, Config config) {
 		this.g = g;
+		this.config = config;
 	}
 	
 	public void draw(Shape<Point> s) {
@@ -31,13 +43,13 @@ public class ShapeGraphics {
 		}
 		if(s.count() == 1) {
 			Point p = s.get(0);
-			int r = BASE_WAYPOINT_RADIUS;
+			int r = config.baseWaypointRadius;
 			g.fillOval(p.x-r, p.y-r, 2*r, 2*r);
 			if(s instanceof Waypoint) {
 				Waypoint<?> wp = (Waypoint<?>) s;
 				String label = wp.label;
 				if(label != null) 
-					drawString(p, label);
+					drawString(p, label, s.style , r);
 			}
 		} else {
 			int[] x = new int[s.count()];
@@ -51,21 +63,22 @@ public class ShapeGraphics {
 		}
 	}
 
-	private void drawString(Point p, String label) {
+	private void drawString(Point p, String label, Style style, int r) {
+		int fontSize = config.fontSize;
+		if(style!=null)
+			fontSize *= style.width;
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setColor(FONT_COLOR);		
-		g.drawString(label, p.x, p.y);
-
 		FontRenderContext frc = g.getFontRenderContext();
-		Font f = new Font(Font.MONOSPACED, Font.BOLD, BASE_FONT_SIZE);
+		Font f = new Font(Font.MONOSPACED, Font.BOLD, fontSize);
 		TextLayout tl = new TextLayout(label, f, frc);
 		AffineTransform transform = new AffineTransform();
-		transform.setToTranslation(p.x,p.y);
+		Rectangle2D b = tl.getBounds();
+		transform.setToTranslation(p.x - b.getWidth()/2,p. y - r);
 		java.awt.Shape s = tl.getOutline(transform);
-		g.setColor(FONT_COLOR);		
+		g.setColor(config.fontColor);		
 		g.fill(s);
-		g.setColor(Color.WHITE);
+		g.setColor(config.fontBorder);
 		g.draw(s);
 	}
 }

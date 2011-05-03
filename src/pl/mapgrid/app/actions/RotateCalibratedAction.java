@@ -1,9 +1,5 @@
 package pl.mapgrid.app.actions;
 
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-
 import javax.swing.JOptionPane;
 
 import pl.mapgrid.app.Main;
@@ -32,11 +28,7 @@ public class RotateCalibratedAction extends BackgroundAction implements UIAction
 		if(confirmation != JOptionPane.OK_OPTION) {
 			return;
 		}
-		AffineTransform transform = new AffineTransform();
-		transform.rotate(rot);
-		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
-		BufferedImage image = op.filter(main.view.getImage(), null);
-		main.view.setImage(image);	
+		main.view.rotate(rot);
 		double a1 = Math.abs(c[1].getX() - c[0].getX());
 		double b1 = Math.abs(c[1].getY() - c[0].getY());
 		double w = Math.sqrt(a1*a1+b1*b1);

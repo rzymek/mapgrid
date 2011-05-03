@@ -103,7 +103,7 @@ public class KMLUtils {
 		if(lineStyle == null) {
 			LabelStyle labelStyle = style.getLabelStyle();
 			if(labelStyle == null)
-				return 1;
+				return 0.0;
 			return labelStyle.getScale();
 		}
 		return lineStyle.getWidth();
