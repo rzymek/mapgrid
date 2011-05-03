@@ -18,11 +18,11 @@ public class FileChooserSingleton {
 	private FileChooserSingleton() {
 		chooser = new JFileChooser(new File("."));
 		mapFilters = new FileFilter[] {
-			new RegistryFileFilter("Pliki graficzne: ",	ImageIO.getReaderFileSuffixes()),
 			new RegistryFileFilter("Pliki kalibracyjne: ", Registry.getReaderFileSuffixes()),
+			new RegistryFileFilter("Pliki graficzne: ",	ImageIO.getReaderFileSuffixes()),
 		};
 		featureFilters = new FileFilter[] {
-			new RegistryFileFilter("Google Earth", Registry.getFeatureFileSuffixes())
+			new RegistryFileFilter("Google Earth: ", Registry.getFeatureFileSuffixes())
 		};
 	}
 	
@@ -44,6 +44,7 @@ public class FileChooserSingleton {
 		chooser.resetChoosableFileFilters();
 		for (FileFilter filter : filters) 
 			chooser.addChoosableFileFilter(filter);
+		chooser.setFileFilter(filters[0]);
 		return chooser;
 	}
 }

@@ -13,7 +13,7 @@ import pl.mapgrid.calibration.exceptions.InvalidFormatException;
 import pl.mapgrid.utils.Utils;
 
 public class WorldFileReader extends TextFileReader {
-	private double[] data = new double[6];
+	private final double[] data = new double[6];
 	private File associated;
 
 	@Override
@@ -39,8 +39,9 @@ public class WorldFileReader extends TextFileReader {
 		int height = reader.getHeight(reader.getMinIndex());
 		double ltx = values[ilx];
 		double lty = values[ily];
-		double rbx = ltx + values[ippmx]*(double)width;
-		double rby = lty + values[ippmy]*(double)height;
+		double rbx = ltx + values[ippmx]*width;
+		double rby = lty + values[ippmy]*height;
+		System.out.println("WorldFileReader.setupCalibration()");
 		System.out.println(values[ippmx]);
 		System.out.println("0.0");
 		System.out.println("0.0");
@@ -48,8 +49,8 @@ public class WorldFileReader extends TextFileReader {
 		System.out.println(values[ilx]);
 		System.out.println(values[ily]);
 		System.out.println();
-		System.out.println(Math.abs(ltx-rbx));
-		System.out.println(Math.abs(lty-rby));
+//		System.out.println(Math.abs(ltx-rbx));
+//		System.out.println(Math.abs(lty-rby));
 		calibration.coordinates[0] = new PUWG92(ltx, lty);
 		calibration.coordinates[1] = new PUWG92(rbx, lty);
 		calibration.coordinates[2] = new PUWG92(rbx, rby);

@@ -21,6 +21,7 @@ import pl.mapgrid.app.Actions.Name;
 import pl.mapgrid.app.actions.DetectGridAction;
 import pl.mapgrid.app.actions.ExitAction;
 import pl.mapgrid.app.actions.OpenAction;
+import pl.mapgrid.app.actions.OpenShapeAction;
 import pl.mapgrid.app.actions.RemoveGridAction;
 import pl.mapgrid.app.actions.RevertAction;
 import pl.mapgrid.app.actions.RotateCalibratedAction;
@@ -30,7 +31,6 @@ import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.Coordinates;
-import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.readers.CalibrationReader;
 import pl.mapgrid.calibration.readers.KMLReader;
@@ -47,6 +47,7 @@ import pl.mapgrid.utils.DragableViewportMouseListener;
 import pl.mapgrid.utils.ProgressMonitor;
 
 public class Main extends JMainFrame implements ProgressMonitor {
+	public static Main instance;
 	public JImageView view;
 	public JProgressBar status;
 	public Actions actions;
@@ -59,14 +60,19 @@ public class Main extends JMainFrame implements ProgressMonitor {
 
 	public Main() throws Exception {
 		super();
+		instance = this;
 		setTitle("Maskuj siatkę");
 		setupActions();
 		setupComponents();
 		actions.reenable();
 		try {
-			File f = new File("samples/rr3.tfw");
+			File f = new File("samples/s11/mapa9.png.aux.xml");
 			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
 			open(f);
+			File file = new File("samples/s11/granica.kml");
+			KMLReader reader = (KMLReader) Registry.getFeatureReader(file.getName());
+			List<Shape<Coordinates>> shapes = reader.read(file);
+			view.setShapes(shapes);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,6 +81,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	private void setupActions() {
 		actions = new Actions();
 		actions.set(Actions.Name.OPEN, new OpenAction(this));
+		actions.set(Actions.Name.OPEN_SHAPE, new OpenShapeAction(this));
 		actions.set(Actions.Name.REVERT, new RevertAction(this));
 		actions.set(Actions.Name.SAVE, new SaveAction(this));
 		actions.set(Actions.Name.EXIT, new ExitAction());
@@ -140,14 +147,14 @@ public class Main extends JMainFrame implements ProgressMonitor {
 			try {
 				CalibrationReader reader = Registry.getReader(file.getName());
 				calibration = reader.read(file);
-				System.out.println(calibration);
-				System.out.println(Arrays.toString(calibration.toLatLon()));
 				openImage(reader.getAssociated());
 			}catch(NoSuchElementException ex) {
 				calibration = null;
 				openImage(file);
 			}
+			System.out.println("Main.open()");
 			System.out.println(calibration);
+			System.out.println(Arrays.toString(calibration.toPuwg()));
 			printForGDAL(calibration);
 			actions.reenable();
 		}catch (Exception e) {

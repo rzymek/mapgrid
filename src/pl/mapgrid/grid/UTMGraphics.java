@@ -88,14 +88,6 @@ public class UTMGraphics {
 			g.drawLine(line[0] , line[1], line[2], line[3]);
 	}
 	
-	private void drawGrid1(List<int[]> lines) {
-		g.setColor(config.lineColors[0]);
-		g.setStroke(new BasicStroke(
-				config.lineSize));
-		for (int[] line : lines) 
-			g.drawLine(line[0], line[1], line[2], line[3]);
-	}
-	
 	private void drawText(Graphics2D g, String s, int[] x, int[] y, int rotate) {
 		FontMetrics fm = g.getFontMetrics();
 		int h = fm.getAscent();

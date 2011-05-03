@@ -1,6 +1,7 @@
 package pl.mapgrid.shape;
 
-public interface Shape<T> {
-	public T get(int i);
-	public int count();
+public abstract class Shape<T> {
+	public abstract T get(int i);
+	public abstract int count();
+	public Style style;
 }

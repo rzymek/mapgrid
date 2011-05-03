@@ -4,6 +4,9 @@ public class LatLon implements Coordinates {
 	private double lat;
 	private double lon;
 
+	public LatLon(Coordinates c) {
+		this(c.getLat(), c.getLon());
+	}
 	public LatLon(double lat, double lon) {
 		this.lat = lat;
 		this.lon = lon;

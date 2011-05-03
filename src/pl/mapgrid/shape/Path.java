@@ -1,6 +1,6 @@
 package pl.mapgrid.shape;
 
-public class Path<T> implements Shape<T> {
+public class Path<T> extends Shape<T> {
 	protected final T[] points;
 
 	public Path(T[] points) {

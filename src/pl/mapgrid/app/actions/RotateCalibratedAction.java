@@ -49,6 +49,7 @@ public class RotateCalibratedAction extends BackgroundAction implements UIAction
 		utm[3].easting = utm[0].easting;
 		utm[3].northing = utm[0].northing-h;
 		main.calibration.coordinates=utm;
+		System.out.println("RotateCalibratedAction.run()");
 		System.out.println(main.calibration);
 	}
 

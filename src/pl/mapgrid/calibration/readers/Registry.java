@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 public class Registry {
 	static FileReader[] featureReaders = {
 		new KMLReader(),
+		new KMZReader(),
 	};
 	static CalibrationReader[] readers = {
 			new OZIMapReader(),

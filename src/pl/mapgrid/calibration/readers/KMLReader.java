@@ -3,11 +3,14 @@ package pl.mapgrid.calibration.readers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.shape.Shape;
+import pl.mapgrid.shape.Style;
 import pl.mapgrid.shape.Waypoint;
+import pl.mapgrid.utils.KMLUtils;
 import de.micromata.opengis.kml.v_2_2_0.Boundary;
 import de.micromata.opengis.kml.v_2_2_0.Coordinate;
 import de.micromata.opengis.kml.v_2_2_0.Document;
@@ -23,6 +26,7 @@ import de.micromata.opengis.kml.v_2_2_0.Polygon;
 
 public class KMLReader implements ShapeReader {
 	private static final String[] SUFFIXES = { "kml" };
+	private Map<String, de.micromata.opengis.kml.v_2_2_0.Style> styleMap;
 
 	@Override
 	public List<Shape<Coordinates>> read(File file) throws Exception {
@@ -32,6 +36,7 @@ public class KMLReader implements ShapeReader {
 	protected List<Shape<Coordinates>> read(Kml kml) {
 		List<Shape<Coordinates>> result = new ArrayList<Shape<Coordinates>>();
 		Document doc = (Document) kml.getFeature();
+		styleMap = KMLUtils.createStyleMap(kml);
 		processFeatures(result, doc.getFeature());
 		return result;
 	}
@@ -41,23 +46,39 @@ public class KMLReader implements ShapeReader {
 			if (feature instanceof Placemark) {
 				Placemark placemark = (Placemark) feature;
 				Geometry geometry = placemark.getGeometry();
+				Shape<Coordinates> shape;
 				if (geometry instanceof Point) {
-					Point p = (Point) geometry;
-					result.add(toShape(p));
+					Point g = (Point) geometry;				
+					Waypoint<Coordinates> wp = toShape(g);
+					wp.label = placemark.getName();
+					shape = wp;
 				} else if (geometry instanceof Polygon) {
-					Polygon p = (Polygon) geometry;
-					result.add(toShape(p));
+					Polygon g = (Polygon) geometry;
+					shape = toShape(g);
 				} else if(geometry instanceof LineString) {
 					LineString g = (LineString) geometry;
-					result.add(toShape(g));
+					shape = toShape(g);
 				} else if(geometry instanceof LinearRing) {
 					LinearRing g = (LinearRing) geometry;
-					result.add(toShape(g));
-				}
+					shape = toShape(g);
+				}else continue;
+				shape.style = getStyle(placemark.getStyleUrl());
+				result.add(shape);
 			}else if(feature instanceof Folder){
 				processFeatures(result, ((Folder) feature).getFeature());
 			}
 		}
+	}
+
+	private Style getStyle(String styleUrl) {
+		de.micromata.opengis.kml.v_2_2_0.Style style = styleMap.get(styleUrl);
+		if(style == null)
+			throw new RuntimeException(styleUrl + " not found");
+		Style s = new Style();
+		s.color = KMLUtils.getColor(style);
+		s.width = KMLUtils.getWidth(style);
+		return s;
+	
 	}
 
 	private Shape<Coordinates> toShape(LinearRing g) {
@@ -65,7 +86,7 @@ public class KMLReader implements ShapeReader {
 		return new pl.mapgrid.shape.Path<Coordinates>(points);
 	}
 
-	private Shape<Coordinates> toShape(LineString g) {
+	private Shape<Coordinates> toShape(LineString g) {		
 		Coordinates[] points = toPoints(g.getCoordinates());
 		return new pl.mapgrid.shape.Path<Coordinates>(points);
 	}
@@ -84,13 +105,13 @@ public class KMLReader implements ShapeReader {
 		return points;
 	}
 
-	private Shape<Coordinates> toShape(Point p) {
+	private Waypoint<Coordinates> toShape(Point p) {
 		return toShape(p.getCoordinates().get(0));
 	}
 
-	private Shape<Coordinates> toShape(Coordinate c) {
+	private Waypoint<Coordinates> toShape(Coordinate c) {
 		Coordinates latlon = toLatLon(c);
-		Shape<Coordinates> shape = new Waypoint<Coordinates>(latlon);
+		Waypoint<Coordinates> shape = new Waypoint<Coordinates>(latlon);
 		return shape;
 	}
 
@@ -103,11 +124,4 @@ public class KMLReader implements ShapeReader {
 		return SUFFIXES;
 	}
 
-	public static void main(String[] args) throws Exception {
-		KMLReader reader = new KMLReader();
-		List<Shape<Coordinates>> read = reader.read(new File("samples/rr3-places.kml"));
-		for (Shape<Coordinates> shape : read) {
-			System.out.println(shape);
-		}
-	}
 }

@@ -18,19 +18,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import pl.mapgrid.app.Main;
-import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.Coordinates;
-import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.grid.UTMGraphics;
 import pl.mapgrid.mask.MaskGrid;
 import pl.mapgrid.shape.GeoShape;
-import pl.mapgrid.shape.Polygon;
 import pl.mapgrid.shape.Shape;
 import pl.mapgrid.shape.ShapeGraphics;
 import pl.mapgrid.utils.PopupListener;
-import pl.mapgrid.utils.Utils;
-import pl.mapgrid.utils.Utils.CoordType;
-import pl.mapgrid.utils.Utils.DimentionType;
 
 public class JImageView extends JComponent implements Observer {
 	private BufferedImage image = null;
@@ -44,6 +38,7 @@ public class JImageView extends JComponent implements Observer {
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem item = menu.add("Pokaż cały");
 		item.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				toggleZoomToFit();
 			}
@@ -84,6 +79,7 @@ public class JImageView extends JComponent implements Observer {
 	
 	public void setImage(BufferedImage image) {
 		this.image = image;		
+		this.grid = null;
 		setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
 		repaint();
 		revalidate();
@@ -111,7 +107,6 @@ public class JImageView extends JComponent implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("JImageView.update("+arg+")");
 	}
 
 	public void setLines(List<double[]> lines) {
@@ -166,7 +161,9 @@ public class JImageView extends JComponent implements Observer {
 	}
 	
 	public void setShapes(List<Shape<Coordinates>> shapes) {
-		ShapeGraphics g = new ShapeGraphics(grid.getGraphics());
+		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);		
+		Graphics2D g2 = (Graphics2D) grid.getGraphics();
+		ShapeGraphics g = new ShapeGraphics(g2);
 		for (Shape<? extends Coordinates> shape : shapes) {
 			Shape<Point> p = GeoShape.project(shape, main.calibration, image.getWidth(), image.getHeight());
 			g.draw(p);
