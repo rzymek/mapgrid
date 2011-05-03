@@ -161,8 +161,7 @@ public class JImageView extends JComponent implements Observer {
 	}
 	
 	public void setShapes(List<Shape<Coordinates>> shapes) {
-		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);		
-		Graphics2D g2 = (Graphics2D) grid.getGraphics();
+		Graphics2D g2 = (Graphics2D) image.getGraphics();
 		ShapeGraphics g = new ShapeGraphics(g2);
 		for (Shape<? extends Coordinates> shape : shapes) {
 			Shape<Point> p = GeoShape.project(shape, main.calibration, image.getWidth(), image.getHeight());

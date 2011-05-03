@@ -40,13 +40,14 @@ public class ShapeGraphics {
 					drawString(p, label);
 			}
 		} else {
-			Point a = s.get(0);
-			Point b;
-			for(int i=1;i<s.count();++i) {
-				b = s.get(i);
-				g.drawLine(a.x, a.y, b.x, b.y);
-				a = b;
+			int[] x = new int[s.count()];
+			int[] y = new int[s.count()];
+			for(int i=0;i<s.count();++i) {
+				Point p = s.get(i);
+				x[i] = p.x;
+				y[i] = p.y;
 			}
+			g.drawPolygon(x, y, s.count());
 		}
 	}
 

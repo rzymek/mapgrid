@@ -4,8 +4,6 @@ import java.awt.Point;
 
 import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.Coordinates;
-import pl.mapgrid.calibration.coordinates.LatLon;
-import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.coordinates.UTM;
 
 public class GeoShape {
@@ -25,27 +23,25 @@ public class GeoShape {
 
 	private static Point[] projectPoints(Shape<? extends Coordinates> shape, Calibration calibration, int width, int height) {
 		Point[] points = new Point[shape.count()];
-		PUWG92[] puwg = calibration.toPuwg();
-//		System.out.println(calibration);
-		double y = Math.abs(puwg[3].getY() - puwg[0].getY());
-		double x = Math.abs(puwg[1].getX() - puwg[0].getX());
-		double metersPerPixel = x/width;
-		double metersPerPixel2 = y/height;
+		Coordinates[] puwg = calibration.toUTM();
+		double tX = Math.abs(puwg[1].getX() - puwg[0].getX());
+		double tY = Math.abs(puwg[1].getY() - puwg[0].getY());
+		double lX = Math.abs(puwg[3].getX() - puwg[0].getX());
+		double lY = Math.abs(puwg[3].getY() - puwg[0].getY());
+		double X = Math.sqrt(tX*tX+tY*tY);
+		double Y = Math.sqrt(lX*lX+lY*lY);
+		double metersPerPixelX = X/width;
+		double metersPerPixelY = Y/height;
 		for(int i=0;i<shape.count();++i) {
 			Coordinates orig = shape.get(i);
-			Coordinates c = new PUWG92(orig);
-			LatLon latLon = new LatLon(orig);
-			UTM utm = new UTM(orig);
-//			System.out.println(i);
-//			System.out.println(orig);
-//			System.out.println(c);
-//			System.out.println(latLon);
-//			System.out.println(utm);
-			double xx1= (c.getX() - puwg[0].getX())/metersPerPixel;
-			double xx2 = width - (puwg[1].getX() - c.getX())/metersPerPixel;
-			double yy1= ((puwg[0].getY() - c.getY())/metersPerPixel2);
-			double yy2= height - (c.getY() - puwg[3].getY())/metersPerPixel2;
-			Point point = new Point((int)((xx1+xx2)/2),(int)((yy1+yy2)/2));
+			Coordinates c = new UTM(orig);
+			double dx = Math.abs(c.getX() - puwg[0].getX());
+			double dy = Math.abs(c.getY() - puwg[0].getY());
+			double x = (dx*tX+dy*tY)/X;
+			double y = (dy*tX-dx*tY)/X;
+			int xx = (int) (x/metersPerPixelX);
+			int yy = (int) (y/metersPerPixelY);
+			Point point = new Point(xx,yy);
 			points[i] = point;
 		}
 		return points;
