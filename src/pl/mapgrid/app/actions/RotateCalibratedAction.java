@@ -20,7 +20,7 @@ public class RotateCalibratedAction extends BackgroundAction implements UIAction
 	@Override
 	public void run() {
 		Coordinates[] c = main.calibration.toUTM();
-		double a = c[3].getX() - c[0].getX();
+		double a = Math.abs(c[3].getX() - c[0].getX());
 		double b = Math.abs(c[3].getY() - c[0].getY());
 		double rot = Math.atan(a/b);
 		String msg = String.format("Obrócic o %.2f\u00b0 do siatki UTM?", Math.toDegrees(rot));
