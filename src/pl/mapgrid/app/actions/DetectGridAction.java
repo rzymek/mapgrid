@@ -19,7 +19,7 @@ public class DetectGridAction extends BackgroundAction implements UIAction {
 	@Override
 	public void run() {
 		BufferedImage image = main.view.getImage();
-		HoughTransform transform = new HoughTransform(main.houghConfig);
+		HoughTransform transform = new HoughTransform(main.getHoughConfig());
 		transform.setObserver(main);
 		main.lines = transform.findGrid(image);
 		main.view.setShowGrid(true);

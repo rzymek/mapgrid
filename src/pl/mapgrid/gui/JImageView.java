@@ -5,9 +5,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -35,6 +38,7 @@ public class JImageView extends JComponent implements Observer {
 	private boolean showGrid = true;
 	private final Main main;
 	private boolean zoomToFit;
+	private float zoom = 1;
 
 	public JImageView(Main main) {
 		this.main = main;
@@ -46,44 +50,72 @@ public class JImageView extends JComponent implements Observer {
 				toggleZoomToFit();
 			}
 		});
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+	    manager.addKeyEventDispatcher(new KeyEventDispatcher() {			
+			@Override
+			public boolean dispatchKeyEvent(KeyEvent e) {
+				if(e.getID() != KeyEvent.KEY_PRESSED)
+					return false;
+				switch(e.getKeyCode()){
+				case KeyEvent.VK_OPEN_BRACKET:
+					zoom = zoom / 1.1f; 
+					break;
+				case KeyEvent.VK_CLOSE_BRACKET:
+					zoom = zoom * 1.1f; 
+					break;
+				case KeyEvent.VK_BACK_SLASH:
+					zoom = 1; 
+					break;
+				default:
+					return false;
+				}
+				revalidate();
+				return false;
+			}
+		});
 		addMouseListener(new PopupListener(menu));
 		add(menu);
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(0,0,getWidth(), getHeight());
+		g.fillRect(0, 0, getWidth(), getHeight());
 		if (image == null)
 			return;
 		int[] bounds = { image.getWidth(), image.getHeight() };
-		if(zoomToFit) {
+		if (zoomToFit) {
 			int w = getParent().getWidth();
 			int h = getParent().getHeight();
-			float scaleW = (float)image.getWidth() / w;
-			float scaleH = (float)image.getHeight() / h;
+			float scaleW = (float) image.getWidth() / w;
+			float scaleH = (float) image.getHeight() / h;
 			float scale = Math.max(scaleW, scaleH);
 			bounds[0] /= scale;
 			bounds[1] /= scale;
-		}else{
-			bounds[0]= image.getWidth(); 
-			bounds[1] = image.getHeight();
+		} else {
+			bounds[0] = (int) (image.getWidth() * zoom);
+			bounds[1] = (int) (image.getHeight() * zoom);
 		}
 		g.drawImage(image, 0, 0, bounds[0], bounds[1], this);
-		if(shape != null)
+		if (shape != null)
 			g.drawImage(shape, 0, 0, bounds[0], bounds[1], this);
 		if (showGrid != false && grid != null)
 			g.drawImage(grid, 0, 0, bounds[0], bounds[1], this);
 	}
-
+	@Override
+	public Dimension getPreferredSize() {
+		if(image == null || zoomToFit)
+			return super.getPreferredSize();
+		return new Dimension((int) (image.getWidth()*zoom),(int)(image.getHeight()*zoom));
+	}
 	public boolean toggleZoomToFit() {
 		zoomToFit = !zoomToFit;
 		repaint();
 		return zoomToFit;
 	}
-	
+
 	public void setImage(BufferedImage image) {
-		this.image = image;		
+		this.image = image;
 		this.grid = null;
 		this.shape = null;
 		setPreferredSize(new Dimension(image.getWidth(this), image.getHeight(this)));
@@ -94,20 +126,18 @@ public class JImageView extends JComponent implements Observer {
 	public BufferedImage getImage() {
 		return image;
 	}
+
 	public BufferedImage getImageWithGrid() {
-		if(showGrid) {
-			BufferedImage image = new BufferedImage(
-					this.image.getWidth(), 
-					this.image.getHeight(), 
-					BufferedImage.TYPE_INT_RGB);
+		if (showGrid) {
+			BufferedImage image = new BufferedImage(this.image.getWidth(), this.image.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics g = image.getGraphics();
 			g.setColor(Color.WHITE);
-			g.fillRect(0,0,image.getWidth(), image.getHeight());
-			g.drawImage(this.image, 0,0, this);
-			g.drawImage(this.grid, 0,0, this);
-			g.drawImage(this.shape, 0,0, this);
+			g.fillRect(0, 0, image.getWidth(), image.getHeight());
+			g.drawImage(this.image, 0, 0, this);
+			g.drawImage(this.grid, 0, 0, this);
+			g.drawImage(this.shape, 0, 0, this);
 			return image;
-		}else{
+		} else {
 			return image;
 		}
 	}
@@ -157,18 +187,17 @@ public class JImageView extends JComponent implements Observer {
 		return grid;
 	}
 
-	public void setGrid(List<int[]> vertical, List<int[]> horizontal,
-			int firstEasting, int firstNorthing) {
-		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);		
+	public void setGrid(List<int[]> vertical, List<int[]> horizontal, int firstEasting, int firstNorthing) {
+		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = (Graphics2D) grid.getGraphics();
-		UTMGraphics.Config cfg = main.utmConfig;
+		UTMGraphics.Config cfg = main.getUtmConfig();
 		UTMGraphics utmg = new UTMGraphics(g, cfg, grid.getWidth(), grid.getHeight());
-		utmg.drawGrid(vertical, horizontal, firstEasting, firstNorthing);		
+		utmg.drawGrid(vertical, horizontal, firstEasting, firstNorthing);
 		setShowGrid(true);
 	}
-	
+
 	public void setShapes(List<Shape<Coordinates>> shapes, ShapeGraphics.Config config) {
-		shape = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);		
+		shape = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g2 = (Graphics2D) shape.getGraphics();
 		ShapeGraphics g = new ShapeGraphics(g2, config);
 		for (Shape<? extends Coordinates> shape : shapes) {

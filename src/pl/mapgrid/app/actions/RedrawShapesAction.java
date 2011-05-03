@@ -15,7 +15,7 @@ public class RedrawShapesAction extends BackgroundAction implements UIAction {
 
 	@Override
 	public void run() {
-		main.view.setShapes(main.shapes, main.shapeConfig);
+		main.view.setShapes(main.shapes, main.getShapeConfig());
 	}
 
 	@Override

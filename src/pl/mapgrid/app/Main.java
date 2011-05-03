@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
@@ -21,12 +23,14 @@ import pl.mapgrid.app.Actions.Name;
 import pl.mapgrid.app.actions.DetectGridAction;
 import pl.mapgrid.app.actions.ExitAction;
 import pl.mapgrid.app.actions.OpenAction;
+import pl.mapgrid.app.actions.OpenSettingsAction;
 import pl.mapgrid.app.actions.OpenShapeAction;
 import pl.mapgrid.app.actions.RedrawShapesAction;
 import pl.mapgrid.app.actions.RemoveGridAction;
 import pl.mapgrid.app.actions.RevertAction;
 import pl.mapgrid.app.actions.RotateCalibratedAction;
 import pl.mapgrid.app.actions.SaveAction;
+import pl.mapgrid.app.actions.SaveSettingsAction;
 import pl.mapgrid.app.actions.ToggleGridAction;
 import pl.mapgrid.app.actions.ToggleSetupAction;
 import pl.mapgrid.app.actions.UTMGridAction;
@@ -55,12 +59,13 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	public Actions actions;
 	public List<double[]> lines;
 	
-	public HoughTransform.Config houghConfig = new HoughTransform.Config();
-	public MaskGrid.Config maskConfig = new MaskGrid.Config();
-	public UTMGraphics.Config utmConfig = new UTMGraphics.Config(); 
-	public ShapeGraphics.Config shapeConfig = new ShapeGraphics.Config(); 
-	
-	public JForm setup;
+	public Serializable[] configs = { 
+		new HoughTransform.Config(),
+		new MaskGrid.Config(),
+		new UTMGraphics.Config(),
+		new ShapeGraphics.Config()
+	};	
+	public JTabbedPane setup;
 	public Calibration calibration;
 	public List<Shape<Coordinates>> shapes;
 
@@ -71,6 +76,10 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
+//		autoload();
+	}
+
+	private void autoload() {
 		try {
 			File f = new File("samples/s11/mapa9.png.aux.xml");
 			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
@@ -78,7 +87,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 			File file = new File("samples/s11/granica.kml");
 			KMLReader reader = (KMLReader) Registry.getFeatureReader(file.getName());
 			List<Shape<Coordinates>> shapes = reader.read(file);
-			view.setShapes(shapes, shapeConfig);
+			view.setShapes(shapes, getShapeConfig());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,6 +107,8 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		actions.set(Actions.Name.ROTATE_CALIBRATED, new RotateCalibratedAction(this));
 		actions.set(Actions.Name.UTM_GRID, new UTMGridAction(this));
 		actions.set(Actions.Name.REDRAW_SHAPES, new RedrawShapesAction(this));
+		actions.set(Actions.Name.SAVE_SETTINGS, new SaveSettingsAction(this));
+		actions.set(Actions.Name.OPEN_SETTINGS, new OpenSettingsAction(this));
 	}
 
 	private void setupComponents() throws Exception {
@@ -112,14 +123,23 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		status.setString("");
 		status.setStringPainted(true);
 				
-		setup = new JForm(utmConfig, shapeConfig, houghConfig, maskConfig);
+		setup = new JTabbedPane();
 		setup.setVisible(false);
+		setupConfigTabs();
 		
 		JScrollPane scroll = new JScrollPane(view);
 		DragableViewportMouseListener drag = new DragableViewportMouseListener(scroll.getViewport());
 		view.addMouseListener(drag);
 		view.addMouseMotionListener(drag);
 		layoutComponents(toolbar, scroll, setup, status);
+	}
+
+	public void setupConfigTabs() throws Exception {
+		setup.removeAll();
+		for (Serializable config : configs) {
+			String name = config.getClass().getEnclosingClass().getSimpleName();
+			setup.addTab(name, new JForm(config));
+		}
 	}
 
 	private void layoutComponents(JComponent top, JComponent center, JComponent right, JComponent bottom) {
@@ -185,6 +205,22 @@ public class Main extends JMainFrame implements ProgressMonitor {
 
 	public static void main(String[] args) throws Exception {		
 		SwingUtilities.invokeLater(new Main());
+	}
+
+	public HoughTransform.Config getHoughConfig() {
+		return (HoughTransform.Config) configs[0];
+	}
+
+	public MaskGrid.Config getMaskConfig() {
+		return (MaskGrid.Config) configs[1];
+	}
+
+	public UTMGraphics.Config getUtmConfig() {
+		return (UTMGraphics.Config) configs[2];
+	}
+
+	public ShapeGraphics.Config getShapeConfig() {
+		return (ShapeGraphics.Config) configs[3];
 	}
 }
 

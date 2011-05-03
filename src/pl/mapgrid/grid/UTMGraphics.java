@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.io.Serializable;
 import java.util.List;
 
 import pl.mapgrid.mask.Doc;
@@ -16,7 +17,7 @@ public class UTMGraphics {
 	private final int width;
 	private final int height;
 	
-	public static class Config {
+	public static class Config implements Serializable {
 		@Doc("UTM: kolor lini")
 		public Color[] lineColors = {
 			new Color(0,0,0,128),
@@ -178,6 +179,7 @@ public class UTMGraphics {
 		g.setColor(config.borderColors[0]);
 		g.drawPolygon(x, y, x.length);
 		if(label!=null) {
+			label = label.replaceAll("(.*)(.)(...)", "$1 $2 $3");
 			g.setColor(config.borderColors[borderColorIndex]);
 			drawText(g, label, x ,y, rotation);
 		}

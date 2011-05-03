@@ -10,11 +10,12 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 
 import pl.mapgrid.mask.Doc;
 
 public class ShapeGraphics {
-	public static class Config {
+	public static class Config implements Serializable {
 		@Doc("Wielkość tekstu")
 		public int fontSize = 20;
 		@Doc("Kolor tekstu")

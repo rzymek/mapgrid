@@ -3,6 +3,7 @@ package pl.mapgrid.mask;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +12,7 @@ import pl.mapgrid.utils.ProgressMonitor;
 
 
 public class HoughTransform {
-	public static class Config {
+	public static class Config implements Serializable {
 		@Doc("Dopuszczalne odchylenie lini w stopniach")
 		public double aberration = 10;
 		@Doc("Próbkowanie odchylenia lini w stopniach. Mniej = dokładniej i wolniej")
@@ -29,10 +30,10 @@ public class HoughTransform {
 	private final Config config;
 	private short[][] space_v;
 	private short[][] space_h;
-	private double[] angle_v;
-	private double[] angle_h;
-	private double[] sin;
-	private double[] cos;
+	private final double[] angle_v;
+	private final double[] angle_h;
+	private final double[] sin;
+	private final double[] cos;
 	private ProgressMonitor observer;
 
 	public HoughTransform(Config config) {

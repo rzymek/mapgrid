@@ -37,7 +37,7 @@ public class OpenShapeAction extends BackgroundAction implements UIAction {
 	private void open(File file) throws Exception {
 		KMLReader reader = (KMLReader) Registry.getFeatureReader(file.getName());
 		main.shapes = reader.read(file);
-		main.view.setShapes(main.shapes, main.shapeConfig);
+		main.view.setShapes(main.shapes, main.getShapeConfig());
 	}
 
 	@Override

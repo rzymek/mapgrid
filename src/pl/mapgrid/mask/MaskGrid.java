@@ -2,6 +2,7 @@ package pl.mapgrid.mask;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.List;
 
 import pl.mapgrid.utils.ProgressMonitor;
@@ -10,7 +11,7 @@ public class MaskGrid {
 	private final Config config;
 	private ProgressMonitor observer;
 
-	public static class Config {
+	public static class Config implements Serializable {
 		@Doc("Przetwarzaj pixele oddalone od lini o maksymalnie:")
 		public int processNeighbourPixels = 3;
 		@Doc("Maskuj pixele różniące się od sąsiadujących o co najmniej tyle procent:")

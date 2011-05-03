@@ -11,9 +11,9 @@ import pl.mapgrid.utils.RegistryFileFilter;
 
 public class FileChooserSingleton {
 	private static FileChooserSingleton instance;
-	private JFileChooser chooser;
-	private FileFilter[] mapFilters;
-	private FileFilter[] featureFilters;
+	private final JFileChooser chooser;
+	private final FileFilter[] mapFilters;
+	private final FileFilter[] featureFilters;
 	
 	private FileChooserSingleton() {
 		chooser = new JFileChooser(new File("."));
@@ -44,7 +44,12 @@ public class FileChooserSingleton {
 		chooser.resetChoosableFileFilters();
 		for (FileFilter filter : filters) 
 			chooser.addChoosableFileFilter(filter);
-		chooser.setFileFilter(filters[0]);
+		if(filters.length > 0)
+			chooser.setFileFilter(filters[0]);
 		return chooser;
+	}
+
+	public JFileChooser getAnyChooser() {
+		return assignFilters(new FileFilter[0]);
 	}
 }
