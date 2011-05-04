@@ -1,5 +1,7 @@
 package pl.mapgrid.app.actions;
 
+import java.awt.image.RenderedImage;
+
 import javax.swing.JOptionPane;
 
 import pl.mapgrid.app.Main;
@@ -20,26 +22,32 @@ public class RotateCalibratedAction extends BackgroundAction implements UIAction
 	@Override
 	public void run() {
 		Coordinates[] c = main.calibration.toUTM();
-		double a = Math.abs(c[3].getX() - c[0].getX());
-		double b = Math.abs(c[3].getY() - c[0].getY());
-		double rot = Math.atan(a/b);
+		double dx = Math.abs(c[3].getX() - c[0].getX());
+		double dy = Math.abs(c[3].getY() - c[0].getY());
+		double rot = Math.atan(dx/dy);
 		String msg = String.format("Obrócic o %.2f\u00b0 do siatki UTM?", Math.toDegrees(rot));
 		int confirmation = JOptionPane.showConfirmDialog(main, msg, "Obrót", JOptionPane.OK_CANCEL_OPTION);
 		if(confirmation != JOptionPane.OK_OPTION) {
 			return;
 		}
-		main.view.rotate(rot);
-		double a1 = Math.abs(c[1].getX() - c[0].getX());
-		double b1 = Math.abs(c[1].getY() - c[0].getY());
-		double w = Math.sqrt(a1*a1+b1*b1);
-		double h = Math.sqrt(a*a+b*b);
+		RenderedImage img = main.view.getImage();
+		double dE = Math.abs(c[3].getX() - c[0].getX());
+		double dN = Math.abs(c[1].getY() - c[0].getY());
+
+//		double a1 = Math.abs(c[1].getX() - c[0].getX());
+//		double b1 = Math.abs(c[1].getY() - c[0].getY());
+//		double w = Math.sqrt(a1*a1+b1*b1);
+//		double h = Math.sqrt(dx*dx+dy*dy);
 		UTM[] utm = main.calibration.toUTM();
-		utm[1].easting = utm[0].easting+w; 
+		
 		utm[1].northing = utm[0].northing;
-		utm[2].easting = utm[0].easting+w;
-		utm[2].northing = utm[0].northing-h;
-		utm[3].easting = utm[0].easting;
-		utm[3].northing = utm[0].northing-h;
+		
+		utm[2].easting  = utm[1].easting; 
+		
+		utm[3].easting  = utm[0].easting;
+		utm[3].northing = utm[2].northing;
+		
+		main.view.rotate(rot);
 		main.calibration.coordinates=utm;
 		System.out.println("RotateCalibratedAction.run()");
 		System.out.println(main.calibration);

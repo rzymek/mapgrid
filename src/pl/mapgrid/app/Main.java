@@ -68,6 +68,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	public JTabbedPane setup;
 	public Calibration calibration;
 	public List<Shape<Coordinates>> shapes;
+	public File file;
 
 	public Main() throws Exception {
 		super();
@@ -179,6 +180,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 				calibration = null;
 				openImage(file);
 			}
+			this.file = file;
 			System.out.println("Main.open()");
 			System.out.println(calibration);
 			System.out.println(Arrays.toString(calibration.toPuwg()));

@@ -69,13 +69,42 @@ public class MaskGrid {
 		int process = config.processNeighbourPixels;
 		int maskWith = getPixel(image, x - dx*process, y - dy*process);
 		final int maskPixelDiffersMoreThan = (int) (config.maskPixelDiffersMoreThan * 255);
+		boolean[] mask = new boolean[process*2]; 
 		for (int i = -process; i < process; ++i) {
 			int current = getPixel(image, x + dx*i, y + dy*i);
 			int diff = HoughTransform.pixelValue(maskWith) - HoughTransform.pixelValue(current);
 			if (diff > maskPixelDiffersMoreThan) 
-				setPixel(image, x + dx * i, y + dy * i, maskWith);
+				mask[process+i] = true;
 			else 
-				maskWith = getPixel(image, x + dx * i, y + dy * i);
+				maskWith = getPixel(image, x + dx * i, y + dy * i);			
+		}
+		long ar=0,ag=0,ab=0;
+		int c=0;
+		for (int i = -process*2; i < process*2; ++i) {
+//			for(int j=-process; j<process;++j) {
+//				int current = getPixel(image, x + dx*i+dy*j, y + dy*i+dx*j);
+//				if(mask[process+i] == false) {
+//					Color color = new Color(current);
+//					ar += color.getRed();
+//					ag += color.getGreen();
+//					ab += color.getBlue();
+//					++c;
+//				}
+//			}
+			int current = getPixel(image, x + dx*i, y + dy*i);
+			if(process+i < 0 || process+i >= mask.length  || mask[process+i] == false) {
+				Color color = new Color(current);
+				ar += color.getRed();
+				ag += color.getGreen();
+				ab += color.getBlue();
+				++c;
+			}
+		}
+		ar/=c;ag/=c;ab/=c;
+		maskWith = new Color((int)ar,(int)ag,(int)ab).getRGB();
+		for (int i = -process; i < process; ++i) {
+			if(mask[process+i]) 
+				setPixel(image, x + dx * i, y + dy * i, maskWith);
 		}
 	}
 	
@@ -91,13 +120,17 @@ public class MaskGrid {
 	private int getPixel(BufferedImage image, int x, int y) {
 		if(x < 0)
 			x = 0;
-		if(x > image.getWidth())
+		if(x >= image.getWidth())
 			x = image.getWidth()-1;
 		if(y < 0)
 			y = 0;
-		if(y > image.getHeight())
+		if(y >= image.getHeight())
 			y = image.getHeight()-1;
-		return image.getRGB(x, y);
+		try{
+			return image.getRGB(x, y);
+		}catch (Exception e) {
+			throw new RuntimeException(x+","+y,e);
+		}
 	}
 	
 	public void setObserver(ProgressMonitor observer) {

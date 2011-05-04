@@ -30,7 +30,7 @@ public class SaveAction extends BackgroundAction implements UIAction {
 			JFileChooser chooser = FileChooserSingleton.instance().getMapChooser();
 			int result = chooser.showSaveDialog(main);
 			if(result == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = chooser.getSelectedFile();
+				File selectedFile = chooser.getSelectedFile();				
 				if(selectedFile.exists()) {
 					int res = JOptionPane.showConfirmDialog(main, "Nadpisać plik "+selectedFile.getName()+"?", "Plik istnieje", JOptionPane.YES_NO_OPTION);
 					if(res != JOptionPane.YES_OPTION)

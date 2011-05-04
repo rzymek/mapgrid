@@ -23,11 +23,11 @@ public class GeoShape {
 
 	private static Point[] projectPoints(Shape<? extends Coordinates> shape, Calibration calibration, int width, int height) {
 		Point[] points = new Point[shape.count()];
-		Coordinates[] puwg = calibration.toUTM();
-		double tX = Math.abs(puwg[1].getX() - puwg[0].getX());
-		double tY = Math.abs(puwg[1].getY() - puwg[0].getY());
-		double lX = Math.abs(puwg[3].getX() - puwg[0].getX());
-		double lY = Math.abs(puwg[3].getY() - puwg[0].getY());
+		Coordinates[] calib = calibration.toUTM();
+		double tX = Math.abs(calib[1].getX() - calib[0].getX());
+		double tY = Math.abs(calib[1].getY() - calib[0].getY());
+		double lX = Math.abs(calib[3].getX() - calib[0].getX());
+		double lY = Math.abs(calib[3].getY() - calib[0].getY());
 		double X = Math.sqrt(tX*tX+tY*tY);
 		double Y = Math.sqrt(lX*lX+lY*lY);
 		double metersPerPixelX = X/width;
@@ -35,8 +35,8 @@ public class GeoShape {
 		for(int i=0;i<shape.count();++i) {
 			Coordinates orig = shape.get(i);
 			Coordinates c = new UTM(orig);
-			double dx = Math.abs(c.getX() - puwg[0].getX());
-			double dy = Math.abs(c.getY() - puwg[0].getY());
+			double dx = Math.abs(c.getX() - calib[0].getX());
+			double dy = Math.abs(c.getY() - calib[0].getY());
 			double x = (dx*tX+dy*tY)/X;
 			double y = (dy*tX-dx*tY)/X;
 			int xx = (int) (x/metersPerPixelX);

@@ -33,6 +33,6 @@ public class RemoveGridAction extends BackgroundAction implements UIAction {
 
 	@Override
 	public boolean enabled() {
-		return main.view.getGrid() != null;
+		return main.lines != null;
 	}
 }

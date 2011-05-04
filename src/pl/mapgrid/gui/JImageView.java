@@ -97,10 +97,10 @@ public class JImageView extends JComponent implements Observer {
 			bounds[1] = (int) (image.getHeight() * zoom);
 		}
 		g.drawImage(image, 0, 0, bounds[0], bounds[1], this);
-		if (shape != null)
-			g.drawImage(shape, 0, 0, bounds[0], bounds[1], this);
 		if (showGrid != false && grid != null)
 			g.drawImage(grid, 0, 0, bounds[0], bounds[1], this);
+		if (shape != null)
+			g.drawImage(shape, 0, 0, bounds[0], bounds[1], this);
 	}
 	@Override
 	public Dimension getPreferredSize() {
@@ -208,14 +208,18 @@ public class JImageView extends JComponent implements Observer {
 	}
 
 	public void rotate(double rot) {
-		AffineTransform transform = new AffineTransform();
-		transform.rotate(rot);
+		AffineTransform tx = new AffineTransform();
+		tx.rotate(rot);
+		transform(tx);
+		revalidate();
+	}
+
+	private void transform(AffineTransform transform) {
 		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BICUBIC);
 		image = op.filter(image, null);
 		if (shape != null)
 			shape = op.filter(shape, null);
 		if (grid != null)
 			grid = op.filter(grid, null);
-		repaint();
 	}
 }
