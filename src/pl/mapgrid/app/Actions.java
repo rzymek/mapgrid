@@ -12,7 +12,7 @@ public class Actions {
 	private final Map<Name, UIAction> actions = new HashMap<Name, UIAction>();
 	public static enum Name {
 		OPEN, OPEN_SHAPE, SAVE, OPEN_SETTINGS, SAVE_SETTINGS, DETECT_GRID, REMOVE_GRID, TOGGLE_GRID, 
-		REVERT, ROTATE_CALIBRATED, UTM_GRID, TOGGLE_SETUP, REDRAW_SHAPES, EXIT, 
+		REVERT, ROTATE_CALIBRATED, UTM_GRID, LATLON_GRID, TOGGLE_SETUP, REDRAW_SHAPES, EXIT, 
 	};	
 	
 	public void set(Name name, UIAction action) {

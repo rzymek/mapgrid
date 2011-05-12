@@ -7,7 +7,6 @@ import java.util.Map;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
-import pl.mapgrid.calibration.coordinates.UTM;
 import pl.mapgrid.shape.Shape;
 import pl.mapgrid.shape.Style;
 import pl.mapgrid.shape.Waypoint;
@@ -52,7 +51,7 @@ public class KMLReader implements ShapeReader {
 					Point g = (Point) geometry;				
 					Waypoint<Coordinates> wp = toShape(g);
 					wp.label = placemark.getName();
-					System.out.println(wp.label+"\t"+new UTM(wp.get(0)));
+//					System.out.println(wp.label+"\t"+new UTM(wp.get(0)));
 					shape = wp;
 				} else if (geometry instanceof Polygon) {
 					Polygon g = (Polygon) geometry;

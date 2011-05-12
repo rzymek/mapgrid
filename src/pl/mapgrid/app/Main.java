@@ -22,6 +22,7 @@ import javax.swing.SwingUtilities;
 import pl.mapgrid.app.Actions.Name;
 import pl.mapgrid.app.actions.DetectGridAction;
 import pl.mapgrid.app.actions.ExitAction;
+import pl.mapgrid.app.actions.LatLonGridAction;
 import pl.mapgrid.app.actions.OpenAction;
 import pl.mapgrid.app.actions.OpenSettingsAction;
 import pl.mapgrid.app.actions.OpenShapeAction;
@@ -38,7 +39,6 @@ import pl.mapgrid.calibration.Calibration;
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.readers.CalibrationReader;
-import pl.mapgrid.calibration.readers.KMLReader;
 import pl.mapgrid.calibration.readers.Registry;
 import pl.mapgrid.grid.UTMGraphics;
 import pl.mapgrid.gui.FileChooserSingleton;
@@ -77,18 +77,18 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
-//		autoload();
+		autoload();
 	}
 
 	private void autoload() {
 		try {
-			File f = new File("samples/s11/mapa9.png.aux.xml");
+			File f = new File("samples/rr3.tfw");
 			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
 			open(f);
-			File file = new File("samples/s11/granica.kml");
-			KMLReader reader = (KMLReader) Registry.getFeatureReader(file.getName());
-			List<Shape<Coordinates>> shapes = reader.read(file);
-			view.setShapes(shapes, getShapeConfig());
+//			File file = new File("samples/s11/granica.kml");
+//			KMLReader reader = (KMLReader) Registry.getFeatureReader(file.getName());
+//			List<Shape<Coordinates>> shapes = reader.read(file);
+//			view.setShapes(shapes, getShapeConfig());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -107,6 +107,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		actions.set(Actions.Name.TOGGLE_SETUP, new ToggleSetupAction(this));
 		actions.set(Actions.Name.ROTATE_CALIBRATED, new RotateCalibratedAction(this));
 		actions.set(Actions.Name.UTM_GRID, new UTMGridAction(this));
+		actions.set(Actions.Name.LATLON_GRID, new LatLonGridAction(this));
 		actions.set(Actions.Name.REDRAW_SHAPES, new RedrawShapesAction(this));
 		actions.set(Actions.Name.SAVE_SETTINGS, new SaveSettingsAction(this));
 		actions.set(Actions.Name.OPEN_SETTINGS, new OpenSettingsAction(this));

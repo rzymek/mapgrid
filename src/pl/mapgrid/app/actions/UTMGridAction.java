@@ -59,10 +59,8 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 			if(y1 > image.getHeight() && y2 > image.getHeight())
 				break;
 		}
-
-		int firstEasting = (int) getKmLine(utm[0].getEasting()); 
-		int firstNorthing = (int) getKmLine(utm[0].getNorthing());
-		main.view.setGrid(vertical, horizontal, firstEasting, firstNorthing);
+		
+		main.view.setGrid(vertical, horizontal);
 	}
 
 	@Override
@@ -74,7 +72,7 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 		return v - getKmLine(v);
 	}
 
-	private double getKmLine(double v) {
+	public static double getKmLine(double v) {
 		return Math.floor(v/1000.0)*1000.0;
 	}
 
