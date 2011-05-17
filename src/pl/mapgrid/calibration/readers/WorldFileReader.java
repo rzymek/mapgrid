@@ -26,8 +26,19 @@ public class WorldFileReader extends TextFileReader {
 		double[] values = data;
 		if(values[1] != 0 || values[2] != 0)
 			throw new InvalidFormatException("Rotacja nie wspierana.");
-		associated = Utils.basename(file, ".tif");
+		associated = getAssociatedFile();		
 		setupCalibration(associated, calibration, values, 4, 5, 0, 3);
+	}
+
+	private File getAssociatedFile() {
+		String[] exts = ImageIO.getReaderFileSuffixes();
+		File associated = null;
+		for (String ext : exts) {
+			associated = Utils.basename(file, "."+ext);
+			if(associated.canRead())
+				return associated;
+		}
+		throw new RuntimeException("Nie mogę otworzyć pliku z grafiką skojażonego z "+file.getName());
 	}
 
 	public static void setupCalibration(File associated, Calibration calibration, double[] values,
