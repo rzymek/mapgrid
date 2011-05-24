@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/jai/clibwrapper_jiio.jar"/>
 	<classpathentry kind="lib" path="lib/jai/jai_imageio.jar"/>
 	<classpathentry kind="lib" path="lib/jai/libclib_jiio.so.jar"/>
+	<classpathentry kind="lib" path="lib/JavaAPIforKml.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
