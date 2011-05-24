@@ -20,7 +20,7 @@ public class UTMGraphics extends GridGraphics {
 		//horizontal is decreasing
 		int addToLabel = (horizontal ? -1 : 1) * 1000 * (i+1);
 		
-		int firstLabel = horizontal ? firstEasting : firstNorthing;
+		int firstLabel = horizontal ? firstNorthing : firstEasting;
 		String label = String.valueOf(firstLabel + addToLabel);
 		label = label.replaceAll("(.*)(.)(...)", "$1 $2 $3");
 		return label;
