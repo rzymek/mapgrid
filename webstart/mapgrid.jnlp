@@ -10,7 +10,7 @@
 	</information>
 	<resources>
 		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
-		<jar href="mapgrid-1.102.jar" />
+		<jar href="mapgrid-1.106.jar" />
 		<jar href="jcoord-1.0.jar"/>
 		<jar href="josm-tested.jar"/>
 		<jar href="JavaAPIforKml.jar"/>
