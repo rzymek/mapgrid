@@ -46,23 +46,23 @@ public abstract class GridGraphics {
 		this.height = height;
 	}
 	
-	public void drawGrid(List<int[]> vertical, List<int[]> horizontal) {
+	public void drawGrid(List<int[]> vertical, List<int[]> horizontal, double cellWidth, double cellHeight) {
 		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, config.border));
 		boolean HORIZONTAL = true;
 		boolean VERTICAL  = false;
 //		drawGrid1(vertical);
-		drawGrid(vertical, horizontal, 1);
-		drawGrid(horizontal, vertical, 0);
+		drawGrid(vertical, horizontal, 1, cellWidth);
+		drawGrid(horizontal, vertical, 0, cellHeight);
 		g.setStroke(new BasicStroke());
 		drawBoxes(vertical, VERTICAL);
 		drawBoxes(horizontal, HORIZONTAL);
 	}
 
-	private void drawGrid(List<int[]> lines, List<int[]> other, int idx) {
+	private void drawGrid(List<int[]> lines, List<int[]> other, int idx, double cellSize) {
 		int start = other.get(0)[idx];
-		int w = other.get(2)[idx] - other.get(1)[idx];
-		drawDashed(lines, start, 0, w);
-		drawDashed(lines, start, 1, w);
+//		int w = other.get(2)[idx] - other.get(1)[idx];
+		drawDashed(lines, start, 0, (int) cellSize);
+		drawDashed(lines, start, 1, (int) cellSize);
 //		start = horizontal.get(0)[1];
 //		w = horizontal.get(2)[1] - horizontal.get(1)[1];
 //		drawDashed(vertical, start, 0, w);

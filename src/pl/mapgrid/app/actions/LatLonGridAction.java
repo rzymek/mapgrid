@@ -52,7 +52,7 @@ public class LatLonGridAction extends AbstractAction implements UIAction {
 			Shape<Point> p = GeoShape.project(shape, main.calibration, width, height);
 			horizontal.add(new int[]{p.get(0).x,p.get(0).y,p.get(1).x,p.get(1).y});
 		}
-		main.view.setGrid(vertical, horizontal);
+//		main.view.setGrid(vertical, horizontal);
 	}
 
 	@Override

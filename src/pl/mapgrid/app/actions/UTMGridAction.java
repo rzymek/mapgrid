@@ -60,7 +60,7 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 				break;
 		}
 		
-		main.view.setGrid(vertical, horizontal);
+		main.view.setGrid(vertical, horizontal, 1000.0/convX, 1000.0/convY);
 	}
 
 	@Override

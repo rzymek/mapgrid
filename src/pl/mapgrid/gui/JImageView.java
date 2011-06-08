@@ -188,7 +188,7 @@ public class JImageView extends JComponent implements Observer {
 		return grid;
 	}
 
-	public void setGrid(List<int[]> vertical, List<int[]> horizontal) {
+	public void setGrid(List<int[]> vertical, List<int[]> horizontal, double cellWidth, double cellHeight) {
 		grid = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g = (Graphics2D) grid.getGraphics();
 		UTMGraphics.Config cfg = main.getUtmConfig();	
@@ -196,7 +196,7 @@ public class JImageView extends JComponent implements Observer {
 		UTMGraphics gg = new UTMGraphics(g, cfg, grid.getWidth(), grid.getHeight(), lt);
 //		LatLon lt = new LatLon(main.calibration.coordinates[0]);
 //		LatLonGridGraphics gg = new LatLonGridGraphics(g, cfg, grid.getWidth(), grid.getHeight(), lt);
-		gg.drawGrid(vertical, horizontal);		
+		gg.drawGrid(vertical, horizontal, cellWidth, cellHeight);		
 		setShowGrid(true);
 	}
 
