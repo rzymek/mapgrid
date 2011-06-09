@@ -37,6 +37,8 @@ public class JForm extends JPanel {
 				Class<?> type = field.getType();
 				if(type == Double.TYPE) 
 					field.setDouble(bean, Double.parseDouble(value));
+				if(type.isAssignableFrom(String.class)) 
+					field.set(bean, value.toString());
 				else if(type == Integer.TYPE)
 					field.setInt(bean, Integer.parseInt((value)));
 				else if(type.isAssignableFrom(Color.class) ) {
