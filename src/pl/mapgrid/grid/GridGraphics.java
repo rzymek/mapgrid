@@ -13,7 +13,7 @@ import pl.mapgrid.mask.Doc;
 
 public abstract class GridGraphics {
 	private final Graphics2D g;
-	private final Config config;
+	protected final Config config;
 	private final int width;
 	private final int height;
 	
@@ -37,6 +37,12 @@ public abstract class GridGraphics {
 			new Color(0,0,0),
 			new Color(255,255,255),
 		};		
+		@Doc("Rozmiar kratki w metrach")
+		public int step=1000;
+		@Doc("Formatowanie wspołrzędnych: regex")
+		public String labelSplit="(.*)(.)(...)";
+		@Doc("Formatowanie wspołrzędnych: replacement")
+		public String labelReplace="$1 $2 $3";
 	}
 	
 	public GridGraphics(Graphics2D g, Config config, int width, int height) {
@@ -63,10 +69,6 @@ public abstract class GridGraphics {
 //		int w = other.get(2)[idx] - other.get(1)[idx];
 		drawDashed(lines, start, 0, (int) cellSize);
 		drawDashed(lines, start, 1, (int) cellSize);
-//		start = horizontal.get(0)[1];
-//		w = horizontal.get(2)[1] - horizontal.get(1)[1];
-//		drawDashed(vertical, start, 0, w);
-//		drawDashed(vertical, start, 1, w);
 	}
 
 	private void drawDashed(List<int[]> lines, int start, int colorIdx, int w) {
@@ -77,7 +79,7 @@ public abstract class GridGraphics {
 		};
 		g.setColor(config.lineColors[colorIdx % config.lineColors.length]);
 		g.setStroke(new BasicStroke(
-				config.lineSize, 			// Width
+				 config.lineSize, 			// Width
 				 BasicStroke.CAP_BUTT,    // End cap
                  BasicStroke.JOIN_BEVEL,    // Join style
                  10.0f,                     // Miter limit

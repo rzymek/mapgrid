@@ -25,6 +25,7 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 		BufferedImage image = main.view.getImage();
 		List<int[]> vertical = new ArrayList<int[]>();
 		List<int[]> horizontal = new ArrayList<int[]>();
+		int step = main.getUtmConfig().step;
 		double nx = Math.abs(utm[1].getNorthing() - utm[0].getNorthing());
 		double ex = Math.abs(utm[1].getEasting() - utm[0].getEasting());
 		double ny = Math.abs(utm[3].getNorthing() - utm[0].getNorthing());
@@ -35,13 +36,13 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 		double metersY = Math.sqrt(ny*ny+ey*ey);
 		double metersPerPixelX = metersX / image.getWidth();
 		double metersPerPixelY = metersY / image.getHeight();
-		double start1 = 1000.0 - getStart(utm[0].getEasting());
+		double start1 = step - getStart(utm[0].getEasting());
 		double start2 = Math.abs(utm[0].getEasting() + start1 - utm[3].getEasting());
 		double convX = Math.cos(rotX)*metersPerPixelX;
 		double convY = Math.cos(rotY)*metersPerPixelY;
 		double x1 = start1/convX;//115
 		double x2 = start2/convX;//141
-		for(int i=1000;;i+=1000) {
+		for(int i=step;;i+=step) {
 			vertical.add(new int[] { (int) x1, 0, (int) x2, image.getHeight() });
 			x1 = (start1+i)/convX;
 			x2 = (start2+i)/convX;
@@ -52,7 +53,7 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 		start2 = Math.abs(utm[0].getNorthing() - start1 - utm[1].getNorthing());
 		double y1 = start1/convY;
 		double y2 = start2/convY;
-		for(int i=1000;;i+=1000) {
+		for(int i=step;;i+=step) {
 			horizontal.add(new int[] { 0, (int) y1, image.getWidth(), (int) y2 });
 			y1 = (start1+i)/convY;
 			y2 = (start2+i)/convY;
@@ -60,7 +61,7 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 				break;
 		}
 		
-		main.view.setGrid(vertical, horizontal, 1000.0/convX, 1000.0/convY);
+		main.view.setGrid(vertical, horizontal, step/convX, step/convY);
 	}
 
 	@Override
@@ -69,11 +70,11 @@ public class UTMGridAction extends AbstractAction implements UIAction {
 	}
 
 	private double getStart(double v) {
-		return v - getKmLine(v);
+		return v - getKmLine(v, main.getUtmConfig().step);
 	}
 
-	public static double getKmLine(double v) {
-		return Math.floor(v/1000.0)*1000.0;
+	public static double getKmLine(double v, int step) {
+		return Math.floor(v/step)*step;
 	}
 
 	@Override

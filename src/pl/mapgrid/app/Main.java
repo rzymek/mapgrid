@@ -82,7 +82,8 @@ public class Main extends JMainFrame implements ProgressMonitor {
 
 	private void autoload() {
 		try {
-			File f = new File("samples/rr3.tfw");
+//			File f = new File("samples/rr3.map");
+			File f = new File("/home/rzymek/Dropbox/devel/maps/sd/poligon-only.map");
 			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
 			open(f);
 //			File file = new File("samples/s11/granica.kml");
