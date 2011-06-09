@@ -53,14 +53,23 @@ public class ShapeGraphics {
 					drawString(p, label, s.style , r);
 			}
 		} else {
-			int[] x = new int[s.count()];
-			int[] y = new int[s.count()];
-			for(int i=0;i<s.count();++i) {
-				Point p = s.get(i);
-				x[i] = p.x;
-				y[i] = p.y;
+//			int[] x = new int[s.count()];
+//			int[] y = new int[s.count()];
+//			for(int i=1;i<s.count();++i) {
+//				Point p = s.get(i);
+//				x[i] = p.x;
+//				y[i] = p.y;
+//			}
+//			g.drawPolygon(x, y, s.count());
+			int x=s.get(0).x;
+			int y=s.get(0).y;
+			for(int i=1;i<s.count();++i) {
+				int x1=s.get(i).x;
+				int y1=s.get(i).y;
+				g.drawLine(x,y, x1,y1);
+				x = x1;
+				y = y1;
 			}
-			g.drawPolygon(x, y, s.count());
 		}
 	}
 
