@@ -1,4 +1,3 @@
-* zoom
 * crop do A4
 * zapis .map
 

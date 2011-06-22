@@ -83,7 +83,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	private void autoload() {
 		try {
 //			File f = new File("samples/rr3.map");
-			File f = new File("/home/rzymek/Dropbox/devel/maps/sd/poligon-only.map");
+			File f = new File("/home/rzymek/Dropbox/devel/maps/osb-ops/s11-osb-HD.map");
 			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
 			open(f);
 //			File file = new File("samples/s11/granica.kml");
@@ -207,10 +207,6 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		view.setImage(ImageIO.read(f));
 	}	
 
-	public static void main(String[] args) throws Exception {		
-		SwingUtilities.invokeLater(new Main());
-	}
-
 	public HoughTransform.Config getHoughConfig() {
 		return (HoughTransform.Config) configs[0];
 	}
@@ -226,5 +222,10 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	public ShapeGraphics.Config getShapeConfig() {
 		return (ShapeGraphics.Config) configs[3];
 	}
+
+	public static void main(String[] args) throws Exception {		
+		SwingUtilities.invokeLater(new Main());
+	}
+
 }
 

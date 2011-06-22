@@ -59,5 +59,21 @@ public class UTM implements Coordinates {
 	public double getY() {
 		return northing;
 	}
+	public String toMGRS() {
+		String e = (""+(int)easting).replaceAll(".*(....).", "$1");
+		String n = (""+(int)northing).replaceAll(".*(....).", "$1");
+		return e+" "+n+"\n"+encode(e)+" "+encode(n);
+	}
+	private String encode(String n) {
+		String kod="uzbekistan";
+		char[] c = n.toCharArray();
+		for (int i = 0; i < c.length; i++) {
+			int w = Integer.parseInt(""+c[i]);
+			if(w==0) w = 10;
+			char x = kod.charAt(w-1);
+			c[i]=x;
+		}
+		return new String(c).toUpperCase();
+	}
 }
 
