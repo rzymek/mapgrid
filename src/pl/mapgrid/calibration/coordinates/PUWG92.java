@@ -54,6 +54,6 @@ public class PUWG92 implements Coordinates {
 
 	@Override
 	public String toString() {
-		return "Pugw["+x+", "+y+"]";
+		return String.format("Pugw[%02f, %02f]",x,y);
 	}
 }

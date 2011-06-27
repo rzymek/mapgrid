@@ -53,7 +53,7 @@ public class SaveAction extends BackgroundAction implements UIAction {
 						if(res != JOptionPane.YES_OPTION)
 							return;
 					}
-					Coordinates[] c = main.calibration.toUTM();
+					Coordinates[] c = main.calibration.toPuwg();
 					double mapWidth = c[1].getX()-c[0].getX();
 					double mapHeight = c[3].getY()-c[0].getY();
 					image.getWidth();
