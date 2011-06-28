@@ -1,4 +1,4 @@
-package pl.maps.tms;
+package pl.maps.tms.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -24,7 +24,7 @@ public class Main extends JMainFrame {
 		pane.add(status, BorderLayout.SOUTH);		
 		setPreferredSize(new Dimension(800, 600));
 		pack();
-		mapview.show(new LatLon(52.19413, 21.05139));
+		mapview.centerAt(new LatLon(52.19413, 21.05139), 0);
 		
 		mapview.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
