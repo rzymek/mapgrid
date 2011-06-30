@@ -2,12 +2,12 @@ package pl.maps.tms.providers;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.regex.Pattern;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.PUWG92;
-import pl.maps.tms.TileProvider;
 import pl.maps.tms.TiledPosition;
+import pl.maps.tms.utils.Range;
+import pl.maps.tms.utils.Utils;
 
 public class GeoportalTileProvider implements TileProvider {
 	private Dimension tileSize = new Dimension(256, 256);
@@ -16,18 +16,19 @@ public class GeoportalTileProvider implements TileProvider {
 		return tileSize;
 	}
 
-	public String getTileURL(int tileX, int tileY, int zoom) {
-		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=RASTER_TOPO&cs=EPSG2180&"
+	public String getTileURL(int x, int y, int zoom) {
+		if(x < 0 || y < 0 || zoom < 0)
+			return null;
+		
+//		String layer = zoom < 7 ? "ORTO_SAT" : "ORTOFOTO";
+//		if(zoom >= 7)
+//			zoom -= 7;
+		String layer="RASTER_TOPO";
+		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service="+layer+"&cs=EPSG2180&"
 			+"fileIDX=L${z}X${x}Y${y}.jpg";
-		return fillTemplate(url, tileX, tileY, zoom);
+		return Utils.fillTileURLTemplate(url, x, y, zoom);
 	}
 	
-	protected String fillTemplate(String template, int x, int y, int z) {
-		template = template.replaceAll(Pattern.quote("${z}"), String.valueOf(z));
-		template = template.replaceAll(Pattern.quote("${x}"), String.valueOf(x));
-		template = template.replaceAll(Pattern.quote("${y}"), String.valueOf(y));
-		return template;
-	}
 	public Point adjacent(Point tile, int dx, int dy) {
 		return new Point(tile.x + dx, tile.y - dy);
 	}
@@ -68,5 +69,10 @@ public class GeoportalTileProvider implements TileProvider {
 		double x = (double) WIDTH_IN_METERS * px / pw;
 		double y = HEIGHT_IN_METERS - (double) HEIGHT_IN_METERS * py / ph;
 		return new PUWG92(x, y);
+	}
+
+	@Override
+	public Range getZoomRange() {
+		return new Range(0,11);
 	}
 }

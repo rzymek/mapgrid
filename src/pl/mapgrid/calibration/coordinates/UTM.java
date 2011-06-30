@@ -51,7 +51,10 @@ public class UTM implements Coordinates {
 
 	@Override
 	public String toString() {
-		return ""+lngZone+latZone+" "+easting+" "+northing;
+		return getZone() + " " + easting + " " + northing;
+	}
+	public String getZone() {
+		return String.format("%c %02d",latZone, lngZone);
 	}
 	public double getX() {
 		return easting;
@@ -64,6 +67,7 @@ public class UTM implements Coordinates {
 		String n = (""+(int)northing).replaceAll(".*(....).", "$1");
 		return e+" "+n+"\n"+encode(e)+" "+encode(n);
 	}
+	
 	private String encode(String n) {
 		String kod="uzbekistan";
 		char[] c = n.toCharArray();

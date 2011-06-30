@@ -4,9 +4,11 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
+import pl.maps.tms.utils.Range;
 
-public interface TileProvider {
-
+public interface TileGridProvider {
+	Range getZoomRange();
+	
 	Dimension getTileSize();
 
 	Point adjacent(Point tile, int dx, int dy);
@@ -14,6 +16,4 @@ public interface TileProvider {
 	TiledPosition getTilePosition(Coordinates coordinates, int zoom);
 
 	Coordinates getCoords(Point tile, Point offset, int zoom);
-
-	String getTileURL(int tileX, int tileY, int zoom);
 }
