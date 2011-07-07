@@ -18,6 +18,8 @@ public class WorldFileReader extends TextFileReader {
 
 	@Override
 	protected void processLine(String line, int lineNo) throws Exception {
+		if(lineNo > data.length)
+			return;
 		data[lineNo-1] = Double.parseDouble(line);
 	}
 	

@@ -83,7 +83,8 @@ public class Main extends JMainFrame implements ProgressMonitor {
 	private void autoload() {
 		try {
 //			File f = new File("samples/rr3.map");
-			File f = new File("/home/rzymek/Dropbox/devel/maps/osb-ops/s11-osb-HD.map");
+//			File f = new File("/home/rzymek/Dropbox/devel/maps/osb-ops/s11-osb-HD.map");
+			File f = new File("sns/sns9.tfw");
 			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
 			open(f);
 //			File file = new File("samples/s11/granica.kml");

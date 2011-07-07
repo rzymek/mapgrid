@@ -26,7 +26,7 @@ public abstract class TextFileReader implements CalibrationReader {
 			try{
 				processLine(line, lineNo);
 			}catch (Exception e) {
-				throw new InvalidFormatException(e,line);
+				throw new InvalidFormatException(e,lineNo+": "+line);
 			}
 		}
 		verify(calibration);

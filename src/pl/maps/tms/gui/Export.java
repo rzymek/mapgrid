@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -37,7 +39,7 @@ public class Export {
 			int zoom = this.view.getZoom();
 			
 			View view = new View(new Dimension(w, h), grid, images);			
-			view.setZoom(9);
+			view.setZoom(10);
 			view.setLeftTop(loc1);
 			p2 = view.getPoint(loc2);
 			w = p2.x;
@@ -50,9 +52,26 @@ public class Export {
 			view.paint(img.getGraphics());
 			System.out.println("Writing");		
 			ImageIO.write(img, "jpg", new File("export.jpg"));
+			writeCalib(loc1, loc2, w, h, "export.tfw");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
+	}
+	private void writeCalib(Coordinates c1, Coordinates c2, int w, int h, String filename) throws IOException {
+		FileWriter out = new FileWriter(filename);
+		try {
+			double cw = Math.abs(c2.getX() - c1.getX());
+			out.append(""+(cw/w)).append('\n');
+			out.append("0.0\n");
+			out.append("0.0\n");
+			double ch = Math.abs(c2.getY() - c1.getY());
+			out.append(""+(-ch/h)).append('\n');
+			out.append(""+c1.getX()).append('\n');
+			out.append(""+c1.getY()).append('\n');
+			out.append("\n");
+		}finally{
+			out.close();
+		}
 	}
 }

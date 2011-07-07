@@ -15,7 +15,7 @@ import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.gui.JMainFrame;
 import pl.maps.tms.HTTPTileImageProvider;
-import pl.maps.tms.cache.MemCache;
+import pl.maps.tms.cache.DiskMemCache;
 import pl.maps.tms.providers.GeoportalBackupImageProvider;
 import pl.maps.tms.providers.GeoportalTileProvider;
 import pl.maps.tms.providers.OSMTileProvider;
@@ -47,8 +47,8 @@ public class Main extends JMainFrame {
 		
 		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);		
 		Image waiting = Utils.createWaitingImage(provider);
-		MemCache images = new MemCache(http, THREADS, waiting);
-//		DiskMemCache images = new DiskMemCache(http, THREADS, waiting, "cache-"+provider.getClass().getSimpleName());
+//		MemCache images = new MemCache(http, THREADS, waiting);
+		DiskMemCache images = new DiskMemCache(http, THREADS, waiting, "cache-"+provider.getClass().getSimpleName());
 		mapview = new JTileMapView(provider, images);		
 		images.addListener(mapview);
 	}
