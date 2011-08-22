@@ -1,6 +1,7 @@
 package pl.maps.tms.gui;
 
 import java.awt.BorderLayout;
+import java.text.DecimalFormatSymbols;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,10 +34,16 @@ public class JOptionsPanel extends JPanel {
 		LatLon latLon = new LatLon(c);
 		
 		String slatLon = String.format("N %02.08f\u00B0 E %02.08f\u00B0", latLon.getLat(), latLon.getLon());
+		String slatLonDeg = GeoUtils.getDegMinFormat(latLon.getLat(), true) + " " + GeoUtils.getDegMinFormat(latLon.getLon(), false);
+		
+		CoordinateDms2Format fmt = new CoordinateDms2Format(new DecimalFormatSymbols());
+		String slatLonSec = "N "+fmt.format(latLon.getLat())+" E "+fmt.format(latLon.getLon());
 		String sutm= String.format("%s %.0f E %.0f N", utm.getZone(), utm.getEasting(), utm.getNorthing());
 		String spuwg = String.format("X %06.0f   Y %06.0f", puwg92.getY(), puwg92.getX()); 
 		String text = "<html>\n"+
 			slatLon+"<br/>\n"+
+			slatLonDeg+"<br/>\n"+
+			slatLonSec+"<br/>\n"+
 			spuwg+"<br/>\n"+
 			sutm+
 			"\n</html>";

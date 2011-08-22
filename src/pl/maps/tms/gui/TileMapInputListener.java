@@ -12,6 +12,7 @@ import java.awt.event.MouseWheelListener;
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.maps.tms.TileGridProvider;
 import pl.maps.tms.View;
+import pl.maps.tms.gui2.GetMapsFrame;
 import pl.maps.tms.utils.Range;
 
 public class TileMapInputListener implements MouseMotionListener, MouseWheelListener, KeyEventDispatcher {
@@ -88,9 +89,11 @@ public class TileMapInputListener implements MouseMotionListener, MouseWheelList
 		case KeyEvent.VK_ESCAPE:
 			parent.firstPoint=null;
 			break;					
-		case KeyEvent.VK_S:
-			parent.exportSelection();
-			break;
+		case KeyEvent.VK_E:
+			Export export = new Export(parent.view, parent.cachingProvider);
+			View v = export.createView(parent.firstPoint, parent.secondPoint);
+			GetMapsFrame.frame.getCacheStatus().setView(v, parent.cachingProvider);
+			break;					
 		default:
 			return false;
 		}

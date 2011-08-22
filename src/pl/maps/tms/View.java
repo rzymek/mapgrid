@@ -24,7 +24,12 @@ public class View {
 		this.images = images;
 		calcGrid();
 	}
-	
+	public Dimension getTileCount() {
+		return tileCount;
+	}
+	public TileGridProvider getGrid() {
+		return grid;
+	}
 	public void setZoom(int zoom) {
 		this.zoom = zoom;
 	}
@@ -40,6 +45,10 @@ public class View {
 		calcGrid();
 	}
 
+	public Dimension getViewSize() {
+		return viewSize;
+	}
+	
 	public void move(int dx, int dy) {
 		offset.x += dx;
 		offset.y += dy;
@@ -59,6 +68,7 @@ public class View {
 			offset.y = ts.height + offset.y;
 		}
 	}
+
 
 	public void paint(Graphics g)  {
 		Dimension ts = grid.getTileSize();
@@ -81,6 +91,13 @@ public class View {
 				}
 			}
 		}
+	}
+	
+	public TiledPosition getPosition() {
+		TiledPosition tp = new TiledPosition();
+		tp.tile = tile;
+		tp.offset = offset;
+		return tp;
 	}
 
 	public Coordinates getCoordinates(int x, int y) {

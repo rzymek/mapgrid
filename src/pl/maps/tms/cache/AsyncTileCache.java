@@ -35,7 +35,9 @@ public abstract class AsyncTileCache implements AsyncFetchListener, TileImagePro
 	}
 	
 
-	public abstract void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception;
+	public void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
+		notifyListeners(entry.image, spec);		
+	}
 
 	public void addListener(AsyncFetchListener listener) {
 		listeners.add(listener);
@@ -52,7 +54,6 @@ public abstract class AsyncTileCache implements AsyncFetchListener, TileImagePro
 	@Override
 	public void imageFetched(Image image, TileSpec spec) throws Exception {
 		setCacheEntry(spec, new CacheEntry(image));
-		notifyListeners(image, spec);
 	}
 
 }

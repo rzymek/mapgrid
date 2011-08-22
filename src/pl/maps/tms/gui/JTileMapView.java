@@ -16,13 +16,14 @@ import pl.maps.tms.View;
 import pl.maps.tms.cache.AsyncTileCache;
 import pl.maps.tms.cacheing.AsyncFetchListener;
 import pl.maps.tms.cacheing.TileSpec;
+import pl.maps.tms.gui2.JViewCacheStatus;
 
 public class JTileMapView extends JComponent implements AsyncFetchListener {
-	View view;
+	public View view;
 	double scale=1.0;
 	Coordinates firstPoint;
 	Coordinates secondPoint;
-	private final AsyncTileCache cachingProvider;
+	final AsyncTileCache cachingProvider;
 	
 	public JTileMapView(TileGridProvider grid, AsyncTileCache images) {
 		this.cachingProvider = images;
@@ -30,10 +31,14 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		view = new View(getSize(), grid, images);
 	}
 	
-	protected void exportSelection() {
+	public void exportSelection(JViewCacheStatus status) {
 		System.out.println("JTileMapView.exportSelection()");
+		cachingProvider.removeListener(status);
+		cachingProvider.addListener(status);
 		Export export = new Export(view, cachingProvider);
-		export.export(firstPoint, secondPoint);
+		View v = export.createView(firstPoint, secondPoint);
+		status.setView(v, cachingProvider);
+		export.export(firstPoint, secondPoint, v);
 		System.out.println("Done");
 		JOptionPane.showMessageDialog(this, "Saved");		
 	}
@@ -58,16 +63,14 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 			int h = Math.abs(p2.y-p1.y);
 			
 			g2.setStroke(new BasicStroke(3));
-			System.out.println(p1+" "+p2);
 			g2.drawRect(x,y,w,h);
 		}
-//		g2.setStroke(new BasicStroke(2));
-//		g2.setColor(Color.BLUE);
-//		drawCrossHair(g2, getWidth()/2, getHeight()/2);
 	}
 
-	private void drawCrossHair(Graphics g, int x, int y) {
+	private void drawCrossHair(Graphics2D g, int x, int y) {
 		int r = 30;
+		g.setStroke(new BasicStroke(2));
+		g.setColor(Color.BLUE);
 		g.drawArc(x - r / 2, y - r / 2, r, r, 0, 360);
 		g.drawLine(x - r / 2, y, x + r / 2, y);
 		g.drawLine(x, y - r / 2, x, y + r / 2);
