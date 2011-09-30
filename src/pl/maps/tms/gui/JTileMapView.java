@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
@@ -19,24 +20,37 @@ import pl.maps.tms.cacheing.TileSpec;
 import pl.maps.tms.gui2.JViewCacheStatus;
 
 public class JTileMapView extends JComponent implements AsyncFetchListener {
-	public View view;
+	public View view = null;
 	double scale=1.0;
 	Coordinates firstPoint;
 	Coordinates secondPoint;
-	final AsyncTileCache cachingProvider;
+	AsyncTileCache cachingProvider;
+	private TileMapInputListener listener;
 	
-	public JTileMapView(TileGridProvider grid, AsyncTileCache images) {
+	public JTileMapView() {
+	}
+
+	public void setProvider(TileGridProvider grid, AsyncTileCache images) {
 		this.cachingProvider = images;
-		new TileMapInputListener(this, grid);
-		view = new View(getSize(), grid, images);
+		if(listener != null)
+			listener.unregister();
+		listener = new TileMapInputListener(this, grid);
+		View newView = new View(getSize(), grid, images);
+		if(view != null) {			
+			Coordinates center = view.getCoordinates(getWidth()/2, getHeight()/2);
+			newView.centerAt(center);
+			newView.setZoom(view.getZoom());
+		}
+		view = newView;
+		repaint();
 	}
 	
-	public void exportSelection(JViewCacheStatus status) {
+	public void exportSelection(JViewCacheStatus status, int zoom) {
 		System.out.println("JTileMapView.exportSelection()");
 		cachingProvider.removeListener(status);
 		cachingProvider.addListener(status);
 		Export export = new Export(view, cachingProvider);
-		View v = export.createView(firstPoint, secondPoint);
+		View v = export.createView(firstPoint, secondPoint, zoom);
 		status.setView(v, cachingProvider);
 		export.export(firstPoint, secondPoint, v);
 		System.out.println("Done");
@@ -44,9 +58,10 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 	}
 
 	protected void paintComponent(Graphics g) {
-		g.setColor(Color.WHITE);
+		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0,0,getWidth(), getHeight());
-		g.setColor(Color.RED);
+		if(view == null)
+			return;
 		Dimension s = getSize();
 		s.width /= scale;
 		s.height/= scale;

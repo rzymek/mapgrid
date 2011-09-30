@@ -24,6 +24,9 @@ public class View {
 		this.images = images;
 		calcGrid();
 	}
+	public TileImageProvider getTileImageProvider() {
+		return images;
+	}
 	public Dimension getTileCount() {
 		return tileCount;
 	}

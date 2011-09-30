@@ -41,13 +41,13 @@ public class Export {
 
 	}
 
-	public View createView(Coordinates loc1, Coordinates loc2) {
+	public View createView(Coordinates loc1, Coordinates loc2, int zoom) {
 		GeoportalTileProvider grid = new GeoportalTileProvider();
 		HTTPTileImageProvider http = new HTTPTileImageProvider(grid);
 		ChainImageProvider images = new ChainImageProvider(cache, http); 
 
 		View view = new View(new Dimension(1, 1), grid, images);			
-		view.setZoom(9);
+		view.setZoom(zoom);
 		view.setLeftTop(loc1);
 		Point end= view.getPoint(loc2);
 		int w = end.x;

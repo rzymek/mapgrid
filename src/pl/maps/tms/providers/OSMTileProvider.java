@@ -63,4 +63,8 @@ public class OSMTileProvider implements TileProvider {
 	public Range getZoomRange() {
 		return new Range(2, 16);
 	}
+	@Override
+	public String toString() {
+		return "OpenStreetMap";
+	}
 }

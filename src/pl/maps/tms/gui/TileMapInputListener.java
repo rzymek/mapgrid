@@ -32,6 +32,12 @@ public class TileMapInputListener implements MouseMotionListener, MouseWheelList
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 	    manager.addKeyEventDispatcher(this);
 	}
+	public void unregister() {
+		parent.removeMouseMotionListener(this);
+		parent.removeMouseWheelListener(this);
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+	    manager.removeKeyEventDispatcher(this);
+	}
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
@@ -89,15 +95,16 @@ public class TileMapInputListener implements MouseMotionListener, MouseWheelList
 		case KeyEvent.VK_ESCAPE:
 			parent.firstPoint=null;
 			break;					
-		case KeyEvent.VK_E:
-			Export export = new Export(parent.view, parent.cachingProvider);
-			View v = export.createView(parent.firstPoint, parent.secondPoint);
-			GetMapsFrame.frame.getCacheStatus().setView(v, parent.cachingProvider);
-			break;					
+//		case KeyEvent.VK_E:
+//			Export export = new Export(parent.view, parent.cachingProvider);
+//			View v = export.createView(parent.firstPoint, parent.secondPoint);
+//			GetMapsFrame.frame.getCacheStatus().setView(v, parent.cachingProvider);
+//			break;					
 		default:
 			return false;
 		}
 		parent.repaint();
 		return false;
 	}
+
 }

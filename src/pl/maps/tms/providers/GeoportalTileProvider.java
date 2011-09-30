@@ -75,4 +75,8 @@ public class GeoportalTileProvider implements TileProvider {
 	public Range getZoomRange() {
 		return new Range(0,11);
 	}
+	@Override
+	public String toString() {
+		return "GeoPortal ARS TOPO";
+	}
 }
