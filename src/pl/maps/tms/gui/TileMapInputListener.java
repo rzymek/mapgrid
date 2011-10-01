@@ -95,11 +95,6 @@ public class TileMapInputListener implements MouseMotionListener, MouseWheelList
 		case KeyEvent.VK_ESCAPE:
 			parent.firstPoint=null;
 			break;					
-//		case KeyEvent.VK_E:
-//			Export export = new Export(parent.view, parent.cachingProvider);
-//			View v = export.createView(parent.firstPoint, parent.secondPoint);
-//			GetMapsFrame.frame.getCacheStatus().setView(v, parent.cachingProvider);
-//			break;					
 		default:
 			return false;
 		}
