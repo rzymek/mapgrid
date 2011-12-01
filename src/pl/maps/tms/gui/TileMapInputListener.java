@@ -10,9 +10,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
+import pl.maps.tms.Position;
 import pl.maps.tms.TileGridProvider;
 import pl.maps.tms.View;
-import pl.maps.tms.gui2.GetMapsFrame;
 import pl.maps.tms.utils.Range;
 
 public class TileMapInputListener implements MouseMotionListener, MouseWheelListener, KeyEventDispatcher {
@@ -47,6 +47,11 @@ public class TileMapInputListener implements MouseMotionListener, MouseWheelList
 			int y = (int) (last.y/parent.scale);
 			parent.firstPoint = parent.view.getCoordinates(x, y);
 		}
+		int x = (int) (last.x/parent.scale);
+		int y = (int) (last.y/parent.scale);
+		Coordinates c = parent.view.getCoordinates(x, y);
+		Position pos = parent.view.getGrid().getTilePosition(c, parent.view.getZoom());
+		System.out.println(pos);
 	}
 	@Override
 	public void mouseDragged(MouseEvent e) {

@@ -2,7 +2,6 @@ package pl.maps.tms.cache;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
@@ -12,7 +11,6 @@ import pl.maps.tms.cacheing.TileSpec;
 
 public class DiskMemCache extends MemCache {
 
-	private static final String FORMAT = "jpg";
 	private final File dir;
 
 	public DiskMemCache(TileImageProvider provider, int threads, Image waitingImage, String directory) {
@@ -32,23 +30,17 @@ public class DiskMemCache extends MemCache {
 		CacheEntry entry = super.getCacheEntry(spec);
 		if(entry != null)
 			return entry;
-		File file = getFile(spec);
+		File file = DiskCache.getFile(dir, spec);
 		if(!file.exists())
 			return null;
 		BufferedImage image = ImageIO.read(file);
 		return new CacheEntry(image);
 	}
 
-	private File getFile(TileSpec spec) {
-		return new File(dir, spec.z+"/"+spec.x+"/"+spec.y+"."+FORMAT);
-	}
-
 	@Override
 	public synchronized void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
 		super.setCacheEntry(spec, entry);
-		File file = getFile(spec);
-		file.getParentFile().mkdirs();
-		ImageIO.write((RenderedImage) entry.image, FORMAT, file);
+		DiskCache.storeOnDisk(dir, spec, entry);
 	}
 
 }

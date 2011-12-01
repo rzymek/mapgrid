@@ -17,20 +17,24 @@ public abstract class TextFileReader implements CalibrationReader {
 		this.file = file;
 		FileReader reader = new FileReader(file);
 		BufferedReader in = new BufferedReader(reader);
-		calibration = new Calibration();
-
-		for (int lineNo = 1;;++lineNo) {
-			String line = in.readLine();
-			if (line == null)
-				break;
-			try{
-				processLine(line, lineNo);
-			}catch (Exception e) {
-				throw new InvalidFormatException(e,lineNo+": "+line);
+		try {
+			calibration = new Calibration();
+	
+			for (int lineNo = 1;;++lineNo) {
+				String line = in.readLine();
+				if (line == null)
+					break;
+				try{
+					processLine(line, lineNo);
+				}catch (Exception e) {
+					throw new InvalidFormatException(e,lineNo+": "+line);
+				}
 			}
+			verify(calibration);
+			return calibration;
+		}finally{
+			in.close();
 		}
-		verify(calibration);
-		return calibration;
 	}
 
 	protected void verify(Calibration calibration) throws Exception {		

@@ -1,24 +1,25 @@
 package pl.maps.tms;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+
 import pl.mapgrid.calibration.coordinates.Coordinates;
 
 public class View {
-	private Point tile; // top-left;
-	private Point offset; // view offset from top-left corner of tile
+	private Position position;
 	private Dimension viewSize; // view size
 	private Dimension tileCount = new Dimension(0,0); //cached
 	private int zoom = 0;
-	public boolean showGrid = false;
+	public boolean showGrid = true;
 	
 	private final TileGridProvider grid;
 	private final TileImageProvider images;
 
 	public View(Dimension dimension, TileGridProvider grid, TileImageProvider images) {
-		this.offset = new Point(0,0);
+		this.position = new Position();
 		this.viewSize = dimension;
 		this.grid = grid;
 		this.images = images;
@@ -53,40 +54,31 @@ public class View {
 	}
 	
 	public void move(int dx, int dy) {
-		offset.x += dx;
-		offset.y += dy;
-		
 		Dimension ts = grid.getTileSize();
-		tile = grid.adjacent(tile, offset.x / ts.width, offset.y / ts.height);
-		
-		offset.x %= ts.width;
-		offset.y %= ts.height;
-		
-		if(offset.x < 0) {
-			tile = grid.adjacent(tile, -1, 0);
-			offset.x = ts.width + offset.x;
-		}
-		if(offset.y < 0) {
-			tile = grid.adjacent(tile, 0, -1);
-			offset.y = ts.height + offset.y;
-		}
+		position.x += (double)dx / ts.width;
+		position.y += (double)dy / ts.height; 
 	}
 
-
 	public void paint(Graphics g)  {
-		Dimension ts = grid.getTileSize();
+		g.setColor(Color.RED);
+		final Dimension ts = grid.getTileSize();
+		final int offsetx = (int) ((position.x % 1) * ts.width);
+		final int offsety = (int) ((position.y % 1) * ts.height);
+		final int posx = (int) position.x;
+		final int posy = (int) position.y;
 		for (int y = 0; y <= tileCount.height; ++y) {
 			for (int x = 0; x <= tileCount.width; ++x) {
 				try {
-					int xx = x*ts.width - offset.x;
-					int yy = y*ts.height- offset.y;
+					final int xx = x*ts.width - offsetx;
+					final int yy = y*ts.height- offsety;
+					final int tilex = posx + x;
+					final int tiley = posy + y;
 					
-					Point next = grid.adjacent(tile, x, y);
-					Image tile = images.getTile(next.x, next.y, zoom);
+					Image tile = images.getTile(tilex, tiley, zoom);
 					g.drawImage(tile, xx, yy, null);
 					if(showGrid){
-						g.drawString(next.x+", "+next.y+", "+zoom, 
-								xx, yy + ts.height);
+						String msg = String.format("%d %d %d", (int)tilex, (int)tiley, zoom);
+						g.drawString(msg, xx, yy + ts.height);
 						g.drawRect(xx, yy, ts.width, ts.height);
 					}
 				}catch (Exception e) {
@@ -96,28 +88,27 @@ public class View {
 		}
 	}
 	
-	public TiledPosition getPosition() {
-		TiledPosition tp = new TiledPosition();
-		tp.tile = tile;
-		tp.offset = offset;
-		return tp;
+	public Position getPosition() {
+		return position;
 	}
 
 	public Coordinates getCoordinates(int x, int y) {
-		Point of = new Point(offset.x + x, offset.y + y);
-		return grid.getCoords(tile, of, zoom);
+		Dimension ts = grid.getTileSize();
+		Position p = position.clone();
+		p.x += (double)x/ts.width;
+		p.y += (double)y/ts.height;
+		return grid.getCoords(p, zoom);
 	}
 
-	public void setPosition(Point tile, Point offset) {
-		this.tile = tile;
-		this.offset = offset;
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 	
 	public Point getPoint(Coordinates c) {
-		TiledPosition pos = grid.getTilePosition(c, zoom);
+		Position pos = grid.getTilePosition(c, zoom);
 		Dimension ts = grid.getTileSize();
-		int x = (pos.tile.x - this.tile.x) * ts.width + pos.offset.x - this.offset.x;
-		int y = (this.tile.y - pos.tile.y) * ts.height + pos.offset.y - this.offset.y;
+		int x = (int) ((pos.x - position.x) * ts.width);
+		int y = (int) ((position.y - pos.y) * ts.height);
 		return new Point(x,y);
 	}
 
@@ -127,9 +118,7 @@ public class View {
 	}
 
 	public void setLeftTop(Coordinates c) {
-		TiledPosition pos = grid.getTilePosition(c, zoom);
-		this.tile = pos.tile;
-		this.offset = pos.offset;
+		position = grid.getTilePosition(c, zoom);
 	}
 
 	public int getZoom() {

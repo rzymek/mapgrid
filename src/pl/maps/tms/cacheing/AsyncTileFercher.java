@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import pl.maps.tms.TileImageProvider;
 
-public class AsyncTileFercher {
+public final class AsyncTileFercher {
 	
 	private BlockingQueue<TileSpec> queue = new LinkedBlockingQueue<TileSpec>();
 	

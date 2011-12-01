@@ -1,11 +1,10 @@
 package pl.maps.tms.providers;
 
 import java.awt.Dimension;
-import java.awt.Point;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
-import pl.maps.tms.TiledPosition;
+import pl.maps.tms.Position;
 import pl.maps.tms.utils.Range;
 
 /*
@@ -18,24 +17,23 @@ public class OSMTileProvider implements TileProvider {
 	public Dimension getTileSize() {
 		return tileSize;
 	}
-
+	 
 	@Override
-	public Point adjacent(Point tile, int dx, int dy) {
-		return new Point(tile.x + dx, tile.y + dy);
+	public Position move(Position tile, double dx, double dy) {
+		tile.x += dx;
+		tile.y += dy;
+		return tile;
 	}
 
 	@Override
-	public TiledPosition getTilePosition(Coordinates coordinates, int zoom) {
+	public Position getTilePosition(Coordinates coordinates, int zoom) {
 		double lat = coordinates.getLat();
 		double lon = coordinates.getLon();
 		double x = (lon + 180) / 360 * (1 << zoom);
 		double y = (1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * (1 << zoom);
 		double ox = (x-Math.floor(x)) * tileSize.width;
 		double oy = (y-Math.floor(y)) * tileSize.height;
-		TiledPosition position = new TiledPosition();
-		position.tile = new Point((int) x, (int) y);
-		position.offset = new Point((int) ox,(int) oy);
-		return position;
+		return new Position(ox, oy);
 	}
 
 	static double tile2lon(double x, int z) {
@@ -48,9 +46,9 @@ public class OSMTileProvider implements TileProvider {
 	}
 
 	@Override
-	public Coordinates getCoords(Point tile, Point offset, int zoom) {
-		double lon = tile2lon(tile.x + (double)offset.x / tileSize.width, zoom);
-		double lat = tile2lat(tile.y + (double)offset.y / tileSize.height, zoom);
+	public Coordinates getCoords(Position tile, int zoom) {
+		double lon = tile2lon(tile.x / tileSize.width, zoom);
+		double lat = tile2lat(tile.y / tileSize.height, zoom);
 		return new LatLon(lat, lon);
 	}
 

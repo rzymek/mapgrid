@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
+
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import pl.maps.tms.Position;
 import pl.maps.tms.TileGridProvider;
-import pl.maps.tms.TiledPosition;
 import pl.maps.tms.View;
 import pl.maps.tms.cache.CacheEntry;
 import pl.maps.tms.cache.TileCache;
@@ -58,13 +58,14 @@ public class JViewCacheStatus extends JComponent implements AsyncFetchListener {
 	}
 
 	private void updateImage(TileGridProvider grid, BufferedImage img) {
-		TiledPosition pos = view.getPosition();
-		int zoom = view.getZoom();
-		Dimension tileCount = view.getTileCount();
+		final Position pos = view.getPosition();
+		final int zoom = view.getZoom();
+		final Dimension tileCount = view.getTileCount();
+		final int px = (int) pos.x;
+		final int py = (int) pos.y;
 		for (int y = 0; y <= tileCount.height; ++y) {
 			for (int x = 0; x <= tileCount.width; ++x) {
-				Point next = grid.adjacent(pos.tile, x, y);
-				TileSpec spec = new TileSpec(next.x, next.y, zoom);
+				TileSpec spec = new TileSpec(px+x, py+y, zoom);
 				CacheStatus stat = getCacheStatus(spec);
 				int c = stat.color.getRGB();
 				img.setRGB(x, y, c);

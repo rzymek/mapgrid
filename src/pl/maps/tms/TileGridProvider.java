@@ -1,7 +1,6 @@
 package pl.maps.tms;
 
 import java.awt.Dimension;
-import java.awt.Point;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.maps.tms.utils.Range;
@@ -11,9 +10,9 @@ public interface TileGridProvider {
 	
 	Dimension getTileSize();
 
-	Point adjacent(Point tile, int dx, int dy);
+	Position move(Position tile, double dx, double dy);
 
-	TiledPosition getTilePosition(Coordinates coordinates, int zoom);
+	Position getTilePosition(Coordinates coordinates, int zoom);
 
-	Coordinates getCoords(Point tile, Point offset, int zoom);
+	Coordinates getCoords(Position tile, int zoom);
 }

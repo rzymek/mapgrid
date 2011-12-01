@@ -15,7 +15,7 @@ import pl.mapgrid.mask.Doc;
 public class JOptionsPanel extends JPanel {
 	public static class Config {
 		@Doc("Export zoom")
-		int zoom;
+		public int zoom;
 	}
 	private JLabel bottomInfo = new JLabel();
 	public JOptionsPanel() {
@@ -41,11 +41,11 @@ public class JOptionsPanel extends JPanel {
 		String sutm= String.format("%s %.0f E %.0f N", utm.getZone(), utm.getEasting(), utm.getNorthing());
 		String spuwg = String.format("X %06.0f   Y %06.0f", puwg92.getY(), puwg92.getX()); 
 		String text = "<html>\n"+
-			slatLon+"<br/>\n"+
-			slatLonDeg+"<br/>\n"+
-			slatLonSec+"<br/>\n"+
+//			slatLon+"<br/>\n"+
+//			slatLonDeg+"<br/>\n"+
+//			slatLonSec+"<br/>\n"+
 			spuwg+"<br/>\n"+
-			sutm+
+//			sutm+
 			"\n</html>";
 		return text;
 	}

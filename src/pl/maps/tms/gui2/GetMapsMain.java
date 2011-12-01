@@ -14,7 +14,7 @@ import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.maps.tms.HTTPTileImageProvider;
 import pl.maps.tms.cache.AsyncTileCache;
-import pl.maps.tms.cache.DiskMemCache;
+import pl.maps.tms.cache.MemCache;
 import pl.maps.tms.gui.JTileMapView;
 import pl.maps.tms.providers.GeoportalTileProvider;
 import pl.maps.tms.providers.OSMTileProvider;
@@ -22,7 +22,9 @@ import pl.maps.tms.providers.TileProvider;
 import pl.maps.tms.utils.Utils;
 
 public final class GetMapsMain extends GetMapsFrame implements Runnable {
-	private static final int THREADS = 2;
+	private static final int SELECTED_PROVIDER = 0;
+	private static final int THREADS = 2;	
+	private AsyncTileCache imagesProvider;	
 
 	private static TileProvider[] providers = {
 			new GeoportalTileProvider(),
@@ -32,7 +34,6 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new GetMapsMain());
 	}
-	private AsyncTileCache imagesProvider;
 	
 	@Override
 	public void run() {
@@ -41,7 +42,7 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable {
 	}
 	
 	protected void setup() {
-		TileProvider provider = providers[0];		
+		TileProvider provider = providers[SELECTED_PROVIDER];		
 		
 		JComboBox combo = getProvidersCombo();
 		combo.setModel(new DefaultComboBoxModel(providers));
@@ -63,10 +64,10 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable {
 	private AsyncTileCache createImagesProvider(TileProvider provider) {
 		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);		
 		Image waiting = Utils.createWaitingImage(provider);
-//		MemCache images = new MemCache(http, THREADS, waiting);
+		MemCache images = new MemCache(http, THREADS, waiting);
 //		GeoportalBackupImageProvider backup = new GeoportalBackupImageProvider();
-		DiskMemCache imgProvider = new DiskMemCache(http, THREADS, waiting, "cache/"+provider.getClass().getSimpleName());
-		return imgProvider;
+//		DiskMemCache images = new DiskMemCache(http, THREADS, waiting, "cache/"+provider.getClass().getSimpleName());
+		return images;
 	}
 	
 	@Override

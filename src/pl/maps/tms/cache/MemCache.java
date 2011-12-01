@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import pl.maps.tms.TileImageProvider;
 import pl.maps.tms.cacheing.TileSpec;
@@ -48,7 +48,9 @@ public class MemCache extends AsyncTileCache {
 		Comparator<Entry<TileSpec, CacheEntry>> comparator = new Comparator<Entry<TileSpec, CacheEntry>>() {
 			@Override
 			public int compare(Entry<TileSpec, CacheEntry> o1, Entry<TileSpec, CacheEntry> o2) {
-				return o1.getValue().compareTo(o2.getValue());
+				long t1 = o1.getValue().timestamp;
+				long t2 = o2.getValue().timestamp;
+				return t1 < t2 ? -1 : t1 == t2 ? 0 : 1;
 			}
 		};
 		Collections.sort(list, Collections.reverseOrder(comparator));
