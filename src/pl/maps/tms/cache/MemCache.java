@@ -77,9 +77,9 @@ public class MemCache extends AsyncTileCache {
 
 	@Override
 	public void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
-		super.setCacheEntry(spec, entry);
 		purgeByZoom(spec.z);
 		purgeByTimeStamp();
 		cache.put(spec, entry);
+		super.setCacheEntry(spec, entry);
 	}
 }

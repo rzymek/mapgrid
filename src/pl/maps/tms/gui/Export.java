@@ -17,11 +17,9 @@ import pl.maps.tms.cache.AsyncTileCache;
 import pl.maps.tms.providers.GeoportalTileProvider;
 
 public class Export {
-	private final View source;
 	private final AsyncTileCache cache;
 	
-	public Export(View source, AsyncTileCache cache) {
-		this.source = source;
+	public Export(AsyncTileCache cache) {
 		this.cache = cache;
 	}
 	
@@ -52,7 +50,6 @@ public class Export {
 		Point end= view.getPoint(loc2);
 		int w = end.x;
 		int h = end.y;
-		System.out.println(w+" x "+h);
 		view.setDimension(new Dimension(w, h));
 		return view;
 	}

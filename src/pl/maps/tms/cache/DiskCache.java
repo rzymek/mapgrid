@@ -48,9 +48,7 @@ public class DiskCache extends AsyncTileCache {
 
 	public static void storeOnDisk(File dir, TileSpec spec, CacheEntry entry) throws IOException {
 		File file = getFile(dir, spec);
-		boolean success = file.getParentFile().mkdirs();
-		if(!success)
-			throw new IOException("Failed to create directory "+file.getParentFile());
+		file.getParentFile().mkdirs(); //ignore failures. may already exist
 		ImageIO.write((RenderedImage) entry.image, FORMAT, file);
 	}
 

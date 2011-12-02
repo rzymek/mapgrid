@@ -6,10 +6,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Point;
+import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeListener;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.maps.tms.TileGridProvider;
@@ -17,19 +18,17 @@ import pl.maps.tms.View;
 import pl.maps.tms.cache.AsyncTileCache;
 import pl.maps.tms.cacheing.AsyncFetchListener;
 import pl.maps.tms.cacheing.TileSpec;
+import pl.maps.tms.gui.Selection.Corner;
 import pl.maps.tms.gui2.JViewCacheStatus;
 
 public class JTileMapView extends JComponent implements AsyncFetchListener {
+	public static enum Mode { MOVE, SELECT }
 	public View view = null;
 	double scale=1.0;
-	Coordinates firstPoint;
-	Coordinates secondPoint;
+	public Selection selection;
 	AsyncTileCache cachingProvider;
 	private TileMapInputListener listener;
 	
-	public JTileMapView() {
-	}
-
 	public void setProvider(TileGridProvider grid, AsyncTileCache images) {
 		this.cachingProvider = images;
 		if(listener != null)
@@ -42,19 +41,21 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 			newView.setZoom(view.getZoom());
 		}
 		view = newView;
+		selection = new Selection(view);
 		repaint();
 	}
 	
 	public void exportSelection(JViewCacheStatus status, int zoom) {
-		System.out.println("JTileMapView.exportSelection()");
 		cachingProvider.removeListener(status);
 		cachingProvider.addListener(status);
-		Export export = new Export(view, cachingProvider);
-		View v = export.createView(firstPoint, secondPoint, zoom);
+		Export export = new Export(cachingProvider);		
+		Coordinates p1 = selection.getPoint(Corner.LEFT_TOP);
+		Coordinates p2 = selection.getPoint(Corner.RIGHT_BOTTOM);
+		View v = export.createView(p1, p2, zoom);
 		status.setView(v, cachingProvider);
-		export.export(firstPoint, secondPoint, v);
-		System.out.println("Done");
-		JOptionPane.showMessageDialog(this, "Saved");		
+		export.export(p1, p2, v);
+		status.repaint();
+		JOptionPane.showMessageDialog(this, "Saved");
 	}
 
 	protected void paintComponent(Graphics g) {
@@ -69,16 +70,22 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.scale(scale, scale);
 		view.paint(g);
-		if(firstPoint != null && secondPoint != null) {
-			Point p1 = view.getPoint(firstPoint);
-			Point p2 = view.getPoint(secondPoint);
-			int x = Math.min(p1.x, p2.x);
-			int y = Math.min(p1.y, p2.y);
-			int w = Math.abs(p2.x-p1.x);
-			int h = Math.abs(p2.y-p1.y);
-			
+		g2.setColor(Color.RED);
+		if(selection.isValid()) {
+			Rectangle rect = selection.getRect();			
 			g2.setStroke(new BasicStroke(3));
-			g2.drawRect(x,y,w,h);
+			g2.drawRect(rect.x, rect.y, rect.width, rect.height);
+			g2.setStroke(new BasicStroke(2));
+			Color fill = new Color(255,0,0,128);
+			Color cornerBorder = Color.BLACK;
+			g2.setColor(fill);
+			for (Corner corner : Selection.Corner.values()) {
+				rect = selection.getCorner(corner);
+				g2.setColor(fill);
+				g2.fillRect(rect.x, rect.y, rect.width, rect.height);
+				g2.setColor(cornerBorder);
+				g2.drawRect(rect.x, rect.y, rect.width, rect.height);
+			}
 		}
 	}
 
@@ -101,5 +108,20 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 	@Override
 	public void imageFetched(Image image, TileSpec spec) throws Exception {
 		repaint();
+	}
+
+	public void setMode(Mode mode) {
+		listener.mode = mode;
+	}
+
+	public void addSelectionChangedListener(ChangeListener listener) {
+		selection.addChangeListener(listener);
+	}
+	public void removeSelectionChangedListener(ChangeListener listener) {
+		selection.removeChangeListener(listener);
+	}
+
+	public Selection getSelection() {
+		return selection;
 	}
 }

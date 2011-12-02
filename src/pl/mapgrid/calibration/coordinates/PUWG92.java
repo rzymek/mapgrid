@@ -1,5 +1,7 @@
 package pl.mapgrid.calibration.coordinates;
 
+import java.util.Arrays;
+
 import org.openstreetmap.josm.data.coor.EastNorth;
 import org.openstreetmap.josm.data.coor.LatLon;
 import org.openstreetmap.josm.data.projection.Puwg;
@@ -36,6 +38,13 @@ public class PUWG92 implements Coordinates {
 		lon = latLon.getX();
 	}
 
+	public static void main(String[] args) {
+		
+		String value = "297 x 420 (A3)";
+		value= value.replaceAll(" |([(].*[)])",""); 
+		Object x = Arrays.asList(value.split("[^0-9]"));
+		System.out.println(x);
+	}
 	@Override
 	public double getLat() {
 		return lat;
@@ -54,6 +63,6 @@ public class PUWG92 implements Coordinates {
 
 	@Override
 	public String toString() {
-		return String.format("Pugw[%02f, %02f]",x,y);
+		return String.format("X %02.0f Y %02.0f",y,x);
 	}
 }

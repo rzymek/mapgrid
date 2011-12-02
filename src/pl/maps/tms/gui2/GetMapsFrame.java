@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -22,6 +24,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import pl.maps.tms.gui.JOptionsPanel;
 import pl.maps.tms.gui.JTileMapView;
@@ -32,7 +37,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class GetMapsFrame extends JFrame {
-
 	private JPanel contentPane;
 	private JSplitPane splitPane;
 
@@ -40,10 +44,12 @@ public class GetMapsFrame extends JFrame {
 	private JOptionsPanel coords;
 	private JViewCacheStatus viewCacheStatus;
 	private JSpinner exportZoom;
-	private final ButtonGroup toolbarButtons = new ButtonGroup();
+	protected final ButtonGroup toolbarButtons = new ButtonGroup();
 	private JComboBox providersCombo;
-	private JTileMapView tileMapView;
-
+	protected JTileMapView tileMapView;
+	private JTextPane selectionCoords;
+	private JLabel selectionSize;
+	protected JComboBox aspectRatio;
 
 	/**
 	 * Create the frame.
@@ -77,19 +83,30 @@ public class GetMapsFrame extends JFrame {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				RowSpec.decode("default:grow"),
-				RowSpec.decode("bottom:pref"),}));
+				RowSpec.decode("pref:grow"),
+				FormFactory.PREF_ROWSPEC,}));
 		
 		JToolBar toolBar_1 = new JToolBar();
 		panel_1.add(toolBar_1, "1, 2");
 		
 		JToggleButton tglbtnMove = new JToggleButton("Move");
+		tglbtnMove.setActionCommand("MOVE");
+		tglbtnMove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				toolbarAction();
+			}
+		});
 		tglbtnMove.setSelected(true);
 		toolbarButtons.add(tglbtnMove);
 		toolBar_1.add(tglbtnMove);
 		
 		JToggleButton tglbtnSelect = new JToggleButton("Select");
+		tglbtnSelect.setActionCommand("SELECT");
+		tglbtnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				toolbarAction();
+			}
+		});
 		toolbarButtons.add(tglbtnSelect);
 		toolBar_1.add(tglbtnSelect);
 		
@@ -131,6 +148,11 @@ public class GetMapsFrame extends JFrame {
 		panel_2.add(btnNewButton, "2, 6, center, default");
 		
 		exportZoom = new JSpinner();
+		exportZoom.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				zoomChanged();
+			}
+		});
 		exportZoom.setModel(new SpinnerNumberModel(new Integer(9), null, null, new Integer(1)));
 		exportZoom.setMinimumSize(new Dimension(20, 20));
 		panel_2.add(exportZoom, "3, 6");
@@ -146,29 +168,54 @@ public class GetMapsFrame extends JFrame {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("fill:default:grow"),}));
 		
 		JLabel lblZaznaczenie = new JLabel("Zaznaczenie");
 		panel_3.add(lblZaznaczenie, "2, 2");
 		
-		JTextPane txtpnSelectioncoords = new JTextPane();
-		txtpnSelectioncoords.setBorder(new LineBorder(new Color(0, 0, 0)));
-		txtpnSelectioncoords.setText("11111\n22222");
-		panel_3.add(txtpnSelectioncoords, "2, 4, fill, top");
+		aspectRatio = new JComboBox();
+		aspectRatio.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				setRatio();
+			}
+		});
+		aspectRatio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setRatio();
+			}
+		});
+		aspectRatio.setModel(new DefaultComboBoxModel(new String[] {"", "297:420 (A3)", "420:297 (A3 landscape)", "210:297 (A4)", "297:210 (A4 landscape)"}));
+		aspectRatio.setEditable(true);
+		panel_3.add(aspectRatio, "2, 4, fill, default");
 		
-		JLabel lblInfo = new JLabel("<html><pre>2456 x 2314m\n4031 x 4133 px</pre></html>");
-		panel_3.add(lblInfo, "2, 5");
+		selectionCoords = new JTextPane();
+		selectionCoords.setEditable(false);
+		selectionCoords.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel_3.add(selectionCoords, "2, 6, fill, top");
+		
+		selectionSize = new JLabel("");
+		selectionSize.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_3.add(selectionSize, "2, 7");
 		
 		viewCacheStatus = new JViewCacheStatus();
 		viewCacheStatus.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_3.add(viewCacheStatus, "2, 6, fill, fill");
+		panel_3.add(viewCacheStatus, "2, 8, fill, fill");
 		
 		coords = new JOptionsPanel();
 		coords.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_1.add(coords, "1, 5, fill, bottom");
+		panel_1.add(coords, "1, 5, fill, fill");
 	}
 	
+	protected void zoomChanged() {
+	}
+
+	protected void toolbarAction() {
+	}
+
 	protected void providerSelected(JComboBox combo) {
 	}
 
@@ -193,4 +240,23 @@ public class GetMapsFrame extends JFrame {
 	protected JTileMapView getMapView() {
 		return tileMapView;
 	}
+	public void setSelectionCoords(String text) {
+		selectionCoords.setText(text);
+	}
+	public void setSelectionSizeText(String text) {
+		selectionSize.setText("<html><pre>"+text+"</pre></html>");
+	}
+	protected void setRatio() {
+		getMapView().selection.setRatio(getSelectionAspectRatio());
+		getMapView().repaint();
+	}
+	
+	public float getSelectionAspectRatio() {
+		String value = String.valueOf(aspectRatio.getModel().getSelectedItem());
+		value = value.replaceAll(" |([(].*[)])",""); //remove spaces and "(...)"
+		String[] split = value.split("[^0-9]");
+		if(split.length < 2)
+			return 0f;
+		return (float) Integer.parseInt(split[0]) / (float) Integer.parseInt(split[1]);
+	}	
 }

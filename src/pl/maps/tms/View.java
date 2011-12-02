@@ -13,7 +13,7 @@ public class View {
 	private Dimension viewSize; // view size
 	private Dimension tileCount = new Dimension(0,0); //cached
 	private int zoom = 0;
-	public boolean showGrid = true;
+	public boolean showGrid = false;
 	
 	private final TileGridProvider grid;
 	private final TileImageProvider images;
@@ -108,13 +108,13 @@ public class View {
 		Position pos = grid.getTilePosition(c, zoom);
 		Dimension ts = grid.getTileSize();
 		int x = (int) ((pos.x - position.x) * ts.width);
-		int y = (int) ((position.y - pos.y) * ts.height);
+		int y = (int) ((pos.y - position.y) * ts.height);
 		return new Point(x,y);
 	}
 
 	public void centerAt(Coordinates c) {
 		setLeftTop(c);
-		move(-viewSize.width/2, -viewSize.height/2);		
+		move(-viewSize.width/2, -viewSize.height/2);
 	}
 
 	public void setLeftTop(Coordinates c) {
