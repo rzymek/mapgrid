@@ -107,8 +107,16 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			Position tp2 = grid.getTilePosition(rb, getZoom());
 			int resx = (int) (Math.abs(tp1.x-tp2.x)*ts.width);
 			int resy = (int) (Math.abs(tp1.y-tp2.y)*ts.height);
-			setSelectionSizeText(width + " x "+height +" m\n" +
-					resx+" x "+resy +" px");
+			
+			String[] aspect= getSelectionApectRatioValues();
+			String msg = width + " x "+height +" m\n" +
+					resx+" x "+resy +" px";
+			if(aspect.length > 1) {
+				int mm = Integer.parseInt(aspect[0]);
+				int scale = width * 100 / mm;
+				msg += "\n1:"+scale;
+			}
+			setSelectionSizeText(msg);
 		}else{
 			setSelectionCoords("");
 			setSelectionSizeText("");			

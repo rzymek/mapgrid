@@ -37,18 +37,18 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class GetMapsFrame extends JFrame {
-	private JPanel contentPane;
-	private JSplitPane splitPane;
+	private final JPanel contentPane;
+	private final JSplitPane splitPane;
 
-	private JPanel panel;
-	private JOptionsPanel coords;
-	private JViewCacheStatus viewCacheStatus;
-	private JSpinner exportZoom;
+	private final JPanel panel;
+	private final JOptionsPanel coords;
+	private final JViewCacheStatus viewCacheStatus;
+	private final JSpinner exportZoom;
 	protected final ButtonGroup toolbarButtons = new ButtonGroup();
-	private JComboBox providersCombo;
+	private final JComboBox providersCombo;
 	protected JTileMapView tileMapView;
-	private JTextPane selectionCoords;
-	private JLabel selectionSize;
+	private final JTextPane selectionCoords;
+	private final JLabel selectionSize;
 	protected JComboBox aspectRatio;
 
 	/**
@@ -92,6 +92,7 @@ public class GetMapsFrame extends JFrame {
 		JToggleButton tglbtnMove = new JToggleButton("Move");
 		tglbtnMove.setActionCommand("MOVE");
 		tglbtnMove.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				toolbarAction();
 			}
@@ -103,6 +104,7 @@ public class GetMapsFrame extends JFrame {
 		JToggleButton tglbtnSelect = new JToggleButton("Select");
 		tglbtnSelect.setActionCommand("SELECT");
 		tglbtnSelect.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				toolbarAction();
 			}
@@ -131,6 +133,7 @@ public class GetMapsFrame extends JFrame {
 		
 		providersCombo = new JComboBox();
 		providersCombo.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox combo = (JComboBox) e.getSource();
 				providerSelected(combo);
@@ -141,6 +144,7 @@ public class GetMapsFrame extends JFrame {
 		
 		JButton btnNewButton = new JButton("Zapisz");
 		btnNewButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				export();
 			}
@@ -149,6 +153,7 @@ public class GetMapsFrame extends JFrame {
 		
 		exportZoom = new JSpinner();
 		exportZoom.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent e) {
 				zoomChanged();
 			}
@@ -184,6 +189,7 @@ public class GetMapsFrame extends JFrame {
 			}
 		});
 		aspectRatio.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setRatio();
 			}
@@ -252,11 +258,16 @@ public class GetMapsFrame extends JFrame {
 	}
 	
 	public float getSelectionAspectRatio() {
-		String value = String.valueOf(aspectRatio.getModel().getSelectedItem());
-		value = value.replaceAll(" |([(].*[)])",""); //remove spaces and "(...)"
-		String[] split = value.split("[^0-9]");
+		String[] split = getSelectionApectRatioValues();
 		if(split.length < 2)
 			return 0f;
 		return (float) Integer.parseInt(split[0]) / (float) Integer.parseInt(split[1]);
+	}
+
+	protected String[] getSelectionApectRatioValues() {
+		String value = String.valueOf(aspectRatio.getModel().getSelectedItem());
+		value = value.replaceAll(" |([(].*[)])",""); //remove spaces and "(...)"
+		String[] split = value.split("[^0-9]");
+		return split;
 	}	
 }
