@@ -7,18 +7,17 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 import pl.maps.tms.Position;
 import pl.maps.tms.TileGridProvider;
-import pl.maps.tms.View;
+import pl.maps.tms.ViewInfo;
 import pl.maps.tms.cache.CacheEntry;
 import pl.maps.tms.cache.TileCache;
 import pl.maps.tms.cacheing.AsyncFetchListener;
 import pl.maps.tms.cacheing.TileSpec;
 
 public class JViewCacheStatus extends JComponent implements AsyncFetchListener {
-	private View view;
+	private ViewInfo view;
 	private TileCache cache;
 	private BufferedImage img;
 
@@ -37,14 +36,14 @@ public class JViewCacheStatus extends JComponent implements AsyncFetchListener {
 		return view.getTileCount();
 	};
 	
-	public void setView(View view, TileCache cache) {
+	public void setView(ViewInfo view, TileCache cache) {
 		this.view = view;
 		this.cache = cache;
 		TileGridProvider grid = view.getGrid();
 		Dimension tc = view.getTileCount();
 		img = new BufferedImage(tc.width + 1, tc.height + 1, BufferedImage.TYPE_3BYTE_BGR);
 		updateImage(grid, img);
-		JPanel p = (JPanel) getParent();
+		JComponent p = (JComponent) getParent();
 		p.revalidate();
 	}
 

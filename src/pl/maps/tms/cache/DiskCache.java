@@ -43,6 +43,7 @@ public class DiskCache extends AsyncTileCache {
 
 	@Override
 	public synchronized void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
+		super.setCacheEntry(spec, entry);
 		storeOnDisk(dir, spec, entry);
 	}
 

@@ -9,7 +9,7 @@ import pl.maps.tms.utils.Range;
 import pl.maps.tms.utils.Utils;
 
 public class GeoportalTileProvider implements TileProvider {
-	private static final Dimension GRID = new Dimension(3,2);
+	public static final Dimension GRID = new Dimension(3,2);
 	private static final long LZTS = 409600;
 	private static final long WIDTH_IN_METERS = LZTS*GRID.width;
 	private static final long HEIGHT_IN_METERS = LZTS*GRID.height;

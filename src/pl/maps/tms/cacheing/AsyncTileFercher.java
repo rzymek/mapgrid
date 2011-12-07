@@ -25,7 +25,6 @@ public final class AsyncTileFercher {
 	}	
 	
 	public void fetch(TileSpec tile) throws Exception {
-		System.out.println("fetch: "+tile);
 		queue.put(tile);
 	}
 }

@@ -112,4 +112,5 @@ public class Selection {
 			points[i] = view.getCoordinates(p.x, p.y);
 		}
 	}
+
 }

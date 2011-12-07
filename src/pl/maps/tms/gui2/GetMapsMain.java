@@ -42,7 +42,7 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	private static final int THREADS = 2;	
 	private AsyncTileCache imagesProvider;	
 
-	private static TileProvider[] providers = {
+	public static TileProvider[] providers = {
 			new GeoportalTileProvider(),
 			new OSMTileProvider()
 	};
@@ -77,7 +77,6 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 		mapview.addSelectionChangedListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				// TODO Auto-generated method stub
 				updateSelectionInfo();
 			}
 		});
@@ -108,7 +107,7 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			int resx = (int) (Math.abs(tp1.x-tp2.x)*ts.width);
 			int resy = (int) (Math.abs(tp1.y-tp2.y)*ts.height);
 			
-			String[] aspect= getSelectionApectRatioValues();
+			String[] aspect= getSelectionApectRatioValues(aspectRatio);
 			String msg = width + " x "+height +" m\n" +
 					resx+" x "+resy +" px";
 			if(aspect.length > 1) {
@@ -200,5 +199,9 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			--i;
 		}
 		return element;
+	}
+	
+	@Override
+	protected void scaleChanged() {
 	}
 }

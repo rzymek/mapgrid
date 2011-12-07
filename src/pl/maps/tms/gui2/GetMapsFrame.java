@@ -40,16 +40,17 @@ public class GetMapsFrame extends JFrame {
 	private final JPanel contentPane;
 	private final JSplitPane splitPane;
 
-	private final JPanel panel;
-	private final JOptionsPanel coords;
-	private final JViewCacheStatus viewCacheStatus;
-	private final JSpinner exportZoom;
+	private JPanel panel;
+	private JOptionsPanel coords;
+	private JViewCacheStatus viewCacheStatus;
+	private JSpinner exportZoom;
 	protected final ButtonGroup toolbarButtons = new ButtonGroup();
-	private final JComboBox providersCombo;
+	private JComboBox providersCombo;
 	protected JTileMapView tileMapView;
-	private final JTextPane selectionCoords;
-	private final JLabel selectionSize;
+	private JTextPane selectionCoords;
+	private JLabel selectionSize;
 	protected JComboBox aspectRatio;
+	protected JComboBox scaleBox;
 
 	/**
 	 * Create the frame.
@@ -92,7 +93,6 @@ public class GetMapsFrame extends JFrame {
 		JToggleButton tglbtnMove = new JToggleButton("Move");
 		tglbtnMove.setActionCommand("MOVE");
 		tglbtnMove.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				toolbarAction();
 			}
@@ -133,7 +133,6 @@ public class GetMapsFrame extends JFrame {
 		
 		providersCombo = new JComboBox();
 		providersCombo.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				JComboBox combo = (JComboBox) e.getSource();
 				providerSelected(combo);
@@ -144,7 +143,6 @@ public class GetMapsFrame extends JFrame {
 		
 		JButton btnNewButton = new JButton("Zapisz");
 		btnNewButton.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				export();
 			}
@@ -153,7 +151,6 @@ public class GetMapsFrame extends JFrame {
 		
 		exportZoom = new JSpinner();
 		exportZoom.addChangeListener(new ChangeListener() {
-			@Override
 			public void stateChanged(ChangeEvent e) {
 				zoomChanged();
 			}
@@ -175,6 +172,8 @@ public class GetMapsFrame extends JFrame {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("fill:default:grow"),}));
 		
@@ -189,7 +188,6 @@ public class GetMapsFrame extends JFrame {
 			}
 		});
 		aspectRatio.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				setRatio();
 			}
@@ -198,24 +196,45 @@ public class GetMapsFrame extends JFrame {
 		aspectRatio.setEditable(true);
 		panel_3.add(aspectRatio, "2, 4, fill, default");
 		
+		scaleBox = new JComboBox();
+		scaleBox.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				scaleChanged();
+			}
+		});
+		scaleBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				scaleChanged();
+			}
+		});
+		scaleBox.setEditable(true);
+		scaleBox.setModel(new DefaultComboBoxModel(new String[] {"", "1:1 000", "1:10 000", "1:20 000", "1:30 000", "1:5 000", "1:15 000"}));
+		panel_3.add(scaleBox, "2, 6, fill, default");
+		
 		selectionCoords = new JTextPane();
 		selectionCoords.setEditable(false);
 		selectionCoords.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_3.add(selectionCoords, "2, 6, fill, top");
+		panel_3.add(selectionCoords, "2, 8, fill, top");
 		
 		selectionSize = new JLabel("");
 		selectionSize.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_3.add(selectionSize, "2, 7");
+		panel_3.add(selectionSize, "2, 9");
 		
 		viewCacheStatus = new JViewCacheStatus();
 		viewCacheStatus.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_3.add(viewCacheStatus, "2, 8, fill, fill");
+		panel_3.add(viewCacheStatus, "2, 10, fill, fill");
 		
 		coords = new JOptionsPanel();
 		coords.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_1.add(coords, "1, 5, fill, fill");
 	}
 	
+	protected void scaleChanged() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	protected void zoomChanged() {
 	}
 
@@ -257,15 +276,24 @@ public class GetMapsFrame extends JFrame {
 		getMapView().repaint();
 	}
 	
+	protected float getRatio(JComboBox combo) {
+		String value = String.valueOf(combo.getModel().getSelectedItem());
+		value = value.replaceAll(" |([(].*[)])",""); //remove spaces and "(...)"
+		String[] split = value.split("[^0-9]");
+		if(split.length < 2)
+			return 0f;
+		return (float) Integer.parseInt(split[0]) / (float) Integer.parseInt(split[1]);
+	}	
+	
 	public float getSelectionAspectRatio() {
-		String[] split = getSelectionApectRatioValues();
+		String[] split = getSelectionApectRatioValues(aspectRatio);
 		if(split.length < 2)
 			return 0f;
 		return (float) Integer.parseInt(split[0]) / (float) Integer.parseInt(split[1]);
 	}
 
-	protected String[] getSelectionApectRatioValues() {
-		String value = String.valueOf(aspectRatio.getModel().getSelectedItem());
+	protected String[] getSelectionApectRatioValues(JComboBox comboBox) {
+		String value = String.valueOf(comboBox.getModel().getSelectedItem());
 		value = value.replaceAll(" |([(].*[)])",""); //remove spaces and "(...)"
 		String[] split = value.split("[^0-9]");
 		return split;

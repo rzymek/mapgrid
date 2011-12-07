@@ -8,7 +8,7 @@ import java.awt.Point;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 
-public class View {
+public class View implements ViewInfo {
 	private Position position;
 	private Dimension viewSize; // view size
 	private Dimension tileCount = new Dimension(0,0); //cached
@@ -28,9 +28,11 @@ public class View {
 	public TileImageProvider getTileImageProvider() {
 		return images;
 	}
+	@Override
 	public Dimension getTileCount() {
 		return tileCount;
 	}
+	@Override
 	public TileGridProvider getGrid() {
 		return grid;
 	}
@@ -88,6 +90,7 @@ public class View {
 		}
 	}
 	
+	@Override
 	public Position getPosition() {
 		return position;
 	}
@@ -121,6 +124,7 @@ public class View {
 		position = grid.getTilePosition(c, zoom);
 	}
 
+	@Override
 	public int getZoom() {
 		return zoom;
 	}
