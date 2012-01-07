@@ -10,11 +10,17 @@
 	</information>
 	<resources>
 		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
-		<jar href="mapgrid-1.131.jar" />
-		@DEPS@
-		<jar href="jcoord-1.0.jar"/>
-		<jar href="josm-tested.jar"/>
+		<jar href="mapgrid-1.132.jar" />
+
+		<jar href="clibwrapper_jiio.jar"/>
+		<jar href="jai_imageio.jar"/>
+		<jar href="libclib_jiio.so.jar"/>
 		<jar href="JavaAPIforKml.jar"/>
+		<jar href="jcoord-1.0.jar"/>
+		<jar href="jgoodies-common-1.2.1.jar"/>
+		<jar href="jgoodies-forms-1.4.2.jar"/>
+		<jar href="josm-tested.jar"/>
+
 		<!-- Wyłącznie dla obsługi większej ilości plików graficznych (m.in. tiff). 
 		Bez tego aplikacja też ruszy 
 		<extension href="http://download.java.net/media/jai-imageio/webstart/release/jai-imageio-1.1-latest.jnlp"/>
