@@ -18,9 +18,11 @@ import pl.maps.tms.providers.GeoportalTileProvider;
 
 public class Export {
 	private final AsyncTileCache cache;
+	private final File file;
 	
-	public Export(AsyncTileCache cache) {
+	public Export(AsyncTileCache cache, File file) {
 		this.cache = cache;
+		this.file = file;
 	}
 	
 	public void export(Coordinates loc1, Coordinates loc2, View view) {
@@ -30,13 +32,19 @@ public class Export {
 			BufferedImage img = new BufferedImage(s.width, s.height, BufferedImage.TYPE_3BYTE_BGR);
 			view.paint(img.getGraphics());
 			
-			ImageIO.write(img, "jpg", new File("export.jpg"));
-			writeCalib(view, s.width, s.height, "export");
-			writeTFWCalib(loc1, loc2, s.width, s.height, "export.tfw");
+			ImageIO.write(img, "jpg", file);
+			String baseName = getBaseName(file);
+			writeCalib(view, s.width, s.height, baseName);
+			writeTFWCalib(loc1, loc2, s.width, s.height, baseName+".tfw");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
+	}
+
+	private static String getBaseName(File file) {
+		String path = file.getPath();
+		return path.substring(0, path.lastIndexOf('.'));
 	}
 
 	public View createView(Coordinates loc1, Coordinates loc2, int zoom) {

@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.File;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -45,10 +46,10 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		repaint();
 	}
 	
-	public void exportSelection(JViewCacheStatus status, int zoom) {
+	public void exportSelection(File file, JViewCacheStatus status, int zoom) {
 		cachingProvider.removeListener(status);
 		cachingProvider.addListener(status);
-		Export export = new Export(cachingProvider);		
+		Export export = new Export(cachingProvider, file);		
 		Coordinates p1 = selection.getPoint(Corner.LEFT_TOP);
 		Coordinates p2 = selection.getPoint(Corner.RIGHT_BOTTOM);
 		View v = export.createView(p1, p2, zoom);
@@ -58,6 +59,7 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		JOptionPane.showMessageDialog(this, "Saved");
 	}
 
+	@Override
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0,0,getWidth(), getHeight());

@@ -11,18 +11,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.Enumeration;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
+import pl.mapgrid.gui.Abort;
+import pl.mapgrid.gui.FileChooserSingleton;
 import pl.maps.tms.HTTPTileImageProvider;
 import pl.maps.tms.Position;
 import pl.maps.tms.TileGridProvider;
@@ -143,14 +147,20 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	
 	@Override
 	protected void export() {
-		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				getMapView().exportSelection(getCacheStatus(), getZoom());				
-				return null;
-			}
-		};
-		worker.execute();		
+		JFileChooser chooser = FileChooserSingleton.instance().getImageChooser();
+		try {
+			final File file = FileChooserSingleton.getSelectedFile(chooser, this);
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					getMapView().exportSelection(file, getCacheStatus(), getZoom());				
+					return null;
+				}
+			};
+			worker.execute();
+		} catch (Abort e) {
+			//aborting
+		}
 	}
 	protected int getZoom() {
 		Number value = (Number) getExportZoom().getValue();
