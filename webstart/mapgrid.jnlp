@@ -3,14 +3,14 @@
 	codebase="http://mapgrid.googlecode.com/files/" 	
  	href="http://mapgrid.googlecode.com/svn/trunk/webstart/mapgrid.jnlp">
 	<information>
-		<title>mapgrid</title>
+		<title>GetMap</title>
 		<vendor>Rzymek FIA</vendor>		
-		<description>Operacje na siatkach na mapach rastrowych</description>
+		<description>Pobieranie map z GeoPortalu</description>
 		<offline-allowed />
 	</information>
 	<resources>
 		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
-		<jar href="mapgrid-1.135.jar" />
+		<jar href="mapgrid-1.136.jar" />
 
 		<jar href="clibwrapper_jiio.jar"/>
 		<jar href="jai_imageio.jar"/>
