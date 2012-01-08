@@ -10,7 +10,7 @@
 	</information>
 	<resources>
 		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
-		<jar href="mapgrid-1.136.jar" />
+		<jar href="mapgrid-1.137.jar" />
 
 		<jar href="clibwrapper_jiio.jar"/>
 		<jar href="jai_imageio.jar"/>
@@ -26,7 +26,7 @@
 		<extension href="http://download.java.net/media/jai-imageio/webstart/release/jai-imageio-1.1-latest.jnlp"/>
 		-->
 	</resources>
-	<application-desc main-class="pl.maps.tms.gui2.GetMapsFrame" />
+	<application-desc main-class="pl.maps.tms.gui2.GetMapsMain" />
 	<security>
 		<all-permissions />
 	</security>
