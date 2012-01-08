@@ -77,7 +77,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
-		autoload();
+//		autoload();
 	}
 
 	private void autoload() {

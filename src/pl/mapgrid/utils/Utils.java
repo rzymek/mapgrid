@@ -50,4 +50,9 @@ public class Utils {
 		}
 	}
 
+	public static String getBaseName(File file) {
+		String path = file.getPath();
+		return path.substring(0, path.lastIndexOf('.'));
+	}
+
 }

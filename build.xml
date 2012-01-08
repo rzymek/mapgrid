@@ -2,19 +2,42 @@
 	<property file="build.properties"/>
 	<property file="build.user.properties"/>
 
-	<target name="release" depends="build,upload,update.webstart"/>
+	<target name="release" depends="build,sign.lib,upload,update.webstart" description="Release"/>
+
+	<macrodef name="googleupload">
+		<attribute name="label"/>
+		<attribute name="file"/>
+		<attribute name="desc"/>
+		<sequential>
+			<echo>Uploading @{file}...</echo>
+			<exec executable="googlecode_upload.py">
+				<arg line="-p mapgrid"/>
+				<arg line="-l '@{label}'"/>
+				<arg line="-s '@{desc}'"/>
+				<arg line="-u '${google.code.user}'"/>
+				<arg line="-w '${google.code.password}'"/>
+				<arg line="'@{file}'"/>
+			</exec>
+		</sequential>
+	</macrodef>
 	
-	<target name="upload">
-		<exec executable="googlecode_upload.py">
-			<arg line="-p mapgrid build/mapgrid-${version}.jar"/>
-			<arg line="-l Featured,Type-Package,OpSys-All"/>
-			<arg line="-s Wersja:${version}"/>
-			<arg line="-u ${google.code.user}"/>
-			<arg line="-w ${google.code.password}"/>
-		</exec>
+	
+	<target name="upload"  depends="version">
+		<googleupload file="build/mapgrid-${version}.jar" label="Featured,Type-Package,OpSys-All" desc="Wersja: ${version}"/>
 		<echo>Uploaded mapgrid-${version}.jar</echo>
 	</target>
-	
+
+	<target name="upload.deps">
+		<googleupload file="lib/jai/clibwrapper_jiio.jar" label="Dependency" desc="Dependency"/>
+		<googleupload file="lib/jai/jai_imageio.jar" label="Dependency" desc="Dependency"/>
+		<googleupload file="lib/jai/libclib_jiio.so.jar" label="Dependency" desc="Dependency"/>
+		<googleupload file="lib/JavaAPIforKml.jar" label="Dependency" desc="Dependency"/>
+		<googleupload file="lib/jcoord-1.0.jar" label="Dependency" desc="Dependency"/>
+		<googleupload file="lib/jgoodies-common-1.2.1.jar" label="Dependency" desc="Dependency"/>
+		<googleupload file="lib/jgoodies-forms-1.4.2.jar" label="Dependency" desc="Dependency"/>
+		<googleupload file="lib/josm-tested.jar" label="Dependency" desc="Dependency"/>
+	</target>
+
 	<target name="version" unless="version">
 		<exec executable="svn">
 			<arg line="up src"/>
@@ -55,7 +78,6 @@
 		</exec>
 	</target>
 
-	
 	<target name="create.keystore">
 		<delete file="mapgrid.keystore" />
 		<exec executable="keytool">
@@ -69,8 +91,10 @@
 	</target>
 	
 	<target name="sign.lib">
-		<signjar jar="lib/jcoord-1.0.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
-		<signjar jar="lib/josm-tested.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
-		<signjar jar="lib/JavaAPIforKml.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
+		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="true">
+			<path>
+				<fileset dir="lib" includes="**/*.jar"/>
+			</path>
+		</signjar>
 	</target>
 </project>

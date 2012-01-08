@@ -21,12 +21,11 @@ public abstract class GridGraphics {
 		@Doc("UTM: kolor lini")
 		public Color[] lineColors = {
 			new Color(0,0,0,128),
-			new Color(255,255,255,128),
 		};
 		@Doc("UTM: grubość lini")
 		public int lineSize = 3;
 		@Doc("UTM: grubość ramki")
-		public int border=20;
+		public int border=40;
 		@Doc("UTM: styl czcionki (1=bold, 2=italic)")
 		public int fontStyle = Font.BOLD;
 		@Doc("UTM: font")

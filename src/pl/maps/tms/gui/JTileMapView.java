@@ -10,7 +10,6 @@ import java.awt.Rectangle;
 import java.io.File;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.event.ChangeListener;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
@@ -56,7 +55,6 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		status.setView(v, cachingProvider);
 		export.export(p1, p2, v);
 		status.repaint();
-		JOptionPane.showMessageDialog(this, "Saved");
 	}
 
 	@Override

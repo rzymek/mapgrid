@@ -11,6 +11,7 @@ import java.util.Locale;
 import javax.imageio.ImageIO;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
+import pl.mapgrid.utils.Utils;
 import pl.maps.tms.HTTPTileImageProvider;
 import pl.maps.tms.View;
 import pl.maps.tms.cache.AsyncTileCache;
@@ -33,18 +34,13 @@ public class Export {
 			view.paint(img.getGraphics());
 			
 			ImageIO.write(img, "jpg", file);
-			String baseName = getBaseName(file);
+			String baseName = Utils.getBaseName(file);
 			writeCalib(view, s.width, s.height, baseName);
 			writeTFWCalib(loc1, loc2, s.width, s.height, baseName+".tfw");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
-	}
-
-	private static String getBaseName(File file) {
-		String path = file.getPath();
-		return path.substring(0, path.lastIndexOf('.'));
 	}
 
 	public View createView(Coordinates loc1, Coordinates loc2, int zoom) {

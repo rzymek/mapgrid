@@ -19,10 +19,13 @@ import javax.swing.ButtonModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import pl.mapgrid.app.Main;
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.gui.Abort;
@@ -153,7 +156,14 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					getMapView().exportSelection(file, getCacheStatus(), getZoom());				
+					getMapView().exportSelection(file, getCacheStatus(), getZoom());
+					int res = JOptionPane.showConfirmDialog(GetMapsMain.this, "Czy chcesz nałożyć na mapę siatkę UTM?", "Siatka?", JOptionPane.YES_NO_OPTION);
+					if(res == JOptionPane.YES_OPTION) {
+						pl.mapgrid.app.Main main = new Main();
+						File tfw = new File(pl.mapgrid.utils.Utils.getBaseName(file)+".tfw");
+						main.open(tfw);
+						SwingUtilities.invokeLater(main);
+					}
 					return null;
 				}
 			};
