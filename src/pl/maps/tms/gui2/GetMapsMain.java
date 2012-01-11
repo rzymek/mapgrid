@@ -28,6 +28,7 @@ import javax.swing.event.ChangeListener;
 import pl.mapgrid.app.Main;
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
+import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.gui.Abort;
 import pl.mapgrid.gui.FileChooserSingleton;
 import pl.maps.tms.HTTPTileImageProvider;
@@ -223,5 +224,20 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	
 	@Override
 	protected void scaleChanged() {
+		String[] scaleArr = getSelectionApectRatioValues(scaleBox);
+		int scale = Integer.parseInt(scaleArr[1]);		
+		String[] aspectRatioArr = getSelectionApectRatioValues(aspectRatio);
+		int[] aspectRatio = {
+			Integer.parseInt(aspectRatioArr[0]),
+			Integer.parseInt(aspectRatioArr[1]),
+		};
+		
+		Selection selection = getMapView().getSelection();
+		Coordinates lt = selection.getPoint(Corner.LEFT_TOP);
+		double x = aspectRatio[0] * scale / 1000;
+		double y = aspectRatio[1] * scale / 1000;
+		PUWG92 rb = new PUWG92(lt.getX() + x, lt.getY() + y);
+		selection.setPoint(Corner.RIGHT_BOTTOM, rb);
+		getMapView().repaint();
 	}
 }

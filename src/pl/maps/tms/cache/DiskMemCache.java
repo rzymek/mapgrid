@@ -26,7 +26,7 @@ public class DiskMemCache extends MemCache {
 	}
 
 	@Override
-	public synchronized CacheEntry getCacheEntry(TileSpec spec) throws Exception {
+	public CacheEntry getCacheEntry(TileSpec spec) throws Exception {
 		CacheEntry entry = super.getCacheEntry(spec);
 		if(entry != null)
 			return entry;
@@ -38,7 +38,7 @@ public class DiskMemCache extends MemCache {
 	}
 
 	@Override
-	public synchronized void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
+	public void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
 		super.setCacheEntry(spec, entry);
 		DiskCache.storeOnDisk(dir, spec, entry);
 	}

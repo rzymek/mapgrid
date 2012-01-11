@@ -25,13 +25,22 @@ public class BackupMain extends BackupFrame implements Runnable {
 	private final class TileFetcher extends SwingWorker<Void, Void> {
 		@Override
 		protected Void doInBackground() throws Exception {
+			getStartStopButton().setText("Stop");
+			
 			Dimension tc = view.getTileCount();
 			int zoom = view.getZoom();
 			long total = (tc.width+1)*(tc.height+1);
 			int count=0;
 			for(int x=0;x<=tc.width;x++) {
 				for(int y=0;y<=tc.height;y++) {
-					Image tile = cache.getTile(x, y, zoom);
+					int xx = (x + tc.width/2) % (tc.width+1);
+					int yy = (y + tc.height/2) % (tc.height+1);
+					long s1 = System.currentTimeMillis();
+					Image tile = cache.getTile(xx, yy, zoom);
+					getViewCacheStatus().imageFetched(null, null);
+					System.out.println(tile);
+					long s2 = System.currentTimeMillis();
+					System.out.println("getTile:"+(s2-s1));
 					getProgressBar().setValue((int) (++count*100/total));
 				}
 			}
@@ -55,7 +64,8 @@ public class BackupMain extends BackupFrame implements Runnable {
 	@Override
 	public void run() {
 		Range zoomRange = provider.getZoomRange();
-		SpinnerModel model = new SpinnerNumberModel(zoomRange.min, zoomRange.min, zoomRange.max, 1); 
+		SpinnerModel model = new SpinnerNumberModel((zoomRange.max - zoomRange.min)/2,
+				zoomRange.min, zoomRange.max, 1); 
 		getZoomSpinner().setModel(model);
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -74,16 +84,15 @@ public class BackupMain extends BackupFrame implements Runnable {
 	protected void startStop() {
 		if(worker == null) {
 			start();			
-			getStartStopButton().setText("Stop");
 		}else{
 			stop();
-			getStartStopButton().setText("Start");
 		}
 	}
 	
 	private void stop() {
 		worker.cancel(true);
 		worker = null;
+		finished();
 	}
 	
 	private void start() {
@@ -118,8 +127,7 @@ public class BackupMain extends BackupFrame implements Runnable {
 	private AsyncTileCache createImagesProvider(TileProvider provider, int threads) {
 		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);		
 		Image waiting = Utils.createWaitingImage(provider);
-		DiskCache images = new DiskCache(http, threads, waiting, "cache/"+provider.getClass().getSimpleName());
-		return images;
+		return new DiskCache(http, threads, waiting, "cache/"+provider.getClass().getSimpleName());
 	}
 	
 	@Override

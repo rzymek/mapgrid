@@ -83,7 +83,7 @@ public class BackupFrame extends JFrame {
 		panel.add(lblLiczbaWtkw, "2, 2");
 		
 		threadsSpinner = new JSpinner();
-		threadsSpinner.setModel(new SpinnerNumberModel(new Byte((byte) 2), new Byte((byte) 1), new Byte((byte) 20), new Byte((byte) 1)));
+		threadsSpinner.setModel(new SpinnerNumberModel(new Byte((byte) 8), new Byte((byte) 1), new Byte((byte) 100), new Byte((byte) 1)));
 		panel.add(threadsSpinner, "2, 4");
 		
 		startStopButton = new JButton("Start");
@@ -97,6 +97,7 @@ public class BackupFrame extends JFrame {
 		panel.add(lblZoom, "2, 6");
 		
 		zoomSpinner = new JSpinner();
+		zoomSpinner.setModel(new SpinnerNumberModel(new Integer(4), null, null, new Integer(1)));
 		zoomSpinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				zoomSpinnerChanged();

@@ -231,8 +231,6 @@ public class GetMapsFrame extends JFrame {
 	}
 	
 	protected void scaleChanged() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	protected void zoomChanged() {

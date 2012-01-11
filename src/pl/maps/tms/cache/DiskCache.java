@@ -29,7 +29,7 @@ public class DiskCache extends AsyncTileCache {
 	}
 
 	@Override
-	public synchronized CacheEntry getCacheEntry(TileSpec spec) throws Exception {
+	public CacheEntry getCacheEntry(TileSpec spec) throws Exception {
 		File file = getFile(dir, spec);
 		if(!file.exists())
 			return null;
@@ -42,7 +42,7 @@ public class DiskCache extends AsyncTileCache {
 	}
 
 	@Override
-	public synchronized void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
+	public void setCacheEntry(TileSpec spec, CacheEntry entry) throws Exception {
 		super.setCacheEntry(spec, entry);
 		storeOnDisk(dir, spec, entry);
 	}

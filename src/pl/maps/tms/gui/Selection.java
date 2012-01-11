@@ -113,4 +113,16 @@ public class Selection {
 		}
 	}
 
+	public double getWidth() {
+		Coordinates lt = getPoint(Corner.LEFT_TOP);
+		Coordinates rb = getPoint(Corner.RIGHT_BOTTOM);
+		return Math.abs(rb.getX() - lt.getX());
+	}
+
+	public double getHeight() {
+		Coordinates lt = getPoint(Corner.LEFT_TOP);
+		Coordinates rb = getPoint(Corner.RIGHT_BOTTOM);
+		return Math.abs(rb.getY() - lt.getY());
+	}
+
 }
