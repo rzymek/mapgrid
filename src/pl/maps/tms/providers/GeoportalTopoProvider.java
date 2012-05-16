@@ -68,7 +68,6 @@ public class GeoportalTopoProvider implements TileProvider {
 			Dimension tc = p.getTileCount(i);
 			System.out.println(i+": "+tc);
 		}
-
 	}
 
 	@Override
