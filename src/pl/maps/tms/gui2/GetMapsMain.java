@@ -36,6 +36,7 @@ import pl.maps.tms.Position;
 import pl.maps.tms.TileGridProvider;
 import pl.maps.tms.cache.AsyncTileCache;
 import pl.maps.tms.cache.DiskMemCache;
+import pl.maps.tms.cache.MemCache;
 import pl.maps.tms.gui.JTileMapView;
 import pl.maps.tms.gui.Selection;
 import pl.maps.tms.gui.Selection.Corner;
@@ -48,7 +49,8 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	private static final LatLon CENTER = new LatLon(52.19413, 21.05139);
 	private static final int SELECTED_PROVIDER = 0;
 	private static final int THREADS = 2;	
-	private AsyncTileCache imagesProvider;	
+	private AsyncTileCache imagesProvider;
+	private final static boolean useDiskCache = true;	
 
 	public static TileProvider[] providers = {
 		new GeoportalTopoProvider(),
@@ -136,10 +138,12 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	private AsyncTileCache createImagesProvider(TileProvider provider) {
 		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);		
 		Image waiting = Utils.createWaitingImage(provider);
-//		MemCache images = new MemCache(http, THREADS, waiting);
+		if(useDiskCache) {
+			return new DiskMemCache(http, THREADS, waiting, "cache/"+provider.getClass().getSimpleName());
+		}else{
+			return new MemCache(http, THREADS, waiting);
+		}
 //		GeoportalBackupImageProvider backup = new GeoportalBackupImageProvider();
-		DiskMemCache images = new DiskMemCache(http, THREADS, waiting, "cache/"+provider.getClass().getSimpleName());
-		return images;
 	}
 	
 	@Override
