@@ -11,19 +11,19 @@ public class GeoportalOrtoProvider extends GeoportalTopoProvider {
 		if (x < 0 || y < 0 || zoom < 0)
 			return null;
 
+		int zoomModif;
+		String layer;		
 		if (zoom > 6) {
-			String layer = "ORTOFOTO";
-			y = getTileCount(zoom).height - 1 - y;
-			String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
-					+ "fileIDX=L${z}X${x}Y${y}.jpg";
-			return Utils.fillTileURLTemplate(url, x, y, zoom - 6);
-		} else {
-			String layer = "ORTO_SAT";
-			y = getTileCount(zoom).height - 1 - y;
-			String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
-					+ "fileIDX=L${z}X${x}Y${y}.jpg";
-			return Utils.fillTileURLTemplate(url, x, y, zoom);
+			layer = "ORTOFOTO";
+			zoomModif = -6;
+		}else{
+			layer = "ORTO_SAT";
+			zoomModif = 0;
 		}
+		y = getTileCount(zoom).height - 1 - y;
+		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
+				+ "fileIDX=L${z}X${x}Y${y}.jpg";
+		return Utils.fillTileURLTemplate(url, x, y, zoom + zoomModif);
 	}
 
 
