@@ -39,8 +39,8 @@ import pl.maps.tms.cache.DiskMemCache;
 import pl.maps.tms.gui.JTileMapView;
 import pl.maps.tms.gui.Selection;
 import pl.maps.tms.gui.Selection.Corner;
-import pl.maps.tms.providers.GeoportalTileProvider;
-import pl.maps.tms.providers.OSMTileProvider;
+import pl.maps.tms.providers.GeoportalOrtoProvider;
+import pl.maps.tms.providers.GeoportalTopoProvider;
 import pl.maps.tms.providers.TileProvider;
 import pl.maps.tms.utils.Utils;
 
@@ -51,8 +51,10 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	private AsyncTileCache imagesProvider;	
 
 	public static TileProvider[] providers = {
-			new GeoportalTileProvider(),
-			new OSMTileProvider()
+		new GeoportalTopoProvider(),
+//		new GeoportalTopoProvider(),
+			new GeoportalOrtoProvider(),
+//			new OSMTileProvider()
 	};
 
 	public static void main(String[] args) {
@@ -71,7 +73,6 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 		JComboBox combo = getProvidersCombo();
 		combo.setModel(new DefaultComboBoxModel(providers));
 		combo.setSelectedItem(provider);
-		providerSelected(combo);
 
 		JTileMapView mapview = getMapView();		
 		mapview.addMouseMotionListener(new MouseMotionAdapter() {
@@ -79,7 +80,9 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			public void mouseMoved(MouseEvent e) {
 				Point p = e.getPoint();
 				Coordinates coordinates = getMapView().view.getCoordinates(p.x, p.y);
+				int zoom = getMapView().view.getZoom();
 				getStatusPanel().setLocation(coordinates);
+				getStatusPanel().setZoom(zoom);
 			}
 		});
 		mapview.addSelectionChangedListener(new ChangeListener() {
@@ -207,6 +210,12 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 				toolbarButtons.setSelected(button.getModel(), true);			
 			}
 			toolbarAction();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_N && e.getID() == KeyEvent.KEY_PRESSED) {
+			JComboBox c = getProvidersCombo();
+			int index  = c.getSelectedIndex() + 1;
+			index = index % c.getItemCount();
+			c.setSelectedIndex(index);
 		}
 		return false;
 	}

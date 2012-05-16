@@ -52,7 +52,7 @@ public class KMLReader implements ShapeReader {
 					Point g = (Point) geometry;				
 					Waypoint<Coordinates> wp = toShape(g);
 					wp.label = placemark.getName();
-					System.out.println(wp.label+"\n"+new UTM(wp.get(0)).toMGRS());
+					System.out.println(new UTM(wp.get(0))+"       "+wp.label);
 					shape = wp;
 				} else if (geometry instanceof Polygon) {
 					Polygon g = (Polygon) geometry;

@@ -15,7 +15,7 @@ import pl.mapgrid.utils.Utils;
 import pl.maps.tms.HTTPTileImageProvider;
 import pl.maps.tms.View;
 import pl.maps.tms.cache.AsyncTileCache;
-import pl.maps.tms.providers.GeoportalTileProvider;
+import pl.maps.tms.providers.GeoportalTopoProvider;
 
 public class Export {
 	private final AsyncTileCache cache;
@@ -44,7 +44,7 @@ public class Export {
 	}
 
 	public View createView(Coordinates loc1, Coordinates loc2, int zoom) {
-		GeoportalTileProvider grid = new GeoportalTileProvider();
+		GeoportalTopoProvider grid = new GeoportalTopoProvider();
 		HTTPTileImageProvider http = new HTTPTileImageProvider(grid);
 		ChainImageProvider images = new ChainImageProvider(cache, http); 
 

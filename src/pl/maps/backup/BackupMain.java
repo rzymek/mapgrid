@@ -15,7 +15,7 @@ import pl.maps.tms.HTTPTileImageProvider;
 import pl.maps.tms.ViewInfo;
 import pl.maps.tms.cache.AsyncTileCache;
 import pl.maps.tms.cache.DiskCache;
-import pl.maps.tms.providers.GeoportalTileProvider;
+import pl.maps.tms.providers.GeoportalTopoProvider;
 import pl.maps.tms.providers.TileProvider;
 import pl.maps.tms.utils.Range;
 import pl.maps.tms.utils.Utils;
@@ -50,13 +50,13 @@ public class BackupMain extends BackupFrame implements Runnable {
 	}
 
 	private TileProvider provider;
-	private Dimension fullViewGrid = GeoportalTileProvider.GRID;
+	private Dimension fullViewGrid = GeoportalTopoProvider.GRID;
 	private SwingWorker<Void, Void> worker = null;
 	private ViewInfo view;
 	private AsyncTileCache cache;
 	
 	public BackupMain() {
-		provider = new GeoportalTileProvider();
+		provider = new GeoportalTopoProvider();
 	}
 	public void finished() {
 		getStartStopButton().setText("Start");

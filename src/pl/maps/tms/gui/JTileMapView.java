@@ -36,9 +36,9 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		listener = new TileMapInputListener(this, grid);
 		View newView = new View(getSize(), grid, images);
 		if(view != null) {			
-			Coordinates center = view.getCoordinates(getWidth()/2, getHeight()/2);
-			newView.centerAt(center);
+			Coordinates lt = view.getCoordinates(0,0);//getWidth()/2, getHeight()/2);
 			newView.setZoom(view.getZoom());
+			newView.setLeftTop(lt);
 		}
 		view = newView;
 		selection = new Selection(view);
@@ -101,7 +101,11 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 	public void centerAt(Coordinates coordinates, int zoom) {
 		view.setZoom(zoom);
 		view.setDimension(getSize());
-		view.centerAt(coordinates);
+//		view.centerAt(coordinates);
+		//tmp{
+		Coordinates lt = view.getCoordinates(0,0);//getWidth()/2, getHeight()/2);
+		view.setLeftTop(lt);
+		//}
 		repaint();
 	}
 

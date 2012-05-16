@@ -51,7 +51,7 @@ public class UTM implements Coordinates {
 
 	@Override
 	public String toString() {
-		return getZone() + " " + easting + " " + northing;
+		return getZone() + " " + (int)easting + " E " + (int)northing + " N";
 	}
 	public String getZone() {
 		return String.format("%c %02d",latZone, lngZone);
