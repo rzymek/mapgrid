@@ -3,7 +3,6 @@ package pl.maps.tms.providers;
 import java.awt.Dimension;
 
 import pl.maps.tms.utils.Range;
-import pl.maps.tms.utils.Utils;
 
 public class GeoportalOrtoProvider extends GeoportalTopoProvider {
 	@Override
@@ -20,12 +19,13 @@ public class GeoportalOrtoProvider extends GeoportalTopoProvider {
 			layer = "ORTO_SAT";
 			zoomModif = 0;
 		}
-		y = getTileCount(zoom).height - 1 - y;
-		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
-				+ "fileIDX=L${z}X${x}Y${y}.jpg";
-		return Utils.fillTileURLTemplate(url, x, y, zoom + zoomModif);
+		return getTileURL(x, y, zoom, zoomModif, layer);
 	}
 
+	@Override
+	public String getName() {
+		return "sat";
+	}
 
 	@Override
 	public String toString() {
@@ -33,7 +33,7 @@ public class GeoportalOrtoProvider extends GeoportalTopoProvider {
 	}
 
 	public static void main(String[] args) {
-		GeoportalOrtoProvider p = new GeoportalOrtoProvider();
+		GeoportalTopoProvider p = new GeoportalOrtoProvider();
 		Range r = p.getZoomRange();
 		for (int i = r.min; i < r.max; i++) {
 			Dimension tc = p.getTileCount(i);

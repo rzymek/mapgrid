@@ -135,7 +135,7 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 		}
 	}
 
-	private AsyncTileCache createImagesProvider(TileProvider provider) {
+	public static AsyncTileCache createImagesProvider(TileProvider provider) {
 		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);		
 		Image waiting = Utils.createWaitingImage(provider);
 		if(useDiskCache) {
@@ -164,13 +164,17 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					getMapView().exportSelection(file, getCacheStatus(), getZoom());
-					int res = JOptionPane.showConfirmDialog(GetMapsMain.this, "Czy chcesz nałożyć na mapę siatkę UTM?", "Siatka?", JOptionPane.YES_NO_OPTION);
-					if(res == JOptionPane.YES_OPTION) {
-						pl.mapgrid.app.Main main = new Main();
-						File tfw = new File(pl.mapgrid.utils.Utils.getBaseName(file)+".tfw");
-						main.open(tfw);
-						SwingUtilities.invokeLater(main);
+					try {
+						File topo = getMapView().exportSelection(file, getCacheStatus(), getZoom(), providers);
+						int res = JOptionPane.showConfirmDialog(GetMapsMain.this, "Czy chcesz nałożyć na mapę siatkę UTM?", "Siatka?", JOptionPane.YES_NO_OPTION);
+						if(res == JOptionPane.YES_OPTION) {
+							pl.mapgrid.app.Main main = new Main();
+							File tfw = pl.mapgrid.utils.Utils.basename(topo, ".tfw");
+							main.open(tfw);
+							SwingUtilities.invokeLater(main);
+						}
+					}catch (Exception e) {
+						e.printStackTrace();
 					}
 					return null;
 				}

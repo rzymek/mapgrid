@@ -24,15 +24,7 @@ public class GeoportalTopoProvider implements TileProvider {
 	public String getTileURL(int x, int y, int zoom) {
 		if (x < 0 || y < 0 || zoom < 0)
 			return null;
-
-		// String layer = zoom < 7 ? "ORTO_SAT" : "ORTOFOTO";
-		// if(zoom >= 7)
-		// zoom -= 7;
-		y = getTileCount(zoom).height - 1 - y;
-		String layer = "RASTER_TOPO";
-		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
-				+ "fileIDX=L${z}X${x}Y${y}.jpg";
-		return Utils.fillTileURLTemplate(url, x, y, zoom);
+		return getTileURL(x,y,zoom, 0, "RASTER_TOPO");
 	}
 
 	@Override
@@ -86,10 +78,20 @@ public class GeoportalTopoProvider implements TileProvider {
 	public Range getZoomRange() {
 		return new Range(0, 11);
 	}
-
+	@Override
+	public String getName() {
+		return "topo";
+	}
 	@Override
 	public String toString() {
 		return "GeoPortal TOPO";
+	}
+
+	protected String getTileURL(int x, int y, int zoom, int zoomModif, String layer) {
+		y = getTileCount(zoom).height - 1 - y;
+		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
+				+ "fileIDX=L${z}X${x}Y${y}.jpg";
+		return Utils.fillTileURLTemplate(url, x, y, zoom + zoomModif);
 	}
 
 }

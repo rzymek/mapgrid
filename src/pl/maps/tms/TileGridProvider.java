@@ -6,6 +6,7 @@ import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.maps.tms.utils.Range;
 
 public interface TileGridProvider {
+	String getName();
 	Range getZoomRange();
 	
 	Dimension getTileSize();

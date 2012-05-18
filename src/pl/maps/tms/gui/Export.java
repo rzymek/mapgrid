@@ -15,7 +15,7 @@ import pl.mapgrid.utils.Utils;
 import pl.maps.tms.HTTPTileImageProvider;
 import pl.maps.tms.View;
 import pl.maps.tms.cache.AsyncTileCache;
-import pl.maps.tms.providers.GeoportalTopoProvider;
+import pl.maps.tms.providers.TileProvider;
 
 public class Export {
 	private final AsyncTileCache cache;
@@ -34,7 +34,7 @@ public class Export {
 			view.paint(img.getGraphics());
 			
 			ImageIO.write(img, "jpg", file);
-			String baseName = Utils.getBaseName(file);
+			String baseName = Utils.basename(file,"").getAbsolutePath();
 			writeCalib(view, s.width, s.height, baseName);
 			writeTFWCalib(loc1, loc2, s.width, s.height, baseName+".tfw");
 		} catch (Exception e) {
@@ -43,12 +43,11 @@ public class Export {
 
 	}
 
-	public View createView(Coordinates loc1, Coordinates loc2, int zoom) {
-		GeoportalTopoProvider grid = new GeoportalTopoProvider();
-		HTTPTileImageProvider http = new HTTPTileImageProvider(grid);
+	public View createView(Coordinates loc1, Coordinates loc2, int zoom, TileProvider provider) {
+		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);
 		ChainImageProvider images = new ChainImageProvider(cache, http); 
 
-		View view = new View(new Dimension(1, 1), grid, images);			
+		View view = new View(new Dimension(1, 1), provider, images);			
 		view.setZoom(zoom);
 		view.setLeftTop(loc1);
 		Point end= view.getPoint(loc2);

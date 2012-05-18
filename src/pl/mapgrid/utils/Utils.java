@@ -20,6 +20,14 @@ public class Utils {
 		return new File(filename);
 	}
 
+	public static File sufix(File f, String text) {
+		String path = f.getPath();
+		String basename = path.substring(0, path.lastIndexOf('.'));
+		String ext = path.substring(path.lastIndexOf('.'));
+		String filename = basename + "-" + text + ext;
+		return new File(filename);
+	}
+	
 	public static String xpath(InputSource source, String xpath) {
 		try {
 			XPathFactory factory = XPathFactory.newInstance();
@@ -48,11 +56,6 @@ public class Utils {
 		case WIDTH:  return image.getWidth();
 		default:     throw new AssertionError("Consitency error:"+type);		
 		}
-	}
-
-	public static String getBaseName(File file) {
-		String path = file.getPath();
-		return path.substring(0, path.lastIndexOf('.'));
 	}
 
 }

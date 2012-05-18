@@ -4,11 +4,12 @@ import java.lang.Thread.UncaughtExceptionHandler;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 
 public abstract class JMainFrame extends JFrame implements UncaughtExceptionHandler, Runnable {
 	public JMainFrame() {
 		Thread.setDefaultUncaughtExceptionHandler(this);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	@Override

@@ -13,13 +13,16 @@ import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
+import pl.mapgrid.utils.Utils;
 import pl.maps.tms.TileGridProvider;
 import pl.maps.tms.View;
 import pl.maps.tms.cache.AsyncTileCache;
 import pl.maps.tms.cacheing.AsyncFetchListener;
 import pl.maps.tms.cacheing.TileSpec;
 import pl.maps.tms.gui.Selection.Corner;
+import pl.maps.tms.gui2.GetMapsMain;
 import pl.maps.tms.gui2.JViewCacheStatus;
+import pl.maps.tms.providers.TileProvider;
 
 public class JTileMapView extends JComponent implements AsyncFetchListener {
 	public static enum Mode { MOVE, SELECT }
@@ -45,16 +48,25 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		repaint();
 	}
 	
-	public void exportSelection(File file, JViewCacheStatus status, int zoom) {
-		cachingProvider.removeListener(status);
-		cachingProvider.addListener(status);
-		Export export = new Export(cachingProvider, file);		
-		Coordinates p1 = selection.getPoint(Corner.LEFT_TOP);
-		Coordinates p2 = selection.getPoint(Corner.RIGHT_BOTTOM);
-		View v = export.createView(p1, p2, zoom);
-		status.setView(v, cachingProvider);
-		export.export(p1, p2, v);
-		status.repaint();
+	public File exportSelection(File basefile, JViewCacheStatus status, int zoom, TileProvider[] providers) {
+		File first = null;
+		for (TileProvider provider : providers) {
+			AsyncTileCache cachingProvider = GetMapsMain.createImagesProvider(provider);
+			cachingProvider.addListener(status);
+			File file = Utils.sufix(basefile, provider.getName());
+			if(first == null) {
+				first = file;
+			}
+			Export export = new Export(cachingProvider, file);		
+			Coordinates p1 = selection.getPoint(Corner.LEFT_TOP);
+			Coordinates p2 = selection.getPoint(Corner.RIGHT_BOTTOM);
+			View v = export.createView(p1, p2, zoom, provider);
+			status.setView(v, cachingProvider);
+			export.export(p1, p2, v);
+			status.repaint();
+			break;
+		}
+		return first;
 	}
 
 	@Override

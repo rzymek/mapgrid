@@ -11,7 +11,7 @@ import pl.maps.tms.utils.Range;
  * http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
  */
 public class OSMTileProvider implements TileProvider {
-	private Dimension tileSize = new Dimension(256, 256);
+	private final Dimension tileSize = new Dimension(256, 256);
 
 	@Override
 	public Dimension getTileSize() {
@@ -52,6 +52,7 @@ public class OSMTileProvider implements TileProvider {
 		return new LatLon(lat, lon);
 	}
 
+	@Override
 	public String getTileURL(int x, int y, int zoom) {
 		if(x < 0 || y < 0 || zoom < 0)
 			return null;
@@ -60,6 +61,10 @@ public class OSMTileProvider implements TileProvider {
 	@Override
 	public Range getZoomRange() {
 		return new Range(2, 16);
+	}
+	@Override
+	public String getName() {
+		return "osm";
 	}
 	@Override
 	public String toString() {
