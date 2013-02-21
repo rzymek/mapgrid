@@ -64,7 +64,6 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 			status.setView(v, cachingProvider);
 			export.export(p1, p2, v);
 			status.repaint();
-			break;
 		}
 		return first;
 	}

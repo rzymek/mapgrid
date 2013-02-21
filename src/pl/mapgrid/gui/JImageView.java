@@ -75,6 +75,7 @@ public class JImageView extends JComponent implements Observer {
 			}
 		});
 		addMouseListener(new PopupListener(menu));
+		addMouseListener(new SelectionListener());
 		add(menu);
 	}
 
