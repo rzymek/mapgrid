@@ -84,7 +84,7 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		try {
 //			File f = new File("samples/rr3.map");
 //			File f = new File("/home/rzymek/Dropbox/devel/maps/osb-ops/s11-osb-HD.map");
-			File f = new File("test/pilawa-topo.tfw");
+			File f = new File("/home/rzymek/Ubuntu One/fia/kaskada/");
 			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
 			open(f);
 //			File file = new File("samples/s11/granica.kml");

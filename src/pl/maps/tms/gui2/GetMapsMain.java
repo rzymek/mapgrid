@@ -12,13 +12,17 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -40,6 +44,7 @@ import pl.maps.tms.cache.MemCache;
 import pl.maps.tms.gui.JTileMapView;
 import pl.maps.tms.gui.Selection;
 import pl.maps.tms.gui.Selection.Corner;
+import pl.maps.tms.providers.GeoportalBackupImageProvider;
 import pl.maps.tms.providers.GeoportalOrtoProvider;
 import pl.maps.tms.providers.GeoportalTopoProvider;
 import pl.maps.tms.providers.TileProvider;
@@ -52,14 +57,16 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	private AsyncTileCache imagesProvider;
 	private final static boolean useDiskCache = true;	
 
-	public static TileProvider[] providers = {
+	public static List<TileProvider> providers = new ArrayList<TileProvider>(Arrays.asList(
 		new GeoportalTopoProvider(),
-//		new GeoportalTopoProvider(),
-			new GeoportalOrtoProvider(),
-//			new OSMTileProvider()
-	};
+		new GeoportalOrtoProvider()
+	));
 
 	public static void main(String[] args) {
+		String geobackURL = System.getProperty("mapgrid.geoback");
+		if(geobackURL != null) {
+			providers.add(new GeoportalBackupImageProvider(geobackURL));			
+		}
 		EventQueue.invokeLater(new GetMapsMain());
 	}
 	
@@ -70,11 +77,11 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	}
 	
 	protected void setup() {
-		final TileProvider provider = providers[SELECTED_PROVIDER];		
+		final TileProvider provider = providers.get(SELECTED_PROVIDER);		
 		
-		JComboBox combo = getProvidersCombo();
-		combo.setModel(new DefaultComboBoxModel(providers));
-		combo.setSelectedItem(provider);
+		JList combo = getProvidersCombo();
+		combo.setModel(new DefaultComboBoxModel(new Vector(providers)));
+		combo.setSelectedValue(provider, true);
 
 		JTileMapView mapview = getMapView();		
 		mapview.addMouseMotionListener(new MouseMotionAdapter() {
@@ -136,19 +143,18 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	}
 
 	public static AsyncTileCache createImagesProvider(TileProvider provider) {
-		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);		
+		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);
 		Image waiting = Utils.createWaitingImage(provider);
 		if(useDiskCache) {
 			return new DiskMemCache(http, THREADS, waiting, "cache/"+provider.getClass().getSimpleName());
 		}else{
 			return new MemCache(http, THREADS, waiting);
 		}
-//		GeoportalBackupImageProvider backup = new GeoportalBackupImageProvider();
 	}
 	
 	@Override
-	protected void providerSelected(JComboBox combo) {
-		TileProvider provider = (TileProvider) combo.getSelectedItem();
+	protected void providerSelected() {
+		TileProvider provider = (TileProvider) getProvidersCombo().getSelectedValue();
 		if(imagesProvider != null)
 			imagesProvider.removeListener(getMapView());
 		imagesProvider = createImagesProvider(provider);
@@ -165,7 +171,8 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 				@Override
 				protected Void doInBackground() throws Exception {
 					try {
-						File topo = getMapView().exportSelection(file, getCacheStatus(), getZoom(), providers);
+						List selected = getProvidersCombo().getSelectedValuesList();
+						File topo = getMapView().exportSelection(file, getCacheStatus(), getZoom(), selected);
 						int res = JOptionPane.showConfirmDialog(GetMapsMain.this, "Czy chcesz nałożyć na mapę siatkę UTM?", "Siatka?", JOptionPane.YES_NO_OPTION);
 						if(res == JOptionPane.YES_OPTION) {
 							pl.mapgrid.app.Main main = new Main();
@@ -174,7 +181,7 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 							SwingUtilities.invokeLater(main);
 						}
 					}catch (Exception e) {
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(GetMapsMain.this, e.toString());
 					}
 					return null;
 				}
@@ -220,9 +227,9 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			toolbarAction();
 		}
 		if(e.getKeyCode() == KeyEvent.VK_N && e.getID() == KeyEvent.KEY_PRESSED) {
-			JComboBox c = getProvidersCombo();
+			JList c = getProvidersCombo();
 			int index  = c.getSelectedIndex() + 1;
-			index = index % c.getItemCount();
+			index = index % c.getModel().getSize();
 			c.setSelectedIndex(index);
 		}
 		return false;

@@ -48,7 +48,7 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 		repaint();
 	}
 	
-	public File exportSelection(File basefile, JViewCacheStatus status, int zoom, TileProvider[] providers) {
+	public File exportSelection(File basefile, JViewCacheStatus status, int zoom, Iterable<TileProvider> providers) {
 		File first = null;
 		for (TileProvider provider : providers) {
 			AsyncTileCache cachingProvider = GetMapsMain.createImagesProvider(provider);

@@ -1,13 +1,26 @@
 package pl.maps.tms.providers;
 
-import pl.maps.tms.URLTileImageProvider;
 import pl.maps.tms.utils.Utils;
 
+public class GeoportalBackupImageProvider extends GeoportalTopoProvider {
+	private final String url;
 
-public class GeoportalBackupImageProvider implements URLTileImageProvider {
+	public GeoportalBackupImageProvider(String baseURL) {
+		url = baseURL + "/cache/${z}/${x}/${y}.jpg";
+	}
+
 	@Override
 	public String getTileURL(int x, int y, int z) {
-		String url = "file:///home/rzymek/devel/mapgrid/cache/${z}/${x}/${y}.jpg";
-		return Utils.fillTileURLTemplate(url,x,y,z);
-	}	
+		return Utils.fillTileURLTemplate(url, x, y, z);
+	}
+
+	@Override
+	public String toString() {
+		return "GeoPortal Backup";
+	}
+
+	@Override
+	public String getName() {
+		return "geoback";
+	}
 }

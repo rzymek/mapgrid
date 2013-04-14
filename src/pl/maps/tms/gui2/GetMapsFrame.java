@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
@@ -27,6 +28,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import pl.maps.tms.gui.JOptionsPanel;
 import pl.maps.tms.gui.JTileMapView;
@@ -45,7 +48,7 @@ public class GetMapsFrame extends JFrame {
 	private JViewCacheStatus viewCacheStatus;
 	private JSpinner exportZoom;
 	protected final ButtonGroup toolbarButtons = new ButtonGroup();
-	private JComboBox providersCombo;
+	private JList providersCombo;
 	protected JTileMapView tileMapView;
 	private JTextPane selectionCoords;
 	private JLabel selectionSize;
@@ -131,11 +134,11 @@ public class GetMapsFrame extends JFrame {
 		JLabel lblrdo = new JLabel("Źródło");
 		panel_2.add(lblrdo, "2, 2");
 		
-		providersCombo = new JComboBox();
-		providersCombo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JComboBox combo = (JComboBox) e.getSource();
-				providerSelected(combo);
+		providersCombo = new JList();
+		providersCombo.addListSelectionListener(new ListSelectionListener() {			
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				providerSelected();			
 			}
 		});
 		providersCombo.setModel(new DefaultComboBoxModel(new String[] {"Geoportal ARS", "Geoportal WMS", "Zumi"}));
@@ -239,7 +242,7 @@ public class GetMapsFrame extends JFrame {
 	protected void toolbarAction() {
 	}
 
-	protected void providerSelected(JComboBox combo) {
+	protected void providerSelected() {
 	}
 
 	protected void export() {
@@ -257,7 +260,7 @@ public class GetMapsFrame extends JFrame {
 	protected JSpinner getExportZoom() {
 		return exportZoom;
 	}
-	protected JComboBox getProvidersCombo() {
+	protected JList getProvidersCombo() {
 		return providersCombo;
 	}
 	protected JTileMapView getMapView() {

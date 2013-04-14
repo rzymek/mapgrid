@@ -124,8 +124,19 @@ public class BackupMain extends BackupFrame implements Runnable {
 		return ((Number)spinner.getModel().getValue()).intValue();
 	}
 	
-	private AsyncTileCache createImagesProvider(TileProvider provider, int threads) {
-		HTTPTileImageProvider http = new HTTPTileImageProvider(provider);		
+	private AsyncTileCache createImagesProvider(final TileProvider provider, int threads) {
+		HTTPTileImageProvider http = new HTTPTileImageProvider(provider) {
+
+			@Override
+			public Image getTile(int x, int y, int zoom) throws Exception {
+				String url = provider.getTileURL(x, y, zoom);
+				if(url == null)
+					return null;
+				System.out.println("HTTPTileImageProvider:"+url);
+				return null;
+			}
+			
+		};		
 		Image waiting = Utils.createWaitingImage(provider);
 		return new DiskCache(http, threads, waiting, "cache/"+provider.getClass().getSimpleName());
 	}

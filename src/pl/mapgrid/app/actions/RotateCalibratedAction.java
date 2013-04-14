@@ -29,10 +29,10 @@ public class RotateCalibratedAction extends BackgroundAction implements UIAction
 		int confirmation = JOptionPane.showConfirmDialog(main, msg, "Obrót", JOptionPane.OK_CANCEL_OPTION);
 		if(confirmation != JOptionPane.OK_OPTION) {
 			return;
-		}
-		RenderedImage img = main.view.getImage();
-		double dE = Math.abs(c[3].getX() - c[0].getX());
-		double dN = Math.abs(c[1].getY() - c[0].getY());
+		} 
+//		RenderedImage img = main.view.getImage();
+//		double dE = Math.abs(c[3].getX() - c[0].getX());
+//		double dN = Math.abs(c[1].getY() - c[0].getY());
 
 //		double a1 = Math.abs(c[1].getX() - c[0].getX());
 //		double b1 = Math.abs(c[1].getY() - c[0].getY());
@@ -49,8 +49,7 @@ public class RotateCalibratedAction extends BackgroundAction implements UIAction
 		
 		main.view.rotate(rot);
 		main.calibration.coordinates=utm;
-		System.out.println("RotateCalibratedAction.run()");
-		System.out.println(main.calibration);
+		main.view.repaint();
 	}
 
 	@Override
