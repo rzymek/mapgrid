@@ -158,7 +158,7 @@ public class GetMapsFrame extends JFrame {
 				zoomChanged();
 			}
 		});
-		exportZoom.setModel(new SpinnerNumberModel(new Integer(9), null, null, new Integer(1)));
+		exportZoom.setModel(new SpinnerNumberModel(new Integer(10), null, null, new Integer(1)));
 		exportZoom.setMinimumSize(new Dimension(20, 20));
 		panel_2.add(exportZoom, "3, 6");
 		
