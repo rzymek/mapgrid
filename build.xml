@@ -2,54 +2,18 @@
 	<property file="build.properties"/>
 	<property file="build.user.properties"/>
 
-	<target name="release" depends="build,sign.lib,upload,update.webstart" description="Release"/>
-
-	<macrodef name="googleupload">
-		<attribute name="label"/>
-		<attribute name="file"/>
-		<attribute name="desc"/>
-		<sequential>
-			<echo>Uploading @{file}...</echo>
-			<exec executable="googlecode_upload.py">
-				<arg line="-p mapgrid"/>
-				<arg line="-l '@{label}'"/>
-				<arg line="-s '@{desc}'"/>
-				<arg line="-u '${google.code.user}'"/>
-				<arg line="-w '${google.code.password}'"/>
-				<arg line="'@{file}'"/>
-			</exec>
-		</sequential>
-	</macrodef>
-	
-	
-	<target name="upload"  depends="version">
-		<googleupload file="build/mapgrid-${version}.jar" label="Featured,Type-Package,OpSys-All" desc="Wersja: ${version}"/>
-		<echo>Uploaded mapgrid-${version}.jar</echo>
-	</target>
-
-	<target name="upload.deps">
-		<googleupload file="lib/jai/clibwrapper_jiio.jar" label="Dependency" desc="Dependency"/>
-		<googleupload file="lib/jai/jai_imageio.jar" label="Dependency" desc="Dependency"/>
-		<googleupload file="lib/jai/libclib_jiio.so.jar" label="Dependency" desc="Dependency"/>
-		<googleupload file="lib/JavaAPIforKml.jar" label="Dependency" desc="Dependency"/>
-		<googleupload file="lib/jcoord-1.0.jar" label="Dependency" desc="Dependency"/>
-		<googleupload file="lib/jgoodies-common-1.2.1.jar" label="Dependency" desc="Dependency"/>
-		<googleupload file="lib/jgoodies-forms-1.4.2.jar" label="Dependency" desc="Dependency"/>
-		<googleupload file="lib/josm-tested.jar" label="Dependency" desc="Dependency"/>
-	</target>
+	<target name="release" depends="build,sign.lib" description="Release"/>
 
 	<target name="build">
-		<delete dir="build"/>
-		<mkdir dir="build"/>
-		<jar destfile="build/mapgrid.jar" basedir="bin">
+		<jar destfile="dist/mapgrid.jar" basedir="bin">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 		</jar>
-		<signjar jar="build/mapgrid-${version}.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
+		<signjar jar="dist/mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
 	</target>
 	
-	<target name="update.webstart" depends="version">
+	<target name="update.webstart">
 		<copy file="mapgrid.jnlp" todir="webstart" overwrite="true">
 			<filterset>
 				<filter token="MAIN" value="${main.class}"/>
@@ -78,9 +42,9 @@
 	</target>
 	
 	<target name="sign.lib">
-		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="true">
+		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="true" verbose="true">
 			<path>
-				<fileset dir="lib" includes="**/*.jar"/>
+				<fileset dir="dist/lib" includes="**/*.jar"/>
 			</path>
 		</signjar>
 	</target>
