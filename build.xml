@@ -42,7 +42,7 @@
 	</target>
 	
 	<target name="sign.lib">
-		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="true" verbose="true">
+		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false" verbose="true">
 			<path>
 				<fileset dir="dist/lib" includes="**/*.jar"/>
 			</path>
