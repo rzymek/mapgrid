@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0+"
 	codebase="http://mapgrid.googlecode.com/files/" 	
- 	href="http://mapgrid.googlecode.com/svn/trunk/webstart/mapgrid.jnlp">
+ 	href="https://github.com/rzymek/mapgrid/raw/master/webstart/mapgrid.jnlp">
 	<information>
 		<title>GetMap</title>
 		<vendor>Rzymek FIA</vendor>		
@@ -10,7 +10,7 @@
 	</information>
 	<resources>
 		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
-		<jar href="mapgrid-1.149.jar" />
+		<jar href="mapgrid.jar" />
 
 		<jar href="clibwrapper_jiio.jar"/>
 		<jar href="jai_imageio.jar"/>

@@ -38,23 +38,10 @@
 		<googleupload file="lib/josm-tested.jar" label="Dependency" desc="Dependency"/>
 	</target>
 
-	<target name="version" unless="version">
-		<exec executable="svn">
-			<arg line="up src"/>
-			<arg line="--username ${google.code.user}"/>
-			<arg line="--password ${google.code.password}"/>
-		</exec>
-		<exec executable="svnversion" outputproperty="minor.version">
-			<arg line="src"/>
-		</exec>
-		<property name="version" value="${major.version}.${minor.version}"/>
-		<echo>Version: ${version}</echo>
-	</target>
-	
-	<target name="build" depends="version">
+	<target name="build">
 		<delete dir="build"/>
 		<mkdir dir="build"/>
-		<jar destfile="build/mapgrid-${version}.jar" basedir="bin">
+		<jar destfile="build/mapgrid.jar" basedir="bin">
 			<manifest>
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
