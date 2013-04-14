@@ -19,7 +19,7 @@ import pl.maps.tms.gui.JTileMapView.Mode;
 import pl.maps.tms.gui.Selection.Corner;
 import pl.maps.tms.utils.Range;
 
-public class TileMapInputListener implements MouseMotionListener, MouseWheelListener, KeyEventDispatcher, MouseListener {
+public class TileMapInputListener implements MouseMotionListener, MouseWheelListener, MouseListener {
 	private Point last;
 	private final JTileMapView parent;
 	private final Range zoomRange;
@@ -36,15 +36,11 @@ public class TileMapInputListener implements MouseMotionListener, MouseWheelList
 		parent.addMouseMotionListener(this);
 		parent.addMouseWheelListener(this);
 		parent.addMouseListener(this);
-		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-	    manager.addKeyEventDispatcher(this);
 	}
 	public void unregister() {
 		parent.removeMouseMotionListener(this);
 		parent.removeMouseWheelListener(this);
 		parent.removeMouseListener(this);
-		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-	    manager.removeKeyEventDispatcher(this);
 	}
 	
 	@Override
@@ -115,24 +111,6 @@ public class TileMapInputListener implements MouseMotionListener, MouseWheelList
 		parent.repaint();
 	}
 	
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent e) {
-		if(e.getID() != KeyEvent.KEY_PRESSED)
-			return false;
-		switch(e.getKeyCode()){
-		case KeyEvent.VK_G:
-			parent.view.showGrid = !parent.view.showGrid;
-			break;
-		case KeyEvent.VK_ESCAPE:
-			parent.selection.clear();
-			break;					
-		default:
-			return false;
-		}
-		parent.repaint();
-		return false;
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 	}

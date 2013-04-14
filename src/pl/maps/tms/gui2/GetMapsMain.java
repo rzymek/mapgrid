@@ -226,12 +226,6 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 			}
 			toolbarAction();
 		}
-		if(e.getKeyCode() == KeyEvent.VK_N && e.getID() == KeyEvent.KEY_PRESSED) {
-			JList c = getProvidersCombo();
-			int index  = c.getSelectedIndex() + 1;
-			index = index % c.getModel().getSize();
-			c.setSelectedIndex(index);
-		}
 		return false;
 	}
 
