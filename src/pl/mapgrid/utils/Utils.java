@@ -15,7 +15,7 @@ public class Utils {
 
 	public static File basename(File f, String ext) {
 		String path = f.getPath();
-		if (!path.contains("."))
+		if (!f.getName().contains("."))
 			return f;
 		String basename = path.substring(0, path.lastIndexOf('.'));
 		String filename = basename + ext;
@@ -24,7 +24,7 @@ public class Utils {
 
 	public static File sufix(File f, String text) {
 		String path = f.getPath();
-		if (!path.contains("."))
+		if (!f.getName().contains("."))
 			path = path + ".jpg";
 		String basename = path.substring(0, path.lastIndexOf('.'));
 		String ext = path.substring(path.lastIndexOf('.'));
