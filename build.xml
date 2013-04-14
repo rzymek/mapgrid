@@ -21,6 +21,7 @@
 			<arg line="-validity 36500" />
 			<arg line='-dname "CN=Rzymek FIA, OU=FIA, O=FIA, L=Warszawa, S=Mazowieckie, C=US" ' />
 			<arg line="-keystore mapgrid.keystore" />
+			<arg line="-digestalg SHA1"/>
 			<arg line='-storepass "${keystore.pass}"' />
 		</exec>
 	</target>
