@@ -17,10 +17,13 @@ public class Selection {
 	}
 	private static final int CORNER_SIZE = 15;
 	private final Coordinates[] points = new Coordinates[2];
-	private final View view;
+	private View view;
 	
 	public Selection(View view) {
 		this.view = view;		
+	}
+	public void setView(View view) {
+		this.view = view;
 	}
 	private List<ChangeListener> changeListeners = new ArrayList<ChangeListener>();
 	public float ratio = 0f;

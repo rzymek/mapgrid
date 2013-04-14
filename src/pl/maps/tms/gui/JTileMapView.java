@@ -44,7 +44,10 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 			newView.setLeftTop(lt);
 		}
 		view = newView;
-		selection = new Selection(view);
+		if(selection == null)
+			selection = new Selection(view);
+		else
+			selection.setView(view);
 		repaint();
 	}
 	
