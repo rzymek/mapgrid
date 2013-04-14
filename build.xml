@@ -10,25 +10,9 @@
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 		</jar>
-		<signjar jar="dist/mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" />
+		<signjar jar="dist/mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false"/>
 	</target>
 	
-	<target name="update.webstart">
-		<copy file="mapgrid.jnlp" todir="webstart" overwrite="true">
-			<filterset>
-				<filter token="MAIN" value="${main.class}"/>
-				<filter token="FILE" value="mapgrid-${version}.jar"/>
-				<filter token="JNLP" value="${jnlp.href}"/>
-				<filter token="CODEBASE" value="${webstart.codebase}"/>
-			</filterset>
-		</copy>
-		<exec executable="svn">
-			<arg line="ci webstart -m 'version ${version}'"/>
-			<arg line="--username ${google.code.user}"/>
-			<arg line="--password ${google.code.password}"/>
-		</exec>
-	</target>
-
 	<target name="create.keystore">
 		<delete file="mapgrid.keystore" />
 		<exec executable="keytool">
@@ -42,7 +26,7 @@
 	</target>
 	
 	<target name="sign.lib">
-		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false" verbose="true">
+		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false">
 			<path>
 				<fileset dir="dist/lib" includes="**/*.jar"/>
 			</path>
