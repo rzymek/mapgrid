@@ -1,4 +1,4 @@
 mapgrid
 =======
 
-https://github.com/rzymek/mapgrid/raw/master/webstart/mapgrid.jnlp
+https://github.com/rzymek/mapgrid/raw/master/dist/mapgrid.jnlp
