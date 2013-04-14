@@ -9,7 +9,7 @@
 		<offline-allowed />
 	</information>
 	<resources>
-		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
+		<j2se version="1.6+"/>
 		<jar href="mapgrid.jar" />
 
 		<jar href="lib/jai/clibwrapper_jiio.jar"/>
