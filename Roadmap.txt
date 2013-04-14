@@ -1,5 +1,0 @@
-* crop do A4
-* zapis .map
-
-known bugs:
-* wykrywanie pionowych siatek ssie
