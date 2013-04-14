@@ -51,6 +51,7 @@ import pl.mapgrid.shape.Shape;
 import pl.mapgrid.shape.ShapeGraphics;
 import pl.mapgrid.utils.DragableViewportMouseListener;
 import pl.mapgrid.utils.ProgressMonitor;
+import pl.maps.tms.utils.Utils;
 
 public class Main extends JMainFrame implements ProgressMonitor {
 	public static Main instance;
@@ -77,23 +78,6 @@ public class Main extends JMainFrame implements ProgressMonitor {
 		setupActions();
 		setupComponents();
 		actions.reenable();
-		autoload();
-	}
-
-	private void autoload() {
-		try {
-//			File f = new File("samples/rr3.map");
-//			File f = new File("/home/rzymek/Dropbox/devel/maps/osb-ops/s11-osb-HD.map");
-			File f = new File("/home/rzymek/Ubuntu One/fia/kaskada/");
-			FileChooserSingleton.instance().getMapChooser().setSelectedFile(f);
-			open(f);
-//			File file = new File("samples/s11/granica.kml");
-//			KMLReader reader = (KMLReader) Registry.getFeatureReader(file.getName());
-//			List<Shape<Coordinates>> shapes = reader.read(file);
-//			view.setShapes(shapes, getShapeConfig());
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void setupActions() {

@@ -6,7 +6,7 @@ public class GeoportalBackupImageProvider extends GeoportalTopoProvider {
 	private final String url;
 
 	public GeoportalBackupImageProvider(String baseURL) {
-		url = baseURL + "/cache/${z}/${x}/${y}.jpg";
+		url = baseURL + "/${z}/${x}/${y}.jpg";
 	}
 
 	@Override

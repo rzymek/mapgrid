@@ -2,11 +2,16 @@ package pl.maps.tms.utils;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
 
 import pl.maps.tms.TileGridProvider;
 
@@ -35,4 +40,11 @@ public final class Utils {
 		g.drawLine(size.width, 0, 0, size.height);
 		return image;
 	}
+	public static void showError(Component parentComponent, Exception e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		JOptionPane.showMessageDialog(parentComponent, sw.toString());
+	}
+
 }

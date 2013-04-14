@@ -181,7 +181,7 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 							SwingUtilities.invokeLater(main);
 						}
 					}catch (Exception e) {
-						JOptionPane.showMessageDialog(GetMapsMain.this, e.toString());
+						Utils.showError(GetMapsMain.this, e);
 					}
 					return null;
 				}
