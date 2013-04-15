@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0+"
-	codebase="https://github.com/rzymek/mapgrid/raw/master/dist/" 	
- 	href="https://github.com/rzymek/mapgrid/raw/master/dist/mapgrid.jnlp">
+	codebase="https://github.com/rzymek/mapgrid/raw/dist/dist/" 	
+ 	href="https://github.com/rzymek/mapgrid/raw/dist/dist/mapgrid.jnlp">
 	<information>
 		<title>MapGrid</title>
 		<vendor>Rzymek FIA</vendor>		
@@ -12,19 +12,14 @@
 		<j2se version="1.6+" java-vm-args="-Xmx1024m"/>
 		<jar href="mapgrid.jar" />
 
-		<jar href="lib/jai/clibwrapper_jiio.jar"/>
-		<jar href="lib/jai/jai_imageio.jar"/>
-		<jar href="lib/jai/libclib_jiio.so.jar"/>
-		<jar href="lib/JavaAPIforKml.jar"/>
-		<jar href="lib/jcoord-1.0.jar"/>
-		<jar href="lib/jgoodies-common-1.2.1.jar"/>
-		<jar href="lib/jgoodies-forms-1.4.2.jar"/>
-		<jar href="lib/josm-tested.jar"/>
-
-		<!-- Wyłącznie dla obsługi większej ilości plików graficznych (m.in. tiff). 
-		Bez tego aplikacja też ruszy 
-		<extension href="http://download.java.net/media/jai-imageio/webstart/release/jai-imageio-1.1-latest.jnlp"/>
-		-->
+		<jar href="clibwrapper_jiio.jar"/>
+		<jar href="jai_imageio.jar"/>
+		<jar href="libclib_jiio.so.jar"/>
+		<jar href="JavaAPIforKml.jar"/>
+		<jar href="jcoord-1.0.jar"/>
+		<jar href="jgoodies-common-1.2.1.jar"/>
+		<jar href="jgoodies-forms-1.4.2.jar"/>
+		<jar href="josm-tested.jar"/>
 	</resources>
 	<application-desc main-class="pl.maps.tms.gui2.GetMapsMain" />
 	<security>
