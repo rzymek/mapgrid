@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseWheelEvent;
 import java.io.File;
+import java.util.Date;
 
 import javax.swing.JComponent;
 import javax.swing.event.ChangeListener;
@@ -31,6 +34,17 @@ public class JTileMapView extends JComponent implements AsyncFetchListener {
 	public Selection selection;
 	AsyncTileCache cachingProvider;
 	private TileMapInputListener listener;
+	
+	public void zoom(int step) {
+		Point m = getMousePosition();
+		if(m == null){
+			return;
+		}
+		int wheelRotation = step;
+		MouseWheelEvent e = new MouseWheelEvent(this, 1, new Date().getTime(), 
+				MouseWheelEvent.CTRL_DOWN_MASK, m.x, m.y, 0, false, 0, 0, wheelRotation);
+		listener.mouseWheelMoved(e);
+	}
 	
 	public void setProvider(TileGridProvider grid, AsyncTileCache images) {
 		this.cachingProvider = images;

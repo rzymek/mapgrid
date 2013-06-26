@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -225,6 +226,13 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 				toolbarButtons.setSelected(button.getModel(), true);			
 			}
 			toolbarAction();
+		}
+		if(e.getID() == KeyEvent.KEY_PRESSED && e.isControlDown()) {
+			if(e.getKeyChar() == '+' || e.getKeyChar() == '=') {
+				getMapView().zoom(-1);
+			}else if(e.getKeyChar() == '-'){			
+				getMapView().zoom(1);
+			}
 		}
 		return false;
 	}
