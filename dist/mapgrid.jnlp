@@ -9,7 +9,7 @@
 		<offline-allowed />
 	</information>
 	<resources>
-		<j2se version="1.7+"/>
+		<j2se version="1.7+" max-heap-size="2024m"/>
 		<jar href="mapgrid.jar" />
 
 		<jar href="lib/jai/clibwrapper_jiio.jar"/>
