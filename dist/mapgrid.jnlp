@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+"
+	codebase="http://rzymek.github.io/mapgrid/dist/" 	
+ 	href="http://rzymek.github.io/mapgrid/dist/mapgrid.jnlp">
+	<information>
+		<title>MapGrid</title>
+		<vendor>Rzymek FIA</vendor>		
+		<description>Pobieranie map z GeoPortalu</description>
+		<offline-allowed />
+	</information>
+	<resources>
+		<j2se version="1.7+" max-heap-size="2024m"/>
+		<jar href="mapgrid.jar" />
+
+		<jar href="lib/jai/clibwrapper_jiio.jar"/>
+		<jar href="lib/jai/jai_imageio.jar"/>
+		<jar href="lib/jai/libclib_jiio.so.jar"/>
+		<jar href="lib/JavaAPIforKml.jar"/>
+		<jar href="lib/jcoord-1.0.jar"/>
+		<jar href="lib/jgoodies-common-1.2.1.jar"/>
+		<jar href="lib/jgoodies-forms-1.4.2.jar"/>
+		<jar href="lib/josm-tested.jar"/>
+		
+		<!-- Wyłącznie dla obsługi większej ilości plików graficznych (m.in. tiff). 
+		Bez tego aplikacja też ruszy 
+		<extension href="http://download.java.net/media/jai-imageio/webstart/release/jai-imageio-1.1-latest.jnlp"/>
+		-->
+	</resources>
+	<application-desc main-class="pl.maps.tms.gui2.GetMapsMain" />
+	<security>
+		<all-permissions />
+	</security>
+</jnlp> 
