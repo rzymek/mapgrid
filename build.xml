@@ -10,7 +10,9 @@
 				<attribute name="Main-Class" value="${main.class}" />
 			</manifest>
 		</jar>
-		<signjar jar="dist/mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false"/>
+		<signjar jar="dist/mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false">
+			<sysproperty key="jsse.enableSNIExtension" value="false"/>
+		</signjar>
 	</target>
 	
 	<target name="create.keystore">
@@ -27,6 +29,7 @@
 	
 	<target name="sign.lib">
 		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false">
+			<sysproperty key="jsse.enableSNIExtension" value="false"/>
 			<path>
 				<fileset dir="dist/lib" includes="**/*.jar"/>
 			</path>
