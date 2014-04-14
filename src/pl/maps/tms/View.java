@@ -13,7 +13,7 @@ public class View implements ViewInfo {
 	private Dimension viewSize; // view size
 	private Dimension tileCount = new Dimension(0,0); //cached
 	private int zoom = 0;
-	public boolean showGrid = false;
+	public boolean showGrid = true;
 	
 	private final TileGridProvider grid;
 	private final TileImageProvider images;
