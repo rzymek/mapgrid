@@ -2,6 +2,7 @@ package pl.mapgrid.calibration;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
+import pl.mapgrid.calibration.coordinates.MGRS;
 import pl.mapgrid.calibration.coordinates.PUWG92;
 import pl.mapgrid.calibration.coordinates.UTM;
 import uk.me.jstott.jcoord.LatLng;
@@ -31,6 +32,15 @@ public class Calibration {
 		UTM[] utm = new UTM[4];
 		for (int i = 0; i < coordinates.length; i++)  
 			utm[i] = new UTM(coordinates[i]);
+		return utm;
+	}
+	
+	public MGRS[] toMGRS() {
+		if(coordinates instanceof MGRS[])
+			return (MGRS[]) coordinates;
+		MGRS[] utm = new MGRS[4];
+		for (int i = 0; i < coordinates.length; i++)  
+			utm[i] = new MGRS(coordinates[i]);
 		return utm;
 	}
 	

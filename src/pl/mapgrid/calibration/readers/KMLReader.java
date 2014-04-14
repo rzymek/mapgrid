@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.ibm.util.CoordinateConversion;
+import com.ibm.util.CoordinateConversion.MGRUTM;
+
 import pl.mapgrid.calibration.coordinates.Coordinates;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.calibration.coordinates.UTM;
@@ -41,7 +44,7 @@ public class KMLReader implements ShapeReader {
 		processFeatures(result, doc.getFeature());
 		return result;
 	}
-
+	public static final CoordinateConversion CONV = new CoordinateConversion();
 	private void processFeatures(List<Shape<Coordinates>> result, List<Feature> features) {
 		for (Feature feature : features) {
 			if (feature instanceof Placemark) {
@@ -52,7 +55,10 @@ public class KMLReader implements ShapeReader {
 					Point g = (Point) geometry;				
 					Waypoint<Coordinates> wp = toShape(g);
 					wp.label = placemark.getName();
-					System.out.println(new UTM(wp.get(0))+"       "+wp.label);
+					final Coordinates coords = wp.get(0);
+//					final UTM utm = new UTM(coords);
+					final MGRUTM mrgs = CONV.latLon2MGRUTM(coords.getLat(), coords.getLon());
+					System.out.println(mrgs+"\t"+wp.label);
 					shape = wp;
 				} else if (geometry instanceof Polygon) {
 					Polygon g = (Polygon) geometry;
