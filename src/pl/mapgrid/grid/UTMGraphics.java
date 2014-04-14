@@ -2,8 +2,6 @@ package pl.mapgrid.grid;
 
 import java.awt.Graphics2D;
 
-import org.openstreetmap.josm.data.conflict.ConflictCollection;
-
 import pl.mapgrid.app.actions.UTMGridAction;
 import pl.mapgrid.calibration.coordinates.LatLon;
 import pl.mapgrid.calibration.coordinates.UTM;

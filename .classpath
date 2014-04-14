@@ -9,6 +9,6 @@
 	<classpathentry kind="lib" path="dist/lib/jcoord-1.0.jar"/>
 	<classpathentry kind="lib" path="dist/lib/jgoodies-common-1.2.1.jar"/>
 	<classpathentry kind="lib" path="dist/lib/jgoodies-forms-1.4.2.jar"/>
-	<classpathentry kind="lib" path="dist/lib/josm-tested.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/puwg"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
