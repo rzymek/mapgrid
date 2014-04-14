@@ -17,7 +17,7 @@ public class OSMTileProvider implements TileProvider {
 	public Dimension getTileSize() {
 		return tileSize;
 	}
-	 
+
 	@Override
 	public Position move(Position tile, double dx, double dy) {
 		tile.x += dx;
@@ -29,15 +29,26 @@ public class OSMTileProvider implements TileProvider {
 	public Position getTilePosition(Coordinates coordinates, int zoom) {
 		double lat = coordinates.getLat();
 		double lon = coordinates.getLon();
-		double x = (lon + 180) / 360 * (1 << zoom);
-		double y = (1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * (1 << zoom);
-		double ox = (x-Math.floor(x)) * tileSize.width;
-		double oy = (y-Math.floor(y)) * tileSize.height;
-		return new Position(ox, oy);
+		double xtile = Math.floor((lon + 180.0) / 360.0 * (1 << zoom));
+		double ytile = Math.floor((1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2.0 * (1 << zoom));
+		if (xtile < 0)
+			xtile = 0;
+		if (xtile >= (1 << zoom))
+			xtile = ((1 << zoom) - 1);
+		if (ytile < 0)
+			ytile = 0;
+		if (ytile >= (1 << zoom))
+			ytile = ((1 << zoom) - 1);
+		//
+		// double x = (lon + 180) / 360 * (1 << zoom);
+		// double y = (1 - Math.log(Math.tan(Math.toRadians(lat)) + 1 / Math.cos(Math.toRadians(lat))) / Math.PI) / 2 * (1 << zoom);
+		// double ox = (x - Math.floor(x)) * tileSize.width;
+		// double oy = (y - Math.floor(y)) * tileSize.height;
+		return new Position(xtile, ytile);
 	}
 
 	static double tile2lon(double x, int z) {
-		return x / Math.pow(2.0, z) * 360.0 - 180;
+		return x / Math.pow(2.0, z) * 360.0 - 180.0;
 	}
 
 	static double tile2lat(double y, int z) {
@@ -47,25 +58,28 @@ public class OSMTileProvider implements TileProvider {
 
 	@Override
 	public Coordinates getCoords(Position tile, int zoom) {
-		double lon = tile2lon(tile.x / tileSize.width, zoom);
-		double lat = tile2lat(tile.y / tileSize.height, zoom);
+		double lon = tile2lon(tile.x, zoom);
+		double lat = tile2lat(tile.y, zoom);
 		return new LatLon(lat, lon);
 	}
 
 	@Override
 	public String getTileURL(int x, int y, int zoom) {
-		if(x < 0 || y < 0 || zoom < 0)
+		if (x < 0 || y < 0 || zoom < 0)
 			return null;
-		return "http://tile.openstreetmap.org/"+zoom+"/"+x+"/"+y+".png";
+		return "http://c.tile.openstreetmap.org/" + zoom + "/" + x + "/" + y + ".png";
 	}
+
 	@Override
 	public Range getZoomRange() {
 		return new Range(2, 16);
 	}
+
 	@Override
 	public String getName() {
 		return "osm";
 	}
+
 	@Override
 	public String toString() {
 		return "OpenStreetMap";

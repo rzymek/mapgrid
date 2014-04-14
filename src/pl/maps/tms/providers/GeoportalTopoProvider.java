@@ -53,15 +53,6 @@ public class GeoportalTopoProvider implements TileProvider {
 		return new Dimension(xTileCount, yTileCount);
 	}
 
-	public static void main(String[] args) {
-		GeoportalTopoProvider p = new GeoportalTopoProvider();
-		Range r = p.getZoomRange();
-		for (int i = r.min; i <= r.max; i++) {
-			Dimension tc = p.getTileCount(i);
-			System.out.println(i+": "+tc);
-		}
-	}
-
 	@Override
 	public Coordinates getCoords(Position position, int zoom) {
 		Dimension tileCount = getTileCount(zoom);

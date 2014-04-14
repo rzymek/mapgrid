@@ -14,7 +14,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -48,6 +47,7 @@ import pl.maps.tms.gui.Selection.Corner;
 import pl.maps.tms.providers.GeoportalBackupImageProvider;
 import pl.maps.tms.providers.GeoportalOrtoProvider;
 import pl.maps.tms.providers.GeoportalTopoProvider;
+import pl.maps.tms.providers.OSMTileProvider;
 import pl.maps.tms.providers.TileProvider;
 import pl.maps.tms.utils.Utils;
 
@@ -60,7 +60,8 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 
 	public static List<TileProvider> providers = new ArrayList<TileProvider>(Arrays.asList(
 		new GeoportalTopoProvider(),
-		new GeoportalOrtoProvider()
+		new GeoportalOrtoProvider(),
+		new OSMTileProvider()
 	));
 
 	public static void main(String[] args) {
