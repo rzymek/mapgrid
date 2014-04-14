@@ -1,8 +1,8 @@
-<project name="mapgrid" default="build">		
-	<property file="build.properties"/>
-	<property file="build.user.properties"/>
+<project name="mapgrid" default="build">
+	<property file="build.properties" />
+	<property file="build.user.properties" />
 
-	<target name="release" depends="build,sign.lib" description="Release"/>
+	<target name="release" depends="build,sign.lib" description="Release" />
 
 	<target name="build">
 		<jar destfile="dist/mapgrid.jar" basedir="bin">
@@ -11,10 +11,10 @@
 			</manifest>
 		</jar>
 		<signjar jar="dist/mapgrid.jar" alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false">
-			<sysproperty key="jsse.enableSNIExtension" value="false"/>
+			<sysproperty key="jsse.enableSNIExtension" value="false" />
 		</signjar>
 	</target>
-	
+
 	<target name="create.keystore">
 		<delete file="mapgrid.keystore" />
 		<exec executable="keytool">
@@ -26,13 +26,31 @@
 			<arg line='-storepass "${keystore.pass}"' />
 		</exec>
 	</target>
-	
+
 	<target name="sign.lib">
 		<signjar alias="mapgrid" storepass="${keystore.pass}" keystore="mapgrid.keystore" lazy="false">
-			<sysproperty key="jsse.enableSNIExtension" value="false"/>
+			<sysproperty key="jsse.enableSNIExtension" value="false" />
 			<path>
-				<fileset dir="dist/lib" includes="**/*.jar"/>
+				<fileset dir="dist/lib" includes="**/*.jar" />
 			</path>
 		</signjar>
+	</target>
+
+	<target name="stanalone" description="">
+		<delete file="dist/mapgrid-stanalone.jar" />
+		<jar destfile="dist/mapgrid-stanalone.jar">
+			<fileset dir="bin" />
+			<restrict>
+				<name name="**/*.class" />
+				<archives>
+					<zips>
+						<fileset dir="dist/lib/" includes="**/*.jar" />
+					</zips>
+				</archives>
+			</restrict>
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+			</manifest>
+		</jar>
 	</target>
 </project>
