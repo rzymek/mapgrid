@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0+"
-	codebase="http://github.com/rzymek/mapgrid/raw/master/dist/" 	
- 	href="http://github.com/rzymek/mapgrid/raw/master/dist/mapgrid.jnlp">
+	codebase="http://rzymek.github.io/mapgrid/dist/" 	
+ 	href="http://rzymek.github.io/mapgrid/dist/mapgrid.jnlp">
 	<information>
 		<title>MapGrid</title>
 		<vendor>Rzymek FIA</vendor>		

@@ -1,2 +1,2 @@
-[[Uruchom]](https://github.com/rzymek/mapgrid/raw/master/dist/mapgrid.jnlp)
+[[Uruchom]](http://rzymek.github.io/mapgrid/dist/mapgrid.jnlp)
 ===========
