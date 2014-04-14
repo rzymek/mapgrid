@@ -9,9 +9,8 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class CoordinateConversion {
-
-	public CoordinateConversion() {
-
+	public static final CoordinateConversion INST = new CoordinateConversion(); 
+	private CoordinateConversion() {
 	}
 
 	public double[] utm2LatLon(String UTM) {
@@ -227,6 +226,9 @@ public class CoordinateConversion {
 		@Override
 		public String toString() {
 			return String.format("%s%s %s%s %s %s", longZone, latZone, digraph1, digraph2, easting, northing);
+		}
+		public String concat() {		
+			return String.format("%s%s%s%s%s%s", longZone, latZone, digraph1, digraph2, easting, northing);
 		}
 	}
 

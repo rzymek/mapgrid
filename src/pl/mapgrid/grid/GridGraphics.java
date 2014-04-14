@@ -39,9 +39,9 @@ public abstract class GridGraphics {
 		@Doc("Rozmiar kratki w metrach")
 		public int step=1000;
 		@Doc("Formatowanie wspołrzędnych: regex")
-		public String labelSplit = "(.*)(.)(...)";
+		public String labelSplit = "M(...) (.*) (..)(...)";//UTM: "(.*)(.)(...)";
 		@Doc("Formatowanie wspołrzędnych: replacement")
-		public String labelReplace = "$1 $2 $3";
+		public String labelReplace = "$2 $3 $4";
 	}
 	
 	public GridGraphics(Graphics2D g, Config config, int width, int height) {
