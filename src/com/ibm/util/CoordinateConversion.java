@@ -248,14 +248,14 @@ public class CoordinateConversion {
 			String digraph1 = digraphs.getDigraph1(Integer.parseInt(longZone), _easting);
 			String digraph2 = digraphs.getDigraph2(Integer.parseInt(longZone), _northing);
 
-			String easting = String.valueOf((int) _easting);
+			String easting = String.valueOf((int) Math.round(_easting));
 			if (easting.length() < 5) {
 				easting = "00000" + easting;
 			}
 			easting = easting.substring(easting.length() - 5);
 
 			String northing;
-			northing = String.valueOf((int) _northing);
+			northing = String.valueOf((int) Math.round(_northing));
 			if (northing.length() < 5) {
 				northing = "0000" + northing;
 			}
