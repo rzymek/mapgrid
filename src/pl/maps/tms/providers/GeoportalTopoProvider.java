@@ -11,7 +11,9 @@ import pl.maps.tms.utils.Utils;
 public class GeoportalTopoProvider implements TileProvider {
 	public static final Dimension GRID = new Dimension(3, 2);
 	private static final long LZTS = 409600;
+	//width in meters of the whole map
 	private static final long WIDTH_IN_METERS = LZTS * GRID.width;
+	//height in meters of the whole map
 	private static final long HEIGHT_IN_METERS = LZTS * GRID.height;
 	private static Dimension tileSize = new Dimension(256, 256);
 

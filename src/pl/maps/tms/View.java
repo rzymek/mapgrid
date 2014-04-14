@@ -2,9 +2,11 @@ package pl.maps.tms;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 
 import pl.mapgrid.calibration.coordinates.Coordinates;
 
@@ -13,7 +15,7 @@ public class View implements ViewInfo {
 	private Dimension viewSize; // view size
 	private Dimension tileCount = new Dimension(0,0); //cached
 	private int zoom = 0;
-	public boolean showGrid = true;
+	public boolean showGrid = false;
 	
 	private final TileGridProvider grid;
 	private final TileImageProvider images;
@@ -80,7 +82,13 @@ public class View implements ViewInfo {
 					g.drawImage(tile, xx, yy, null);
 					if(showGrid){
 						String msg = String.format("%d %d %d", (int)tilex, (int)tiley, zoom);
-						g.drawString(msg, xx, yy + ts.height);
+						g.setColor(Color.WHITE);
+						FontMetrics fm = g.getFontMetrics();
+						final Rectangle2D bounds = fm.getStringBounds(msg, g);
+						g.fillRect(xx, yy+ts.height-(int)bounds.getHeight(), (int) bounds.getWidth()+6, (int) bounds.getHeight()+6);
+						g.setColor(Color.BLACK);
+						g.drawString(msg, xx+2, yy + ts.height-2);
+						g.setColor(Color.RED);
 						g.drawRect(xx, yy, ts.width, ts.height);
 					}
 				}catch (Exception e) {
