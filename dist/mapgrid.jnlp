@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0+"
-	codebase="https://github.com/rzymek/mapgrid/raw/master/dist/" 	
- 	href="https://github.com/rzymek/mapgrid/raw/master/dist/mapgrid.jnlp">
+	codebase="http://github.com/rzymek/mapgrid/raw/master/dist/" 	
+ 	href="http://github.com/rzymek/mapgrid/raw/master/dist/mapgrid.jnlp">
 	<information>
 		<title>MapGrid</title>
 		<vendor>Rzymek FIA</vendor>		
@@ -20,8 +20,6 @@
 		<jar href="lib/jgoodies-common-1.2.1.jar"/>
 		<jar href="lib/jgoodies-forms-1.4.2.jar"/>
 		<jar href="lib/josm-tested.jar"/>
-		
-		<property name="jsse.enableSNIExtension" value="false"/>
 		
 		<!-- Wyłącznie dla obsługi większej ilości plików graficznych (m.in. tiff). 
 		Bez tego aplikacja też ruszy 
