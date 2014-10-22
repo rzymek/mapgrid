@@ -29,8 +29,8 @@ final class Worker extends Thread {
 					listener.imageFetched(image, tile);
 			} catch (InterruptedException e) {
 				continue;
-			} catch (Exception e) {
-				System.err.println(e);
+			} catch (Exception e) {				
+				System.err.println("Worker:"+e);
 			}
 		}
 	}

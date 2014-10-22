@@ -17,7 +17,7 @@ public class HTTPTileImageProvider implements TileImageProvider {
 		String url = urlProvider.getTileURL(tileX, tileY, zoom);
 		if(url == null)
 			return null;
-		System.out.println("HTTPTileImageProvider:"+url);
+		System.out.println(url);
 		return ImageIO.read(new URL(url));
 	}
 

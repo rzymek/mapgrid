@@ -15,7 +15,7 @@ public class GeoportalTopoProvider implements TileProvider {
 	private static final long WIDTH_IN_METERS = LZTS * GRID.width;
 	//height in meters of the whole map
 	private static final long HEIGHT_IN_METERS = LZTS * GRID.height;
-	private static Dimension tileSize = new Dimension(256, 256);
+	private static Dimension tileSize = new Dimension(512, 512);
 
 	@Override
 	public Dimension getTileSize() {
@@ -82,8 +82,11 @@ public class GeoportalTopoProvider implements TileProvider {
 
 	protected String getTileURL(int x, int y, int zoom, int zoomModif, String layer) {
 		y = getTileCount(zoom).height - 1 - y;
-		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
-				+ "fileIDX=L${z}X${x}Y${y}.jpg";
+		String url = "http://mapy.geoportal.gov.pl/wss/service/WMTS/guest/wmts/TOPO?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=MAPA%20TOPOGRAFICZNA&STYLE=default&FORMAT=image/jpeg&"
+						+ "TILEMATRIXSET=EPSG:2180&TILEMATRIX=EPSG:2180:${z}&"
+						+ "TILEROW=${y}&TILECOL=${x}";
+//		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
+//				+ "fileIDX=L${z}X${x}Y${y}.jpg";
 		return Utils.fillTileURLTemplate(url, x, y, zoom + zoomModif);
 	}
 

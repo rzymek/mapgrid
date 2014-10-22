@@ -53,7 +53,7 @@ public abstract class AsyncTileCache implements AsyncFetchListener, TileImagePro
 
 	@Override
 	public void imageFetched(Image image, TileSpec spec) throws Exception {
-		System.out.println("AsyncTileCache.imageFetched()");
+		System.out.println("AsyncTileCache.imageFetched():"+image);
 		setCacheEntry(spec, new CacheEntry(image));
 	}
 
