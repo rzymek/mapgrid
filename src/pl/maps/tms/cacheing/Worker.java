@@ -25,8 +25,9 @@ final class Worker extends Thread {
 			try {
 				TileSpec tile = queue.take();
 				Image image = provider.getTile(tile.x, tile.y, tile.z);
-				if (listener != null)
+				if (listener != null) {
 					listener.imageFetched(image, tile);
+				}
 			} catch (InterruptedException e) {
 				continue;
 			} catch (Exception e) {				

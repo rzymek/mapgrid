@@ -42,7 +42,7 @@ public class GeoportalTopoProvider implements TileProvider {
 		PUWG92 puwg92 = new PUWG92(coordinates);
 		Position p = new Position();
 		p.x = puwg92.getX() * tileCount.width / WIDTH_IN_METERS;
-		p.y = tileCount.height - puwg92.getY() * tileCount.height / HEIGHT_IN_METERS;
+		p.y = puwg92.getY() * tileCount.height / HEIGHT_IN_METERS;
 		return p;
 	}
 
@@ -63,7 +63,7 @@ public class GeoportalTopoProvider implements TileProvider {
 		double px = position.x * tileSize.width;
 		double py = position.y * tileSize.height;
 		double x = WIDTH_IN_METERS * px / pw;
-		double y = HEIGHT_IN_METERS - HEIGHT_IN_METERS * py / ph;
+		double y = HEIGHT_IN_METERS * py / ph;
 		return new PUWG92(x, y);
 	}
 
@@ -81,12 +81,10 @@ public class GeoportalTopoProvider implements TileProvider {
 	}
 
 	protected String getTileURL(int x, int y, int zoom, int zoomModif, String layer) {
-		y = getTileCount(zoom).height - 1 - y;
+//		y = getTileCount(zoom).height - 1 - y;
 		String url = "http://mapy.geoportal.gov.pl/wss/service/WMTS/guest/wmts/TOPO?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=MAPA%20TOPOGRAFICZNA&STYLE=default&FORMAT=image/jpeg&"
 						+ "TILEMATRIXSET=EPSG:2180&TILEMATRIX=EPSG:2180:${z}&"
 						+ "TILEROW=${y}&TILECOL=${x}";
-//		String url = "http://ars.geoportal.gov.pl/ARS/getTile.aspx?service=" + layer + "&cs=EPSG2180&"
-//				+ "fileIDX=L${z}X${x}Y${y}.jpg";
 		return Utils.fillTileURLTemplate(url, x, y, zoom + zoomModif);
 	}
 

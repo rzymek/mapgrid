@@ -56,7 +56,7 @@ public final class GetMapsMain extends GetMapsFrame implements Runnable, KeyEven
 	private static final int SELECTED_PROVIDER = 0;
 	private static final int THREADS = 2;	
 	private AsyncTileCache imagesProvider;
-	private final static boolean useDiskCache = true;	
+	private final static boolean useDiskCache = false;	
 
 	public static List<TileProvider> providers = new ArrayList<TileProvider>(Arrays.asList(
 		new GeoportalTopoProvider(),
